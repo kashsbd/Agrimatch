@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, ActivityIndicator, Text } from 'react-native';
 
 import {
 	Container,
@@ -23,23 +23,80 @@ import ImageLoad from 'react-native-image-placeholder';
 
 import Color from '../../theme/Colors';
 
-import { userUrl } from '../../utils/global';
+import { userUrl, ratingUrl } from '../../utils/global';
+import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 
 export class Profile extends Component {
 	state = {
 		feedbackText: '',
 		feedBackStartCount: 0,
 		recordingUri: undefined,
+		isSaving: false,
 	};
 
 	close = () => {
 		this.props.navigation.goBack();
 	};
 
-	onSave = () => {
+	_validate = () => {
+		const { feedBackStartCount } = this.state;
+
+		if (feedBackStartCount == 0) {
+			alert("Can't save without rating user.");
+		} else {
+			this.setState({ isSaving: true }, this.onSave);
+		}
+	};
+
+	onSave = async () => {
 		const { feedbackText, feedBackStartCount, recordingUri } = this.state;
 
-		console.log(recordingUri);
+		const { user } = this.props.navigation.state.params;
+
+		const data = new FormData();
+		data.append('fromUser', LoggedUserCredentials.getUserId());
+		data.append('toUser', user.user._id);
+		data.append('value', feedBackStartCount);
+		data.append('feedback', feedbackText);
+
+		if (recordingUri) {
+			const filename = recordingUri.split('/').pop();
+
+			const match = /\.(\w+)$/.exec(filename);
+			const type = match ? `audio/${match[1]}` : `audio`;
+
+			data.append('feedbackAudio', {
+				uri: recordingUri,
+				type,
+				name: filename,
+			});
+		}
+
+		const config = {
+			headers: {
+				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
+				'Content-Type': 'multipart/form-data',
+			},
+			method: 'POST',
+			body: data,
+		};
+
+		try {
+			const res = await fetch(ratingUrl, config);
+
+			if (res.status === 201) {
+				this.setState({
+					isSaving: false,
+					feedBackStartCount: 0,
+					feedbackText: '',
+					recordingUri: undefined,
+				});
+			} else {
+				this.setState({ isSaving: false }, () => alert('Something went Wrong.Try Again!'));
+			}
+		} catch (error) {
+			this.setState({ isSaving: false }, () => alert('Please connect to internet!'));
+		}
 	};
 
 	onStarRatingPress = feedBackStartCount => this.setState({ feedBackStartCount });
@@ -76,7 +133,7 @@ export class Profile extends Component {
 	render() {
 		const { user } = this.props.navigation.state.params;
 
-		const { feedbackText, feedBackStartCount } = this.state;
+		const { feedbackText, feedBackStartCount, isSaving } = this.state;
 
 		return (
 			<Container>
@@ -90,57 +147,65 @@ export class Profile extends Component {
 						<Title>{user ? `${user.user.name}'s Profile` : 'Profile'}</Title>
 					</Body>
 					<Right>
-						<Button transparent onPress={this.onSave}>
+						<Button transparent onPress={this._validate} disabled={isSaving}>
 							<Icon name='checkmark' />
 						</Button>
 					</Right>
 				</Header>
 
-				<Content>
-					<ImageLoad
-						style={styles.logo}
-						source={{ uri: userUrl + '/' + user.user._id + '/profile_pic' }}
-						placeholderSource={require('../../assets/images/propic.png')}
-						isShowActivity={true}
-					/>
+				<Content contentContainerStyle={{ flexGrow: 1 }}>
+					{isSaving ? (
+						<View style={styles.centerContent}>
+							<Text style={{ fontSize: 15, fontWeight: '500' }}>Saving ...</Text>
+						</View>
+					) : (
+						<>
+							<ImageLoad
+								style={styles.logo}
+								source={{ uri: userUrl + '/' + user.user._id + '/profile_pic' }}
+								placeholderSource={require('../../assets/images/propic.png')}
+								isShowActivity={true}
+							/>
 
-					<H3 style={styles.h3}>{`How was farmer ${user.user.name} ?`}</H3>
+							<H3 style={styles.h3}>{`How was farmer ${user.user.name} ?`}</H3>
 
-					<View
-						style={{
-							width: '60%',
-							alignSelf: 'center',
-							paddingTop: 5,
-						}}>
-						<StarRating
-							disabled={false}
-							maxStars={5}
-							rating={feedBackStartCount}
-							selectedStar={this.onStarRatingPress}
-							fullStarColor='gray'
-						/>
-					</View>
+							<View
+								style={{
+									width: '60%',
+									alignSelf: 'center',
+									paddingTop: 5,
+								}}>
+								<StarRating
+									disabled={false}
+									maxStars={5}
+									rating={feedBackStartCount}
+									selectedStar={this.onStarRatingPress}
+									fullStarColor='gray'
+								/>
+							</View>
 
-					<Form
-						style={{
-							width: '70%',
-							alignSelf: 'center',
-							paddingTop: 25,
-						}}>
-						<H3 style={styles.h3}>Additional Feedback</H3>
-						<Textarea
-							rowSpan={4}
-							bordered
-							placeholder=''
-							style={{ marginTop: 10 }}
-							value={feedbackText}
-							onChangeText={this._onTextChange}
-						/>
-					</Form>
+							<Form
+								style={{
+									width: '70%',
+									alignSelf: 'center',
+									paddingTop: 25,
+								}}>
+								<H3 style={styles.h3}>Additional Feedback</H3>
+								<Textarea
+									rowSpan={4}
+									bordered
+									placeholder=''
+									style={{ marginTop: 10 }}
+									value={feedbackText}
+									onChangeText={this._onTextChange}
+								/>
+							</Form>
 
-					<Recorder onDone={this._handleRecordingFinished} style={{ marginTop: 10 }} />
+							<Recorder onDone={this._handleRecordingFinished} style={{ marginTop: 10 }} />
 
-					{this._maybeRenderLastRecording()}
+							{this._maybeRenderLastRecording()}
+						</>
+					)}
 				</Content>
 			</Container>
 		);
@@ -149,7 +214,6 @@ export class Profile extends Component {
 
 const styles = StyleSheet.create({
 	logo: {
-		flex: 1,
 		width: 120,
 		height: 120,
 		resizeMode: 'contain',
@@ -176,5 +240,10 @@ const styles = StyleSheet.create({
 	},
 	smallIcon: {
 		fontSize: 18,
+	},
+	centerContent: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });

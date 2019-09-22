@@ -181,15 +181,17 @@ export class Home extends Component {
 						) : (
 							<>
 								{LoggedUserCredentials.getUserType() === 'FARMER' ? (
-									<Text
-										style={
-											styles.usingText
-										}>{`${numberOfUser} of farmers are using AgriMatch!`}</Text>
+									<Text style={styles.usingText}>
+										{numberOfUser > 1
+											? `${numberOfUser} farmers are using AgriMatch!`
+											: `${numberOfUser} farmer is using AgriMatch!`}
+									</Text>
 								) : (
-									<Text
-										style={
-											styles.usingText
-										}>{`${numberOfUser} of middlemen are using AgriMatch!`}</Text>
+									<Text style={styles.usingText}>
+										{numberOfUser > 1
+											? `${numberOfUser} middlemen are using AgriMatch!`
+											: `${numberOfUser} middleman is using AgriMatch!`}
+									</Text>
 								)}
 
 								<View style={styles.bubbleMenuContainer}>

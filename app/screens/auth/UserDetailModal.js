@@ -150,9 +150,6 @@ export default class UserDetailModal extends Component {
 					this.props.navigation.navigate('Home'),
 				);
 			} else {
-				const resJson = await res.json();
-				console.log(resJson);
-
 				const errorText = 'Something Wrong.Try Again!';
 				this.setState({ isSigningUp: false, errorText });
 			}

@@ -1,25 +1,7 @@
 import React, { Component } from 'react';
-import {
-	StyleSheet,
-	View,
-	Text as RNText,
-	ActivityIndicator,
-	TouchableOpacity,
-	Image,
-} from 'react-native';
+import { StyleSheet, View, Text as RNText, ActivityIndicator, TouchableOpacity, Image } from 'react-native';
 
-import {
-	Container,
-	Button,
-	Icon,
-	Header,
-	Left,
-	Body,
-	Right,
-	Title,
-	Text,
-	Item,
-} from 'native-base';
+import { Container, Button, Icon, Header, Left, Body, Right, Title, Text, Item } from 'native-base';
 
 import { AccordionList } from 'accordion-collapse-react-native';
 
@@ -44,20 +26,18 @@ export class TradingInfoList extends Component {
 	async getAllCrops() {
 		const { page, crops } = this.state;
 
+		const { user, showAddButton } = this.props.navigation.state.params;
+
 		const config = {
 			headers: {
-				Authorization:
-					'Bearer ' + LoggedUserCredentials.getAccessToken(),
+				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
 			},
 			method: 'GET',
 		};
 
-		const url =
-			cropUrl +
-			'?page=' +
-			page +
-			'&user=' +
-			LoggedUserCredentials.getUserId();
+		const userId = showAddButton ? LoggedUserCredentials.getUserId() : user.user._id;
+
+		const url = cropUrl + '?page=' + page + '&user=' + userId;
 
 		try {
 			const res = await fetch(url, config);
@@ -65,8 +45,7 @@ export class TradingInfoList extends Component {
 			if (res.status == 200) {
 				const resJson = await res.json();
 				this.setState({
-					crops:
-						page === 1 ? resJson.docs : [...crops, ...resJson.docs],
+					crops: page === 1 ? resJson.docs : [...crops, ...resJson.docs],
 					totalPages: resJson.pages,
 					loading: false,
 					error: false,
@@ -93,9 +72,7 @@ export class TradingInfoList extends Component {
 	};
 
 	_onRefresh = () => {
-		this.setState({ refreshing: true, page: 1, totalPages: 1 }, () =>
-			this.getAllCrops(),
-		);
+		this.setState({ refreshing: true, page: 1, totalPages: 1 }, () => this.getAllCrops());
 	};
 
 	_renderFooter = () => {
@@ -144,9 +121,7 @@ export class TradingInfoList extends Component {
 					borderWidth: StyleSheet.hairlineWidth,
 				}}
 				key={item._id}>
-				<Text style={{ paddingLeft: 10 }}>
-					{date.toLocaleDateString()}
-				</Text>
+				<Text style={{ paddingLeft: 10 }}>{date.toLocaleDateString()}</Text>
 			</View>
 		);
 	};
@@ -167,12 +142,7 @@ export class TradingInfoList extends Component {
 						<Image
 							style={{ width: 120, height: 120 }}
 							source={{
-								uri:
-									baseUrl +
-									'/crops/media/' +
-									item.media._id +
-									'/' +
-									item.media.name,
+								uri: baseUrl + '/crops/media/' + item.media._id + '/' + item.media.name,
 							}}
 						/>
 					</Item>
@@ -223,9 +193,7 @@ export class TradingInfoList extends Component {
 					) : (
 						<Right>
 							<Button transparent onPress={this._goToProfile}>
-								<RNText style={styles.transactStyle}>
-									Transact
-								</RNText>
+								<RNText style={styles.transactStyle}>Transact</RNText>
 							</Button>
 						</Right>
 					)}
@@ -234,20 +202,13 @@ export class TradingInfoList extends Component {
 				<View style={{ flex: 1 }}>
 					{loading ? (
 						<View style={styles.centerContent}>
-							<ActivityIndicator
-								color={Color.mainColor}
-								size='large'
-							/>
+							<ActivityIndicator color={Color.mainColor} size='large' />
 						</View>
 					) : error ? (
 						<View style={styles.centerContent}>
 							<TouchableOpacity>
 								<View style={{ alignItems: 'center' }}>
-									<Icon
-										name='ios-wifi'
-										color='black'
-										style={{ fontSize: 40 }}
-									/>
+									<Icon name='ios-wifi' color='black' style={{ fontSize: 40 }} />
 									<Text>No Internet Connection !</Text>
 									<Text> Tap To Retry </Text>
 								</View>

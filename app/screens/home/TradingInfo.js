@@ -64,8 +64,7 @@ export class TradingInfo extends Component {
 			const config = {
 				headers: {
 					'Content-Type': 'multipart/form-data',
-					Authorization:
-						'Bearer ' + LoggedUserCredentials.getAccessToken(),
+					Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
 				},
 				method: 'POST',
 				body: data,
@@ -94,13 +93,9 @@ export class TradingInfo extends Component {
 
 	getPermissionAsync = async () => {
 		if (Constants.platform.ios) {
-			const { status } = await Permissions.askAsync(
-				Permissions.CAMERA_ROLL,
-			);
+			const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
 			if (status !== 'granted') {
-				alert(
-					'Sorry, we need camera roll permissions to make this work!',
-				);
+				alert('Sorry, we need camera roll permissions to make this work!');
 			} else {
 				this.pickImage();
 			}
@@ -155,22 +150,15 @@ export class TradingInfo extends Component {
 						</View>
 					) : (
 						<>
-							{LoggedUserCredentials.getUserType() ===
-							'FARMER' ? (
-								<H3 style={styles.h3}>
-									What do you want to sell today?{' '}
-								</H3>
+							{LoggedUserCredentials.getUserType() === 'FARMER' ? (
+								<H3 style={styles.h3}>What do you want to sell today? </H3>
 							) : (
-								<H3 style={styles.h3}>
-									What do you want to buy today?{' '}
-								</H3>
+								<H3 style={styles.h3}>What do you want to buy today? </H3>
 							)}
 
 							<View style={{ marginVertical: 40 }}>
 								<Text style={styles.h3}>Type of Crop</Text>
-								<Item
-									picker
-									style={{ marginLeft: 40, marginRight: 40 }}>
+								<Item picker style={{ marginLeft: 40, marginRight: 40 }}>
 									<Picker
 										mode='dropdown'
 										iosIcon={<Icon name='arrow-down' />}
@@ -179,14 +167,8 @@ export class TradingInfo extends Component {
 										placeholderIconColor='#007aff'
 										selectedValue={cropType}
 										onValueChange={this.onCropTypeChange}>
-										<Picker.Item
-											label='Sesame'
-											value='Sesame'
-										/>
-										<Picker.Item
-											label='Beans'
-											value='Beans'
-										/>
+										<Picker.Item label='Sesame' value='Sesame' />
+										<Picker.Item label='Beans' value='Beans' />
 									</Picker>
 								</Item>
 							</View>
@@ -224,18 +206,9 @@ export class TradingInfo extends Component {
 								<Text style={styles.h3}>Sample Photo</Text>
 								{image ? (
 									<View>
-										<Image
-											source={{ uri: image.uri }}
-											style={styles.img}
-										/>
-										<TouchableOpacity
-											style={styles.delBtn}
-											onPress={this.removeImage}>
-											<Icon
-												name='close'
-												size={5}
-												style={styles.delIcon}
-											/>
+										<Image source={{ uri: image.uri }} style={styles.img} />
+										<TouchableOpacity style={styles.delBtn} onPress={this.removeImage}>
+											<Icon name='close' size={5} style={styles.delIcon} />
 										</TouchableOpacity>
 									</View>
 								) : (
@@ -243,11 +216,7 @@ export class TradingInfo extends Component {
 										transparent
 										style={styles.pickImgBtn}
 										onPress={this.getPermissionAsync}>
-										<Icon
-											name='camera'
-											size={20}
-											style={styles.cameraIcon}
-										/>
+										<Icon name='camera' size={20} style={styles.cameraIcon} />
 									</Button>
 								)}
 							</View>
