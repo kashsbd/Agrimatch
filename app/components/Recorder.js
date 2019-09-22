@@ -96,13 +96,12 @@ export class Recorder extends React.Component {
 	};
 
 	_renderRecorderButtons = () => {
-		const { isRecording, durationMillis, canRecord } = this.state;
+		const { isRecording, durationMillis } = this.state;
 
 		if (!isRecording && durationMillis === 0) {
 			return (
 				<TouchableOpacity
 					onPress={this._record}
-					//disabled={!canRecord}
 					style={[styles.bigRoundButton, { backgroundColor: 'red' }]}>
 					<Ionicons name='ios-mic' style={[styles.bigIcon, { color: 'white' }]} />
 				</TouchableOpacity>
@@ -143,7 +142,7 @@ export class Recorder extends React.Component {
 			<View style={this.props.style}>
 				<View style={styles.centerer}>
 					{this._renderRecorderButtons()}
-					<Text style={{ fontWeight: 'bold', marginVertical: 10 }}>
+					<Text style={{ fontWeight: 'bold', marginTop: 6 }}>
 						{_formatTime(this.state.durationMillis / 1000)}
 					</Text>
 				</View>
@@ -195,23 +194,23 @@ const styles = StyleSheet.create({
 		color: ExpoColors.errorText,
 	},
 	bigRoundButton: {
-		width: 100,
-		height: 100,
-		borderRadius: 50,
+		width: 80,
+		height: 80,
+		borderRadius: 40,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	bigIcon: {
-		fontSize: 50,
+		fontSize: 40,
 	},
 	smallRoundButton: {
-		width: 50,
-		height: 50,
-		borderRadius: 25,
+		width: 42,
+		height: 42,
+		borderRadius: 21,
 		justifyContent: 'center',
 		alignItems: 'center',
 	},
 	smallIcon: {
-		fontSize: 24,
+		fontSize: 20,
 	},
 });

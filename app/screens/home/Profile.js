@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Image, View, Linking } from 'react-native';
+import { StyleSheet, View, TouchableOpacity } from 'react-native';
 
 import {
 	Container,
@@ -29,23 +29,48 @@ export class Profile extends Component {
 	state = {
 		feedbackText: '',
 		feedBackStartCount: 0,
+		recordingUri: undefined,
 	};
 
 	close = () => {
 		this.props.navigation.goBack();
 	};
 
-	onSave = () => {};
+	onSave = () => {
+		const { feedbackText, feedBackStartCount, recordingUri } = this.state;
+
+		console.log(recordingUri);
+	};
 
 	onStarRatingPress = feedBackStartCount => this.setState({ feedBackStartCount });
 
 	_handleRecordingFinished = recordingUri => this.setState({ recordingUri });
 
+	_onTextChange = feedbackText => this.setState({ feedbackText });
+
+	_cancelSong = () => this.setState({ recordingUri: undefined });
+
 	_maybeRenderLastRecording = () =>
 		this.state.recordingUri ? (
-			<>
+			<View style={styles.audioplayerContainer}>
 				<AudioPlayer source={{ uri: this.state.recordingUri }} />
-			</>
+				<TouchableOpacity
+					onPress={this._cancelSong}
+					style={[
+						styles.smallRoundButton,
+						{
+							backgroundColor: Color.mainColor,
+							position: 'absolute',
+							borderColor: 'white',
+							borderWidth: 3,
+							bottom: 35,
+							left: 300,
+							zIndex: -999,
+						},
+					]}>
+					<Icon name='close' style={[styles.smallIcon, { color: 'white' }]} />
+				</TouchableOpacity>
+			</View>
 		) : null;
 
 	render() {
@@ -100,7 +125,7 @@ export class Profile extends Component {
 						style={{
 							width: '70%',
 							alignSelf: 'center',
-							paddingTop: 35,
+							paddingTop: 25,
 						}}>
 						<H3 style={styles.h3}>Additional Feedback</H3>
 						<Textarea
@@ -109,6 +134,7 @@ export class Profile extends Component {
 							placeholder=''
 							style={{ marginTop: 10 }}
 							value={feedbackText}
+							onChangeText={this._onTextChange}
 						/>
 					</Form>
 
@@ -133,5 +159,22 @@ const styles = StyleSheet.create({
 	h3: {
 		marginTop: 5,
 		alignSelf: 'center',
+	},
+	audioplayerContainer: {
+		marginHorizontal: 15,
+		borderWidth: 1,
+		borderColor: Color.mainColor,
+		paddingHorizontal: 10,
+		marginVertical: 10,
+	},
+	smallRoundButton: {
+		width: 38,
+		height: 38,
+		borderRadius: 19,
+		justifyContent: 'center',
+		alignItems: 'center',
+	},
+	smallIcon: {
+		fontSize: 18,
 	},
 });
