@@ -172,10 +172,13 @@ class ProfileScreen extends Component {
 							/>
 
 							<H3 style={styles.h3}>
-								{t('profile:how_was_people', {
-									userType: user.user.userType.toLowerCase(),
-									name: user.user.name,
-								})}
+								{user.user.userType == 'FARMER'
+									? t('profile:how_is_farmer', {
+											name: user.user.name,
+									  })
+									: t('profile:how_is_middleman', {
+											name: user.user.name,
+									  })}
 							</H3>
 
 							<View
@@ -197,7 +200,7 @@ class ProfileScreen extends Component {
 								style={{
 									width: '70%',
 									alignSelf: 'center',
-									paddingTop: 25,
+									paddingTop: 15,
 								}}>
 								<H3 style={styles.h3}>{t('profile:additional_feedback')}</H3>
 								<Textarea
@@ -234,8 +237,8 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 	},
 	h3: {
-		marginTop: 5,
-		alignSelf: 'center',
+		paddingTop: 10,
+		textAlign: 'center',
 	},
 	audioplayerContainer: {
 		marginHorizontal: 15,

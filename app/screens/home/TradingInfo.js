@@ -245,6 +245,7 @@ const styles = StyleSheet.create({
 	h3: {
 		textAlign: 'center',
 		color: Color.mainColor,
+		paddingTop: 10,
 	},
 	pickImgBtn: {
 		alignSelf: 'center',

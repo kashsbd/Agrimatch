@@ -279,7 +279,9 @@ class NearMeScreen extends Component {
 			<View style={styles.nearMeMenuContainer}>
 				{showFarmersCount ? (
 					<View style={{ alignSelf: 'center' }}>
-						<Text style={{ color: Color.mainColor }}>{t('nearme:showing_farmers')}</Text>
+						<Text style={{ color: Color.mainColor, textAlign: 'center' }}>
+							{t('nearme:showing_farmers')}
+						</Text>
 						<Text
 							style={{
 								textAlign: 'center',

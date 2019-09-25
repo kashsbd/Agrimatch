@@ -159,6 +159,8 @@ class TradingInfoListScreen extends Component {
 	_setRef = ref => (this.flatListRef = ref);
 
 	_renderNoCrops = () => {
+		const { t } = this.props;
+
 		return (
 			<View style={styles.centerContent}>
 				<Icon name='ios-paper' color='black' style={{ fontSize: 40 }} />
@@ -170,6 +172,7 @@ class TradingInfoListScreen extends Component {
 	render() {
 		const { crops, error, loading, refreshing } = this.state;
 		const { showAddButton } = this.props.navigation.state.params;
+		const { t } = this.props;
 
 		return (
 			<Container>
@@ -248,6 +251,7 @@ const styles = StyleSheet.create({
 	transactStyle: {
 		color: '#fff',
 		fontSize: 17,
+		textAlign: 'center',
 	},
 	centerContent: {
 		flex: 1,

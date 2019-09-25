@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 	signupBtn: {
-		fontSize: 17,
+		fontSize: 16,
 		fontWeight: '500',
 	},
 	errorText: {

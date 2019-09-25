@@ -196,7 +196,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center',
 	},
 	goBackBtn: {
-		fontSize: 17,
+		fontSize: 16,
 		fontWeight: '500',
 	},
 	errorText: {

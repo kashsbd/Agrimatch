@@ -45,8 +45,8 @@
 		"greeting": "Hello,",
 		"no_internet": "No Internet Connection !",
 		"tap_to_retry": "Tap To Retry",
-		"farmers_are_using": "{{ numberOfUser }} farmers are using AgriMatch!",
-		"middlemen_are_using": "{{ numberOfUser }} middlemen are using AgriMatch!",
+		"farmers_are_using": "{{ count }} farmers are using AgriMatch!",
+		"middlemen_are_using": "{{ count }} middlemen are using AgriMatch!",
 		"messages": "Messages",
 		"sell_goods": "Sell Goods",
 		"buy_goods": "Buy Goods",
@@ -63,8 +63,9 @@
 	},
 	"profile": {
 		"can_not_save": "Can't save without rating user.",
-		"how_was_people": "How was {{ userType }} {{ name }} ?",
-		"additional_feedback": "Additional Feedback"
+		"additional_feedback": "Additional Feedback",
+		"how_is_farmer": "How was farmer {{ name }} ?",
+		"how_is_middleman": "How was middleman {{ name }} ?"
 	},
 	"tradinginfo": {
 		"enter_quantity": "Please enter quantity.",

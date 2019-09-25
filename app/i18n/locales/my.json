@@ -1,47 +1,93 @@
 {
 	"common": {
-		"select_user_type": "Select User Type",
+		"select_user_type": "အသုံးပြုသူအမျိုးအစား ရွေးပါ။",
 		"farmer_label": "တောင်သူ",
-		"middleman_label": "Middleman",
-		"email": "Email",
-		"password": "Password",
-		"confirm_password": "Confirm Password"
+		"middleman_label": "ပွဲစား",
+		"email": "အီးမေးလ်လိပ်စာ",
+		"password": "လျှို့ဝှက်စကားလုံး",
+		"confirm_password": "လျှို့ဝှက်စကားလုံး နောက်တကြိမ်ရိုက်ပါ။",
+		"saving": "သိမ်းနေသည် ..."
 	},
 	"errors": {
 		"no_internet": "Please connect to internet!",
-		"500_error": "Something Wrong.Try Again!",
+		"500_error": "Something went wrong.Try Again!",
 		"select_user_type": "Please select user type.",
 		"enter_email": "Please enter email.",
 		"enter_valid_email": "Please enter valid email.",
 		"enter_password": "Please enter password.",
 		"enter_confirm_password": "Please enter confirm password.",
 		"password_do_not_match": "Passwords do not match.",
-		"login_fail": "Login fail.Try again!"
+		"login_fail": "Login fail.Try again!",
+		"try_later": "Something went wrong.Please try later."
 	},
 	"login": {
-		"sign_in": "Sign In",
-		"don't_have_account": "Don't have an account?",
-		"sign_up_now": "Sign up now"
+		"sign_in": "ဝင်မည်။",
+		"don't_have_account": "အကောင့်မရှိသေးပါက ",
+		"sign_up_now": "ဤနေရာတွင်အကောင့်ဖွင့်ပါ။"
 	},
 	"signup": {
 		"already_mail_exists": "Mail already exists.Please try different email.",
-		"next": "Next",
-		"already_have_account": "Already have an account?",
-		"sign_in_now": "Sign in now"
+		"next": "ရှေ့ဆက်ရန်",
+		"already_have_account": "အကောင့်ရှိပြီးသားဖြစ်ပါက ",
+		"sign_in_now": "ဤနေရာမှတဆင့် ဝင်ပါ။"
 	},
 	"userdetailmodal": {
 		"enter_ph_no": "Please enter phone number.",
 		"enter_valid_ph_no": "Please enter valid phone number.",
 		"enter_name": "Please enter name.",
-		"ph_no": "Phone Number",
-		"name": "Name",
-		"gpa_cert_no": "GAP Cert. No",
-		"save": "Save"
+		"ph_no": "ဖုန်းနံပါတ်",
+		"name": "အမည်",
+		"gpa_cert_no": "ဂျီအေပီ အမှတ်",
+		"save": "သိမ်းမည်"
 	},
 	"chat": {},
-	"home": {},
-	"nearme": {},
-	"profile": {},
-	"tradinginfo": {},
-	"tradinginfolist": {}
+	"home": {
+		"greeting": "မင်္ဂလာပါ... ",
+		"no_internet": "Internet Connection မရှိပါ!",
+		"tap_to_retry": "Tap To Retry",
+		"farmers_are_using": "စုစုပေါင်း တောင်သူ {{ count }} ဦး AgriMatch ကို အသုံးပြုနေပါသည်။",
+		"middlemen_are_using": "စုစုပေါင်း ပွဲစား {{ count }} ဦး AgriMatch ကို အသုံးပြုနေပါသည်။",
+		"messages": "စာတိုပို့ရန်",
+		"sell_goods": "သီးနှံရောင်းရန်",
+		"buy_goods": "သီးနှံဝယ်ရန်",
+		"find_people": "လူရှာမည်"
+	},
+	"nearme": {
+		"title": "လူရှာမည်",
+		"greeting": "မင်္ဂလာပါ... {{ name }}",
+		"showing_farmers": "အနီးအနားရှိ တောင်သူများကို ပြသနေသည်။",
+		"showing_middlemen": "အနီးအနားရှိ ပွဲစားများကို ပြသနေသည်။",
+		"show_farmers": "အနီးအနားရှိ တောင်သူများကို ကြည့်မည်။",
+		"show_middlemen": "အနီးအနားရှိ ပွဲစားများကို ကြည့်မည်။",
+		"results_found": "စုစုပေါင်း {{ count }}ယောက်ရှိပါသည်။"
+	},
+	"profile": {
+		"can_not_save": "Can't save without rating user.",
+		"additional_feedback": "ထပ်မံဖော်ပြလိုသည့် တုံ့ပြန်ချက်များ",
+		"how_is_farmer": "တောင်သူ {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။",
+		"how_is_middleman": "ပွဲစား {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။"
+	},
+	"tradinginfo": {
+		"enter_quantity": "Please enter quantity.",
+		"select_photo": "Please select sample photo.",
+		"selling_info": "ရောင်းချမည့်သီးနှံ",
+		"buying_info": "ဝယ်ယူမည့်သီးနှံ",
+		"sell_today": "သင်ဘာကိုရောင်းချင်ပါသလဲ။",
+		"buy_today": "သင်ဘာကိုဝယ်ချင်ပါသလဲ။",
+		"type_of_crop": "သီးနှံအမျိုးအစား",
+		"quantity": "အရေအတွက်",
+		"kg": "ကီလို",
+		"sample_photo": "သီးနှံနမူနာဓာတ်ပုံ"
+	},
+	"tradinginfolist": {
+		"crop_type": "Crop Type :",
+		"quantity": "အရေအတွက် :",
+		"in_kg": "{{ qt }} ကီလို",
+		"no_crops": "No crop list to show !",
+		"selling_info_list": "ရောင်းချမည့်သီးနှံစာရင်း",
+		"buying_info_list": "ဝယ်ယူမည့်သီးနှံစာရင်း",
+		"transact": "အရောင်းအဝယ်ပြုလုပ်မည်",
+		"no_internet": "Internet Connection မရှိပါ!",
+		"tap_to_retry": "Tap To Retry"
+	}
 }

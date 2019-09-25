@@ -183,11 +183,11 @@ class HomeScreen extends Component {
 							<>
 								{LoggedUserCredentials.getUserType() === 'FARMER' ? (
 									<Text style={styles.usingText}>
-										{t('home:farmers_are_using', { numberOfUser })}
+										{t('home:farmers_are_using', { count: numberOfUser })}
 									</Text>
 								) : (
 									<Text style={styles.usingText}>
-										{t('home:middlemen_are_using', { numberOfUser })}
+										{t('home:middlemen_are_using', { count: numberOfUser })}
 									</Text>
 								)}
 
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 	},
 	bubbleMenuContainer: {
-		paddingTop: 14,
+		paddingTop: 5,
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-around',
