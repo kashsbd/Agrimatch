@@ -62,13 +62,14 @@ export default class UserDetailModal extends Component {
 
 	_validateSignUp = () => {
 		const { isFarmer, ph_no, gpa_cert_no, name } = this.state;
+		const { t } = this.props;
 
 		if (ph_no.trim().length === 0) {
-			this.setState({ errorText: 'Please enter phone number.' });
+			this.setState({ errorText: t('userdetailmodal:enter_ph_no') });
 		} else if (!ph_checker.isValidMMPhoneNumber(ph_no)) {
-			this.setState({ errorText: 'Please enter valid phone number.' });
+			this.setState({ errorText: t('userdetailmodal:enter_valid_ph_no') });
 		} else if (name.trim().length === 0) {
-			this.setState({ errorText: 'Please enter name.' });
+			this.setState({ errorText: t('userdetailmodal:enter_name') });
 		} else {
 			this.setState({ isSigningUp: true, errorText: '' }, () => this._tryToSignUp());
 		}
@@ -76,6 +77,7 @@ export default class UserDetailModal extends Component {
 
 	async _tryToSignUp() {
 		const { isFarmer, ph_no, gpa_cert_no, gpa_cert_pic, name, param, proPic, location } = this.state;
+		const { t } = this.props;
 
 		const data = new FormData();
 		data.append('email', param.email);
@@ -150,12 +152,12 @@ export default class UserDetailModal extends Component {
 					this.props.navigation.navigate('Home'),
 				);
 			} else {
-				const errorText = 'Something Wrong.Try Again!';
+				const errorText = t('errors:500_error');
 				this.setState({ isSigningUp: false, errorText });
 			}
 		} catch (error) {
 			console.log(error);
-			const errorText = 'Please connect to internet!';
+			const errorText = t('errors:no_internet');
 			this.setState({ isSigningUp: false, errorText });
 		}
 	}
@@ -212,6 +214,7 @@ export default class UserDetailModal extends Component {
 			errorText,
 			proPic,
 		} = this.state;
+		const { t } = this.props;
 
 		const pro_pic = proPic ? { uri: proPic.uri } : default_propic;
 
@@ -234,21 +237,25 @@ export default class UserDetailModal extends Component {
 							<Item>
 								<Input
 									value={ph_no}
-									placeholder='Phone Number'
+									placeholder={t('userdetailmodal:ph_no')}
 									onChangeText={this.onPhNoChange}
 									keyboardType='phone-pad'
 								/>
 							</Item>
 
 							<Item>
-								<Input value={name} placeholder='Name' onChangeText={this.onNameChange} />
+								<Input
+									value={name}
+									placeholder={t('userdetailmodal:name')}
+									onChangeText={this.onNameChange}
+								/>
 							</Item>
 
 							{isFarmer && (
 								<Item>
 									<Input
 										value={gpa_cert_no}
-										placeholder='GAP Cert. No'
+										placeholder={t('userdetailmodal:gpa_cert_no')}
 										onChangeText={this.onGpaCertNoChange}
 									/>
 									<Icon active name='camera' />
@@ -267,7 +274,11 @@ export default class UserDetailModal extends Component {
 							style={styles.saveBtn}
 							onPress={this._getLocationAsync}
 							disabled={isSigningUp}>
-							{isSigningUp ? <ActivityIndicator color='#fff' /> : <Text>Save</Text>}
+							{isSigningUp ? (
+								<ActivityIndicator color='#fff' />
+							) : (
+								<Text>{t('userdetailmodal:save')}</Text>
+							)}
 						</Button>
 					</Content>
 				</ScrollView>

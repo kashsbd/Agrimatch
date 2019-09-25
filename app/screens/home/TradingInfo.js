@@ -21,12 +21,13 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import Constants from 'expo-constants';
+import { withTranslation } from 'react-i18next';
 
 import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 import { cropUrl } from '../../utils/global';
 
-export class TradingInfo extends Component {
+class TradingInfoScreen extends Component {
 	state = {
 		cropType: 'Sesame',
 		quantity: '',
@@ -38,11 +39,12 @@ export class TradingInfo extends Component {
 
 	onSave = async () => {
 		const { cropType, quantity, image } = this.state;
+		const { t } = this.props;
 
 		if (quantity.trim().length === 0) {
-			alert('Please enter quantity.');
+			alert(t('tradinginfo:enter_quantity'));
 		} else if (image === null) {
-			alert('Please select sample photo');
+			alert(t('tradinginfo:select_photo'));
 		} else {
 			let data = new FormData();
 			data.append('userId', LoggedUserCredentials.getUserId());
@@ -74,15 +76,16 @@ export class TradingInfo extends Component {
 
 			try {
 				let res = await fetch(cropUrl, config);
-				this.setState({ isSaving: false });
 				if (res.status == 201) {
+					this.setState({ isSaving: false });
 					const crop = await res.json();
 					this.props.navigation.state.params.updateCropList(crop);
 					this.props.navigation.goBack();
+				} else if (res.status == 500) {
+					this.setState({ isSaving: false }, () => alert(t('errors:try_later')));
 				}
 			} catch (error) {
-				console.log(error);
-				this.setState({ isSaving: false });
+				this.setState({ isSaving: false }, () => alert(t('errors:no_internet')));
 			}
 		}
 	};
@@ -120,6 +123,7 @@ export class TradingInfo extends Component {
 
 	render() {
 		const { cropType, quantity, image, isSaving } = this.state;
+		const { t } = this.props;
 
 		return (
 			<Container>
@@ -131,9 +135,9 @@ export class TradingInfo extends Component {
 					</Left>
 					<Body>
 						{LoggedUserCredentials.getUserType() === 'FARMER' ? (
-							<Title>Selling Info</Title>
+							<Title>{t('tradinginfo:selling_info')}</Title>
 						) : (
-							<Title>Buying Info</Title>
+							<Title>{t('tradinginfo:buying_info')}</Title>
 						)}
 					</Body>
 					<Right>
@@ -146,18 +150,18 @@ export class TradingInfo extends Component {
 				<Content padder contentContainerStyle={{ flexGrow: 1 }}>
 					{isSaving ? (
 						<View style={styles.centerContent}>
-							<Text>Saving ..</Text>
+							<Text>{t('common:saving')}</Text>
 						</View>
 					) : (
 						<>
 							{LoggedUserCredentials.getUserType() === 'FARMER' ? (
-								<H3 style={styles.h3}>What do you want to sell today? </H3>
+								<H3 style={styles.h3}>{t('tradinginfo:sell_today')} </H3>
 							) : (
-								<H3 style={styles.h3}>What do you want to buy today? </H3>
+								<H3 style={styles.h3}>{t('tradinginfo:buy_today')} </H3>
 							)}
 
 							<View style={{ marginVertical: 40 }}>
-								<Text style={styles.h3}>Type of Crop</Text>
+								<Text style={styles.h3}>{t('tradinginfo:type_of_crop')}</Text>
 								<Item picker style={{ marginLeft: 40, marginRight: 40 }}>
 									<Picker
 										mode='dropdown'
@@ -174,7 +178,7 @@ export class TradingInfo extends Component {
 							</View>
 
 							<View>
-								<Text style={styles.h3}>Quantity</Text>
+								<Text style={styles.h3}>{t('tradinginfo:quantity')}</Text>
 								<View
 									style={{
 										marginLeft: 40,
@@ -197,13 +201,13 @@ export class TradingInfo extends Component {
 											textAlignVertical: 'center',
 											marginLeft: 5,
 										}}>
-										Kg
+										{t('tradinginfo:kg')}
 									</Text>
 								</View>
 							</View>
 
 							<View style={{ marginVertical: 40 }}>
-								<Text style={styles.h3}>Sample Photo</Text>
+								<Text style={styles.h3}>{t('tradinginfo:sample_photo')}</Text>
 								{image ? (
 									<View>
 										<Image source={{ uri: image.uri }} style={styles.img} />
@@ -227,6 +231,10 @@ export class TradingInfo extends Component {
 		);
 	}
 }
+
+const TradingInfo = withTranslation(['tradinginfo, errors', 'common'])(TradingInfoScreen);
+
+export { TradingInfo };
 
 const styles = StyleSheet.create({
 	saveBtn: {

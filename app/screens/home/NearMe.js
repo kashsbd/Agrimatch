@@ -17,13 +17,14 @@ import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import { withTranslation } from 'react-i18next';
 
 import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 
 import { locationUrl } from '../../utils/global';
 
-export class NearMe extends Component {
+class NearMeScreen extends Component {
 	state = {
 		dialogVisible: false,
 		markers: [],
@@ -73,6 +74,8 @@ export class NearMe extends Component {
 			location: { latitude, longitude },
 		} = this.state;
 
+		const { t } = this.props;
+
 		const lat = latitude ? latitude : 12.45;
 
 		const lng = longitude ? longitude : 14.23;
@@ -104,11 +107,11 @@ export class NearMe extends Component {
 						loading: false,
 						markers: [],
 					},
-					() => alert('Something went wront.Please try later.'),
+					() => alert(t('errors:try_later')),
 				);
 			}
 		} catch (error) {
-			this.setState({ loading: false, markers: [] }, () => alert('Please connect to internet.'));
+			this.setState({ loading: false, markers: [] }, () => alert(t('errors:no_internet')));
 		}
 	}
 
@@ -120,6 +123,8 @@ export class NearMe extends Component {
 		const {
 			location: { latitude, longitude },
 		} = this.state;
+
+		const { t } = this.props;
 
 		const lat = latitude ? latitude : 12.45;
 
@@ -152,11 +157,11 @@ export class NearMe extends Component {
 						loading: false,
 						markers: [],
 					},
-					() => alert('Something went wront.Please try later.'),
+					() => alert(t('errors:try_later')),
 				);
 			}
 		} catch (error) {
-			this.setState({ loading: false, markers: [] }, () => alert('Please connect to internet.'));
+			this.setState({ loading: false, markers: [] }, () => alert(t('errors:no_internet')));
 		}
 	};
 
@@ -268,44 +273,41 @@ export class NearMe extends Component {
 
 	renderNearMeButtons() {
 		const { showFarmersCount, showMiddlemenCount, markers } = this.state;
+		const { t } = this.props;
 
 		return (
 			<View style={styles.nearMeMenuContainer}>
 				{showFarmersCount ? (
 					<View style={{ alignSelf: 'center' }}>
-						<Text style={{ color: Color.mainColor }}>Now Showing Farmers Near You</Text>
+						<Text style={{ color: Color.mainColor }}>{t('nearme:showing_farmers')}</Text>
 						<Text
 							style={{
 								textAlign: 'center',
 								color: Color.mainColor,
 							}}>
-							{markers.length > 1
-								? markers.length + ' results found'
-								: markers.length + ' result found'}
+							{t('nearme:results_found', { count: markers.length })}
 						</Text>
 					</View>
 				) : (
 					<Button block light style={{ height: 42 }} onPress={this._findFarmers}>
-						<RNText style={styles.nearMeText}>Show Farmers Near Me</RNText>
+						<RNText style={styles.nearMeText}>{t('nearme:show_farmers')}</RNText>
 					</Button>
 				)}
 
 				{showMiddlemenCount ? (
 					<View style={{ alignSelf: 'center' }}>
-						<Text style={{ color: Color.mainColor }}>Now Showing Middlemen Near You</Text>
+						<Text style={{ color: Color.mainColor }}>{t('nearme:showing_middlemen')}</Text>
 						<Text
 							style={{
 								textAlign: 'center',
 								color: Color.mainColor,
 							}}>
-							{markers.length > 1
-								? markers.length + ' results found'
-								: markers.length + ' result found'}
+							{t('nearme:results_found', { count: markers.length })}
 						</Text>
 					</View>
 				) : (
 					<Button block style={{ marginTop: 5, height: 42 }} light onPress={this._findMiddlemen}>
-						<RNText style={styles.nearMeText}>Show Middlemen Near Me</RNText>
+						<RNText style={styles.nearMeText}>{t('nearme:show_middlemen')}</RNText>
 					</Button>
 				)}
 			</View>
@@ -324,6 +326,8 @@ export class NearMe extends Component {
 			location,
 		} = this.state;
 
+		const { t } = this.props;
+
 		return (
 			<Container>
 				<Header style={{ backgroundColor: Color.mainColor }}>
@@ -333,7 +337,7 @@ export class NearMe extends Component {
 						</Button>
 					</Left>
 					<Body>
-						<Title>Find People</Title>
+						<Title>{t('nearme:title')}</Title>
 					</Body>
 					<Right />
 				</Header>
@@ -417,7 +421,9 @@ export class NearMe extends Component {
 											<Text style={styles.nameStyle}>
 												{selectedGroup
 													? selectedGroup.name
-													: 'Hello, ' + LoggedUserCredentials.getUserName() + ' !'}
+													: t('nearme:greeting', {
+															name: LoggedUserCredentials.getUserName(),
+													  })}
 											</Text>
 										</Body>
 										<Right>
@@ -428,7 +434,7 @@ export class NearMe extends Component {
 									</View>
 								) : (
 									<Text style={styles.nameStyle}>
-										Hello, {LoggedUserCredentials.getUserName() + ' '}!
+										{t('nearme:greeting', { name: LoggedUserCredentials.getUserName() })}
 									</Text>
 								)}
 							</View>
@@ -495,6 +501,10 @@ export class NearMe extends Component {
 		);
 	}
 }
+
+const NearMe = withTranslation(['nearme, errors', 'common'])(NearMeScreen);
+
+export { NearMe };
 
 const styles = StyleSheet.create({
 	footerContainer: {

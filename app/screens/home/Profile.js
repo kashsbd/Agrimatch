@@ -20,13 +20,14 @@ import { Recorder, AudioPlayer } from '../../components';
 
 import StarRating from 'react-native-star-rating';
 import ImageLoad from 'react-native-image-placeholder';
+import { withTranslation } from 'react-i18next';
 
 import Color from '../../theme/Colors';
 
 import { userUrl, ratingUrl } from '../../utils/global';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 
-export class Profile extends Component {
+class ProfileScreen extends Component {
 	state = {
 		feedbackText: '',
 		feedBackStartCount: 0,
@@ -40,9 +41,10 @@ export class Profile extends Component {
 
 	_validate = () => {
 		const { feedBackStartCount } = this.state;
+		const { t } = this.props;
 
 		if (feedBackStartCount == 0) {
-			alert("Can't save without rating user.");
+			alert(t('profile:can_not_save'));
 		} else {
 			this.setState({ isSaving: true }, this.onSave);
 		}
@@ -51,6 +53,7 @@ export class Profile extends Component {
 	onSave = async () => {
 		const { feedbackText, feedBackStartCount, recordingUri } = this.state;
 
+		const { t } = this.props;
 		const { user } = this.props.navigation.state.params;
 
 		const data = new FormData();
@@ -92,10 +95,10 @@ export class Profile extends Component {
 					recordingUri: undefined,
 				});
 			} else {
-				this.setState({ isSaving: false }, () => alert('Something went Wrong.Try Again!'));
+				this.setState({ isSaving: false }, () => alert(t('errors:try_later')));
 			}
 		} catch (error) {
-			this.setState({ isSaving: false }, () => alert('Please connect to internet!'));
+			this.setState({ isSaving: false }, () => alert(t('errors:no_internet')));
 		}
 	};
 
@@ -132,6 +135,7 @@ export class Profile extends Component {
 
 	render() {
 		const { user } = this.props.navigation.state.params;
+		const { t } = this.props;
 
 		const { feedbackText, feedBackStartCount, isSaving } = this.state;
 
@@ -156,7 +160,7 @@ export class Profile extends Component {
 				<Content contentContainerStyle={{ flexGrow: 1 }}>
 					{isSaving ? (
 						<View style={styles.centerContent}>
-							<Text style={{ fontSize: 15, fontWeight: '500' }}>Saving ...</Text>
+							<Text style={{ fontSize: 15, fontWeight: '500' }}>{t('common:saving')}</Text>
 						</View>
 					) : (
 						<>
@@ -167,7 +171,12 @@ export class Profile extends Component {
 								isShowActivity={true}
 							/>
 
-							<H3 style={styles.h3}>{`How was farmer ${user.user.name} ?`}</H3>
+							<H3 style={styles.h3}>
+								{t('profile:how_was_people', {
+									userType: user.user.userType.toLowerCase(),
+									name: user.user.name,
+								})}
+							</H3>
 
 							<View
 								style={{
@@ -190,7 +199,7 @@ export class Profile extends Component {
 									alignSelf: 'center',
 									paddingTop: 25,
 								}}>
-								<H3 style={styles.h3}>Additional Feedback</H3>
+								<H3 style={styles.h3}>{t('profile:additional_feedback')}</H3>
 								<Textarea
 									rowSpan={4}
 									bordered
@@ -211,6 +220,10 @@ export class Profile extends Component {
 		);
 	}
 }
+
+const Profile = withTranslation(['profile, errors', 'common'])(ProfileScreen);
+
+export { Profile };
 
 const styles = StyleSheet.create({
 	logo: {

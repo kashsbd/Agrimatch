@@ -16,12 +16,13 @@ import SegmentedControlTab from 'react-native-segmented-control-tab';
 
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
+import { withTranslation } from 'react-i18next';
 
 import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 import { userUrl } from '../../utils/global';
 
-export class Home extends Component {
+class HomeScreen extends Component {
 	state = {
 		selectedIndex: LoggedUserCredentials.getUserType() === 'FARMER' ? 0 : 1,
 		isLoading: false,
@@ -117,6 +118,7 @@ export class Home extends Component {
 
 	render() {
 		const { numberOfUser, isLoading, isError, wholeScreenLoading, location } = this.state;
+		const { t } = this.props;
 
 		if (wholeScreenLoading) {
 			return (
@@ -138,7 +140,7 @@ export class Home extends Component {
 							tabTextStyle={segStyle.tabTextStyle}
 							activeTabStyle={segStyle.activeTabStyle}
 							activeTabTextStyle={segStyle.activeTabTextStyle}
-							values={['Farmer', 'Middleman']}
+							values={[t('common:farmer_label'), t('common:middleman_label')]}
 							selectedIndex={this.state.selectedIndex}
 							onTabPress={this._handleLogOut}
 						/>
@@ -158,10 +160,9 @@ export class Home extends Component {
 
 					<View style={styles.footerContainer}>
 						<View style={styles.nameContainer}>
-							<Text
-								style={
-									styles.nameStyle
-								}>{`Hello, ${LoggedUserCredentials.getUserName()}`}</Text>
+							<Text style={styles.nameStyle}>{`${t(
+								'home:greeting',
+							)} ${LoggedUserCredentials.getUserName()}`}</Text>
 						</View>
 
 						{isLoading ? (
@@ -173,8 +174,8 @@ export class Home extends Component {
 								<TouchableOpacity>
 									<View style={{ alignItems: 'center' }}>
 										<Icon name='ios-wifi' color='black' style={{ fontSize: 40 }} />
-										<Text>No Internet Connection !</Text>
-										<Text> Tap To Retry </Text>
+										<Text>{t('home:no_internet')}</Text>
+										<Text> {t('home:tap_to_retry')} </Text>
 									</View>
 								</TouchableOpacity>
 							</View>
@@ -182,15 +183,11 @@ export class Home extends Component {
 							<>
 								{LoggedUserCredentials.getUserType() === 'FARMER' ? (
 									<Text style={styles.usingText}>
-										{numberOfUser > 1
-											? `${numberOfUser} farmers are using AgriMatch!`
-											: `${numberOfUser} farmer is using AgriMatch!`}
+										{t('home:farmers_are_using', { numberOfUser })}
 									</Text>
 								) : (
 									<Text style={styles.usingText}>
-										{numberOfUser > 1
-											? `${numberOfUser} middlemen are using AgriMatch!`
-											: `${numberOfUser} middleman is using AgriMatch!`}
+										{t('home:middlemen_are_using', { numberOfUser })}
 									</Text>
 								)}
 
@@ -206,7 +203,7 @@ export class Home extends Component {
 													style={styles.iconStyle}
 												/>
 											</View>
-											<Text style={styles.msgStyle}>Messages</Text>
+											<Text style={styles.msgStyle}>{t('home:messages')}</Text>
 										</View>
 									</TouchableOpacity>
 
@@ -218,15 +215,15 @@ export class Home extends Component {
 												<Icon name='add' size={20} style={styles.iconStyle} />
 											</View>
 											{LoggedUserCredentials.getUserType() === 'FARMER' ? (
-												<Text style={styles.msgStyle}>Sell Goods</Text>
+												<Text style={styles.msgStyle}>{t('home:sell_goods')}</Text>
 											) : (
-												<Text style={styles.msgStyle}>Buy Goods</Text>
+												<Text style={styles.msgStyle}>{t('home:buy_goods')}</Text>
 											)}
 										</View>
 									</TouchableOpacity>
 
 									<TouchableOpacity
-										style={[styles.btnBubbleContainer, { paddingTop: 20 }]}
+										style={[styles.btnBubbleContainer]}
 										onPress={this._openNearMe}>
 										<View style={{ alignItems: 'center' }}>
 											<View style={styles.iconWrapper}>
@@ -237,7 +234,7 @@ export class Home extends Component {
 													color: Color.mainColor,
 													textAlign: 'center',
 												}}>
-												Find People Near Me
+												{t('home:find_people')}
 											</Text>
 										</View>
 									</TouchableOpacity>
@@ -250,6 +247,10 @@ export class Home extends Component {
 		);
 	}
 }
+
+const Home = withTranslation(['home, errors', 'common'])(HomeScreen);
+
+export { Home };
 
 const segStyle = StyleSheet.create({
 	tabsContainerStyle: {

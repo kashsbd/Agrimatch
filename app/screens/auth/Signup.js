@@ -37,9 +37,9 @@ class SignupScreen extends Component {
 		} else if (password.trim().length === 0) {
 			this.setState({ errorText: t('errors:enter_password') });
 		} else if (confirm_password.trim().length === 0) {
-			this.setState({ errorText: 'Please enter confirm password.' });
+			this.setState({ errorText: t('errors:enter_confirm_password') });
 		} else if (password.trim() !== confirm_password.trim()) {
-			this.setState({ errorText: 'Passwords do not match.' });
+			this.setState({ errorText: t('errors:password_do_not_match') });
 		} else {
 			this.setState({ isChecking: true, errorText: '' }, () => this._tryToCheckEmail());
 		}
@@ -68,17 +68,17 @@ class SignupScreen extends Component {
 			const res = await fetch(path, config);
 
 			if (res.status == 409) {
-				const errorText = 'Mail already exists.Please try different email.';
+				const errorText = t('signup:already_mail_exists');
 				this.setState({ isChecking: false, errorText });
 			} else if (res.status == 200) {
 				const param = { email, password, userType };
 				this.setState({ isChecking: false, errorText: '' }, () => this.userDetailRef.open(param));
 			} else {
-				const errorText = 'Something Wrong.Try Again!';
+				const errorText = t('errors:500_error');
 				this.setState({ isChecking: false, errorText });
 			}
 		} catch (error) {
-			const errorText = 'Please connect to internet!';
+			const errorText = t('errors:no_internet');
 			this.setState({ isChecking: false, errorText });
 		}
 	}
@@ -114,16 +114,16 @@ class SignupScreen extends Component {
 								placeholderIconColor='#007aff'
 								selectedValue={userType}
 								onValueChange={this.onUserTypeChange}>
-								<Picker.Item label='Select User Type' value='key0' />
-								<Picker.Item label='Farmer' value='FARMER' />
-								<Picker.Item label='Middleman' value='MIDDLEMAN' />
+								<Picker.Item label={t('common:select_user_type')} value='key0' />
+								<Picker.Item label={t('common:farmer_label')} value='FARMER' />
+								<Picker.Item label={t('common:middleman_label')} value='MIDDLEMAN' />
 							</Picker>
 						</Item>
 
 						<Item>
 							<Input
 								value={email}
-								placeholder='Email'
+								placeholder={t('common:email')}
 								onChangeText={this.onEmailChange}
 								keyboardType='email-address'
 							/>
@@ -132,7 +132,7 @@ class SignupScreen extends Component {
 						<Item>
 							<Input
 								value={password}
-								placeholder='Password'
+								placeholder={t('common:password')}
 								secureTextEntry
 								onChangeText={this.onPasswordChange}
 							/>
@@ -141,7 +141,7 @@ class SignupScreen extends Component {
 						<Item>
 							<Input
 								value={confirm_password}
-								placeholder='Confirm Password'
+								placeholder={t('common:confirm_password')}
 								secureTextEntry
 								onChangeText={this.onConfirmPasswordChange}
 							/>
@@ -155,13 +155,13 @@ class SignupScreen extends Component {
 					)}
 
 					<Button block style={styles.nextBtn} onPress={this._validateNext} disabled={isChecking}>
-						{isChecking ? <ActivityIndicator color='#fff' /> : <Text>Next</Text>}
+						{isChecking ? <ActivityIndicator color='#fff' /> : <Text>{t('signup:next')}</Text>}
 					</Button>
 
 					<Text style={styles.bottomText}>
-						<Text>Already have an account? </Text>
+						<Text>{t('signup:already_have_account')} </Text>
 						<Text style={styles.goBackBtn} onPress={this._goBack}>
-							Sign in now
+							{t('signup:sign_in_now')}
 						</Text>
 					</Text>
 				</Content>
@@ -172,7 +172,7 @@ class SignupScreen extends Component {
 	}
 }
 
-const Signup = withTranslation(['signup, errors', 'common'])(SignupScreen);
+const Signup = withTranslation(['signup, errors', 'common', 'userdetailmodal'])(SignupScreen);
 
 export { Signup };
 

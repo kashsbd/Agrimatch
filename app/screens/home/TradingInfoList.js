@@ -4,12 +4,13 @@ import { StyleSheet, View, Text as RNText, ActivityIndicator, TouchableOpacity, 
 import { Container, Button, Icon, Header, Left, Body, Right, Title, Text, Item } from 'native-base';
 
 import { AccordionList } from 'accordion-collapse-react-native';
+import { withTranslation } from 'react-i18next';
 
 import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 import { cropUrl, baseUrl } from '../../utils/global';
 
-export class TradingInfoList extends Component {
+class TradingInfoListScreen extends Component {
 	state = {
 		loading: false,
 		crops: [],
@@ -127,15 +128,17 @@ export class TradingInfoList extends Component {
 	};
 
 	_renderAccordionBody = item => {
+		const { t } = this.props;
+
 		return (
 			<View style={{ paddingLeft: 20 }} key={item._id}>
 				<Item>
-					<Text>Crop Type : </Text>
+					<Text>{t('tradinginfolist:crop_type')}</Text>
 					<Text>{item.cropType}</Text>
 				</Item>
 				<Item>
-					<Text>Quantity : </Text>
-					<Text>{item.quantity + ' kg'}</Text>
+					<Text>{t('tradinginfolist:quantity')} </Text>
+					<Text>{t('tradinginfolist:crop_type', { qt: item.quantity })}</Text>
 				</Item>
 				{item.media && (
 					<Item style={{ justifyContent: 'center', padding: 10 }}>
@@ -159,7 +162,7 @@ export class TradingInfoList extends Component {
 		return (
 			<View style={styles.centerContent}>
 				<Icon name='ios-paper' color='black' style={{ fontSize: 40 }} />
-				<Text style={styles.blackText}>No crop list to show !</Text>
+				<Text style={styles.blackText}>{t('tradinginfolist:no_crops')}</Text>
 			</View>
 		);
 	};
@@ -178,9 +181,9 @@ export class TradingInfoList extends Component {
 					</Left>
 					<Body>
 						{LoggedUserCredentials.getUserType() === 'FARMER' ? (
-							<Title>Selling Info List</Title>
+							<Title>{t('tradinginfolist:selling_info_list')}</Title>
 						) : (
-							<Title>Buying Info List</Title>
+							<Title>{t('tradinginfolist:buying_info_list')}</Title>
 						)}
 					</Body>
 
@@ -193,7 +196,7 @@ export class TradingInfoList extends Component {
 					) : (
 						<Right>
 							<Button transparent onPress={this._goToProfile}>
-								<RNText style={styles.transactStyle}>Transact</RNText>
+								<RNText style={styles.transactStyle}>{t('tradinginfolist:transact')}</RNText>
 							</Button>
 						</Right>
 					)}
@@ -209,8 +212,8 @@ export class TradingInfoList extends Component {
 							<TouchableOpacity>
 								<View style={{ alignItems: 'center' }}>
 									<Icon name='ios-wifi' color='black' style={{ fontSize: 40 }} />
-									<Text>No Internet Connection !</Text>
-									<Text> Tap To Retry </Text>
+									<Text>{t('tradinginfolist:no_internet')}</Text>
+									<Text> {t('tradinginfolist:tap_to_retry')} </Text>
 								</View>
 							</TouchableOpacity>
 						</View>
@@ -236,6 +239,10 @@ export class TradingInfoList extends Component {
 		);
 	}
 }
+
+const TradingInfoList = withTranslation(['tradinginfolist, errors', 'common'])(TradingInfoListScreen);
+
+export { TradingInfoList };
 
 const styles = StyleSheet.create({
 	transactStyle: {
