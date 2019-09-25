@@ -3,8 +3,7 @@ import { ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native';
 
 import { Content, Button, Item, Input, Form, Text, Picker, Icon } from 'native-base';
 
-import * as Location from 'expo-location';
-import * as Permissions from 'expo-permissions';
+import { withTranslation } from 'react-i18next';
 
 import UserDetailModal from './UserDetailModal';
 
@@ -13,7 +12,7 @@ import imageLogo from '../../assets/images/logo.png';
 import Color from '../../theme/Colors';
 import { userUrl } from '../../utils/global';
 
-export class Signup extends Component {
+class SignupScreen extends Component {
 	state = {
 		email: '',
 		password: '',
@@ -25,17 +24,18 @@ export class Signup extends Component {
 
 	_validateNext = () => {
 		const { email, password, confirm_password, userType } = this.state;
+		const { t } = this.props;
 
 		const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 		if (userType === 'key0') {
-			this.setState({ errorText: 'Please select user type.' });
+			this.setState({ errorText: t('errors:select_user_type') });
 		} else if (email.trim().length === 0) {
-			this.setState({ errorText: 'Please enter email.' });
+			this.setState({ errorText: t('errors:enter_email') });
 		} else if (reg.test(email) === false) {
-			this.setState({ errorText: 'Please enter valid email.' });
+			this.setState({ errorText: t('errors:enter_valid_email') });
 		} else if (password.trim().length === 0) {
-			this.setState({ errorText: 'Please enter password.' });
+			this.setState({ errorText: t('errors:enter_password') });
 		} else if (confirm_password.trim().length === 0) {
 			this.setState({ errorText: 'Please enter confirm password.' });
 		} else if (password.trim() !== confirm_password.trim()) {
@@ -47,6 +47,7 @@ export class Signup extends Component {
 
 	async _tryToCheckEmail() {
 		const { email, userType, password } = this.state;
+		const { t } = this.props;
 
 		const data = {
 			email,
@@ -96,6 +97,7 @@ export class Signup extends Component {
 
 	render() {
 		const { userType, email, password, confirm_password, isChecking, errorText } = this.state;
+		const { t } = this.props;
 
 		return (
 			<ScrollView style={styles.container}>
@@ -169,6 +171,10 @@ export class Signup extends Component {
 		);
 	}
 }
+
+const Signup = withTranslation(['signup, errors', 'common'])(SignupScreen);
+
+export { Signup };
 
 const styles = StyleSheet.create({
 	container: {

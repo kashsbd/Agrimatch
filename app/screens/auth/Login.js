@@ -1,24 +1,11 @@
 import React, { Component } from 'react';
-import {
-	ScrollView,
-	Image,
-	StyleSheet,
-	ActivityIndicator,
-	AsyncStorage,
-} from 'react-native';
+import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
 
-import {
-	Content,
-	Button,
-	Item,
-	Input,
-	Form,
-	Text,
-	Picker,
-	Icon,
-} from 'native-base';
+import { Content, Button, Item, Input, Form, Text, Picker, Icon } from 'native-base';
 
+import { Switch } from 'react-native-switch';
 import md5 from 'react-native-md5';
+import { withTranslation } from 'react-i18next';
 
 import imageLogo from '../../assets/images/logo.png';
 
@@ -26,37 +13,38 @@ import Color from '../../theme/Colors';
 import { loginUrl } from '../../utils/global';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 
-export class Login extends Component {
+class LoginScreen extends Component {
 	state = {
 		email: '',
 		password: '',
 		userType: 'key0',
 		isLoggingIn: false,
 		errorText: '',
+		isEng: true,
 	};
 
 	_validateSignIn = () => {
 		const { email, password, userType } = this.state;
+		const { t } = this.props;
 
 		const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 		if (userType === 'key0') {
-			this.setState({ errorText: 'Please select user type.' });
+			this.setState({ errorText: t('errors:select_user_type') });
 		} else if (email.trim().length === 0) {
-			this.setState({ errorText: 'Please enter email.' });
+			this.setState({ errorText: t('errors:enter_email') });
 		} else if (reg.test(email) === false) {
-			this.setState({ errorText: 'Please enter valid email.' });
+			this.setState({ errorText: t('errors:enter_valid_email') });
 		} else if (password.trim().length === 0) {
-			this.setState({ errorText: 'Please enter password.' });
+			this.setState({ errorText: t('errors:enter_password') });
 		} else {
-			this.setState({ isLoggingIn: true, errorText: '' }, () =>
-				this._tryToSignIn(),
-			);
+			this.setState({ isLoggingIn: true, errorText: '' }, () => this._tryToSignIn());
 		}
 	};
 
 	async _tryToSignIn() {
 		const { email, password, userType } = this.state;
+		const { t } = this.props;
 
 		const data = {
 			email,
@@ -78,7 +66,7 @@ export class Login extends Component {
 			if (res.status == 401) {
 				this.setState({
 					isLoggingIn: false,
-					errorText: 'Login fail.Try again!',
+					errorText: t('errors:login_fail'),
 				});
 			} else if (res.status == 200) {
 				const resJson = await res.json();
@@ -95,22 +83,15 @@ export class Login extends Component {
 					resJson.userType,
 				);
 
-				await AsyncStorage.multiSet([
-					accessTokenArray,
-					userIdArray,
-					userNameArray,
-					userTypeArray,
-				]);
+				await AsyncStorage.multiSet([accessTokenArray, userIdArray, userNameArray, userTypeArray]);
 
-				this.setState({ isLoggingIn: false }, () =>
-					this.props.navigation.navigate('Home'),
-				);
+				this.setState({ isLoggingIn: false }, () => this.props.navigation.navigate('Home'));
 			} else {
-				const errorText = 'Something Wrong.Try Again!';
+				const errorText = t('errors:500_error');
 				this.setState({ isLoggingIn: false, errorText });
 			}
 		} catch (error) {
-			const errorText = 'Please connect to internet!';
+			const errorText = t('errors:no_internet');
 			this.setState({ isLoggingIn: false, errorText });
 		}
 	}
@@ -123,18 +104,47 @@ export class Login extends Component {
 
 	onPasswordChange = password => this.setState({ password });
 
+	onLanguageChange = lan => this.setState({ isEng: lan });
+
+	_renderInsideCircle = () => {
+		return <Text>mm</Text>;
+	};
+
 	render() {
-		const {
-			userType,
-			email,
-			password,
-			isLoggingIn,
-			errorText,
-		} = this.state;
+		const { userType, email, password, isLoggingIn, errorText, isEng } = this.state;
+
+		const { t } = this.props;
 
 		return (
 			<ScrollView style={styles.container}>
 				<Content>
+					<Switch
+						style={{ alignSelf: 'flex-end', margin: 10, backgroundColor: 'red' }}
+						value={isEng}
+						onValueChange={this.onLanguageChange}
+						disabled={false}
+						activeText='eng'
+						inActiveText='mm'
+						circleSize={50}
+						barHeight={1}
+						circleBorderWidth={3}
+						backgroundActive={Color.mainColor}
+						backgroundInactive='gray'
+						circleActiveColor='#30a566'
+						circleInActiveColor='#000000'
+						changeValueImmediately={true}
+						renderInsideCircle={this._renderInsideCircle}
+						changeValueImmediately={true}
+						innerCircleStyle={{ alignItems: 'center', justifyContent: 'center', margin: 50 }}
+						outerCircleStyle={{}}
+						renderActiveText={true}
+						renderInActiveText={true}
+						switchLeftPx={2}
+						switchRightPx={2}
+						switchWidthMultiplier={2}
+						switchBorderRadius={30}
+					/>
+
 					<Image source={imageLogo} style={styles.logo} />
 
 					<Form style={{ paddingRight: 15 }}>
@@ -147,22 +157,16 @@ export class Login extends Component {
 								placeholderIconColor='#007aff'
 								selectedValue={userType}
 								onValueChange={this.onUserTypeChange}>
-								<Picker.Item
-									label='Select User Type'
-									value='key0'
-								/>
-								<Picker.Item label='Farmer' value='FARMER' />
-								<Picker.Item
-									label='Middleman'
-									value='MIDDLEMAN'
-								/>
+								<Picker.Item label={t('common:select_user_type')} value='key0' />
+								<Picker.Item label={t('common:farmer_label')} value='FARMER' />
+								<Picker.Item label={t('common:middleman_label')} value='MIDDLEMAN' />
 							</Picker>
 						</Item>
 
 						<Item>
 							<Input
 								value={email}
-								placeholder='Email'
+								placeholder={t('common:email')}
 								onChangeText={this.onEmailChange}
 								keyboardType='email-address'
 							/>
@@ -171,7 +175,7 @@ export class Login extends Component {
 						<Item>
 							<Input
 								value={password}
-								placeholder='Password'
+								placeholder={t('common:password')}
 								secureTextEntry
 								onChangeText={this.onPasswordChange}
 							/>
@@ -189,19 +193,13 @@ export class Login extends Component {
 						style={styles.signinBtn}
 						onPress={this._validateSignIn}
 						disabled={isLoggingIn}>
-						{isLoggingIn ? (
-							<ActivityIndicator color='#fff' />
-						) : (
-							<Text>Sign In</Text>
-						)}
+						{isLoggingIn ? <ActivityIndicator color='#fff' /> : <Text>{t('login:sign_in')}</Text>}
 					</Button>
 
 					<Text style={styles.bottomText}>
-						<Text>Don't have an account? </Text>
-						<Text
-							style={styles.signupBtn}
-							onPress={this._goToSignup}>
-							Sign up now
+						<Text>{t("login:don't_have_account")} </Text>
+						<Text style={styles.signupBtn} onPress={this._goToSignup}>
+							{t('login:sign_up_now')}
 						</Text>
 					</Text>
 				</Content>
@@ -209,6 +207,10 @@ export class Login extends Component {
 		);
 	}
 }
+
+const Login = withTranslation(['login, errors', 'common'])(LoginScreen);
+
+export { Login };
 
 const styles = StyleSheet.create({
 	container: {

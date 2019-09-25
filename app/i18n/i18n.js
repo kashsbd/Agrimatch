@@ -1,15 +1,28 @@
-import I18n from 'i18n-js';
+import i18n from 'i18next';
 import * as Localization from 'expo-localization';
 
 const en = require('./locales/en.json');
 const my = require('./locales/my.json');
 
-I18n.fallbacks = true;
-I18n.translations = {
-	en,
-	my,
+const languageDetector = {
+	type: 'languageDetector',
+	async: true,
+	detect: cb => cb(Localization.locale.split('-')[0]),
+	init: () => {},
+	cacheUserLanguage: () => {},
 };
 
-I18n.locale = Localization.locale;
+i18n.use(languageDetector).init({
+	fallbackLng: 'en',
+	resources: {
+		en,
+		my,
+		ns: ['common'],
+		defaultNS: 'common',
+		interpolation: {
+			escapeValue: false,
+		},
+	},
+});
 
-export default I18n;
+export { i18n };
