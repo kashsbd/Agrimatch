@@ -138,6 +138,7 @@ export default class UserDetailModal extends Component {
 				const userIdArray = ['userId', resJson.userId];
 				const userNameArray = ['userName', resJson.name];
 				const userTypeArray = ['userType', resJson.userType];
+				const lngArray = ['lng', LoggedUserCredentials.getLanguage()];
 
 				LoggedUserCredentials.setLoggedUserData(
 					resJson.token,
@@ -146,7 +147,13 @@ export default class UserDetailModal extends Component {
 					resJson.userType,
 				);
 
-				await AsyncStorage.multiSet([accessTokenArray, userIdArray, userNameArray, userTypeArray]);
+				await AsyncStorage.multiSet([
+					accessTokenArray,
+					userIdArray,
+					userNameArray,
+					userTypeArray,
+					lngArray,
+				]);
 
 				this.setState({ isSigningUp: false, errorText: '' }, () =>
 					this.props.navigation.navigate('Home'),

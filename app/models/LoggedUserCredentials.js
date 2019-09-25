@@ -6,6 +6,7 @@ export default class LoggedUserCredentials {
 	userId = '';
 	userType = '';
 	location = null;
+	lng = 'en';
 
 	static setLoggedUserData(accessToken, userName, userId, userType) {
 		this.accessToken = accessToken;
@@ -36,5 +37,13 @@ export default class LoggedUserCredentials {
 
 	static getLocation() {
 		return this.location;
+	}
+
+	static setLanguage(lng) {
+		this.lng = lng;
+	}
+
+	static getLanguage() {
+		return this.lng;
 	}
 }

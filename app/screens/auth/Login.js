@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
 
-import { Content, Button, Item, Input, Form, Text, Picker, Icon } from 'native-base';
+import { Content, Button, Item, Input, Form, Text, Picker, Icon, View } from 'native-base';
 
-import { Switch } from 'react-native-switch';
+import SegmentedControlTab from 'react-native-segmented-control-tab';
 import md5 from 'react-native-md5';
 import { withTranslation } from 'react-i18next';
 
@@ -20,7 +20,7 @@ class LoginScreen extends Component {
 		userType: 'key0',
 		isLoggingIn: false,
 		errorText: '',
-		isEng: true,
+		selectedIndex: 0,
 	};
 
 	_validateSignIn = () => {
@@ -75,6 +75,7 @@ class LoginScreen extends Component {
 				const userIdArray = ['userId', resJson.userId];
 				const userNameArray = ['userName', resJson.name];
 				const userTypeArray = ['userType', resJson.userType];
+				const lngArray = ['lng', LoggedUserCredentials.getLanguage()];
 
 				LoggedUserCredentials.setLoggedUserData(
 					resJson.token,
@@ -83,7 +84,13 @@ class LoginScreen extends Component {
 					resJson.userType,
 				);
 
-				await AsyncStorage.multiSet([accessTokenArray, userIdArray, userNameArray, userTypeArray]);
+				await AsyncStorage.multiSet([
+					accessTokenArray,
+					userIdArray,
+					userNameArray,
+					userTypeArray,
+					lngArray,
+				]);
 
 				this.setState({ isLoggingIn: false }, () => this.props.navigation.navigate('Home'));
 			} else {
@@ -104,46 +111,42 @@ class LoginScreen extends Component {
 
 	onPasswordChange = password => this.setState({ password });
 
-	onLanguageChange = lan => this.setState({ isEng: lan });
+	onLanguageChange = index => this.setState({ selectedIndex: index }, this._changeLanguage);
 
-	_renderInsideCircle = () => {
-		return <Text>mm</Text>;
+	_changeLanguage = () => {
+		const { selectedIndex } = this.state;
+
+		if (selectedIndex == 0) {
+			this.props.i18n.changeLanguage('en');
+			LoggedUserCredentials.setLanguage('en');
+		} else {
+			this.props.i18n.changeLanguage('my');
+			LoggedUserCredentials.setLanguage('my');
+		}
 	};
 
 	render() {
-		const { userType, email, password, isLoggingIn, errorText, isEng } = this.state;
+		const { userType, email, password, isLoggingIn, errorText, selectedIndex } = this.state;
 
 		const { t } = this.props;
 
 		return (
 			<ScrollView style={styles.container}>
 				<Content>
-					<Switch
-						style={{ alignSelf: 'flex-end', margin: 10, backgroundColor: 'red' }}
-						value={isEng}
-						onValueChange={this.onLanguageChange}
-						disabled={false}
-						activeText='eng'
-						inActiveText='mm'
-						circleSize={50}
-						barHeight={1}
-						circleBorderWidth={3}
-						backgroundActive={Color.mainColor}
-						backgroundInactive='gray'
-						circleActiveColor='#30a566'
-						circleInActiveColor='#000000'
-						changeValueImmediately={true}
-						renderInsideCircle={this._renderInsideCircle}
-						changeValueImmediately={true}
-						innerCircleStyle={{ alignItems: 'center', justifyContent: 'center', margin: 50 }}
-						outerCircleStyle={{}}
-						renderActiveText={true}
-						renderInActiveText={true}
-						switchLeftPx={2}
-						switchRightPx={2}
-						switchWidthMultiplier={2}
-						switchBorderRadius={30}
-					/>
+					<View style={styles.switchContainer}>
+						<SegmentedControlTab
+							tabsContainerStyle={segStyle.tabsContainerStyle}
+							tabStyle={segStyle.tabStyle}
+							firstTabStyle={segStyle.firstTabStyle}
+							lastTabStyle={segStyle.lastTabStyle}
+							tabTextStyle={segStyle.tabTextStyle}
+							activeTabStyle={segStyle.activeTabStyle}
+							activeTabTextStyle={segStyle.activeTabTextStyle}
+							values={['English', 'မြန်မာ']}
+							selectedIndex={selectedIndex}
+							onTabPress={this.onLanguageChange}
+						/>
+					</View>
 
 					<Image source={imageLogo} style={styles.logo} />
 
@@ -212,6 +215,30 @@ const Login = withTranslation(['login, errors', 'common'])(LoginScreen);
 
 export { Login };
 
+const segStyle = StyleSheet.create({
+	tabsContainerStyle: {
+		borderColor: Color.mainColor,
+	},
+	tabStyle: {
+		borderRadius: 1,
+	},
+	firstTabStyle: {
+		borderColor: Color.mainColor,
+	},
+	lastTabStyle: {
+		borderColor: Color.mainColor,
+	},
+	tabTextStyle: {
+		color: Color.mainColor,
+	},
+	activeTabStyle: {
+		backgroundColor: Color.mainColor,
+	},
+	activeTabTextStyle: {
+		color: '#fff',
+	},
+});
+
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
@@ -242,5 +269,12 @@ const styles = StyleSheet.create({
 		paddingRight: 17,
 		textAlignVertical: 'center',
 		height: 40,
+	},
+	switchContainer: {
+		paddingTop: 15,
+		position: 'absolute',
+		zIndex: 999,
+		width: '60%',
+		alignSelf: 'center',
 	},
 });

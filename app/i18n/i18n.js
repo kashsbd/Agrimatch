@@ -7,8 +7,7 @@ const my = require('./locales/my.json');
 const languageDetector = {
 	type: 'languageDetector',
 	async: true,
-	// detect: cb => cb(Localization.locale.split('-')[0]),
-	detect: cb => cb('en'),
+	detect: cb => cb(Localization.locale.split('-')[0]),
 	init: () => {},
 	cacheUserLanguage: () => {},
 };

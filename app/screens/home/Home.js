@@ -91,7 +91,7 @@ class HomeScreen extends Component {
 	}
 
 	_handleLogOut = async () => {
-		const keys = ['accessToken', 'userId', 'userName', 'userType'];
+		const keys = ['accessToken', 'userId', 'userName', 'userType', 'lng'];
 
 		try {
 			await AsyncStorage.multiRemove(keys);
