@@ -1,4 +1,5 @@
 import i18n from 'i18next';
+import { AsyncStorage } from 'react-native';
 import * as Localization from 'expo-localization';
 
 const en = require('./locales/en.json');
@@ -7,7 +8,19 @@ const my = require('./locales/my.json');
 const languageDetector = {
 	type: 'languageDetector',
 	async: true,
-	detect: cb => cb(Localization.locale.split('-')[0]),
+	detect: async cb => {
+		try {
+			const lng = await AsyncStorage.getItem('lng');
+
+			if (lng) {
+				return cb(lng);
+			}
+
+			return cb(Localization.locale.split('-')[0]);
+		} catch (error) {
+			return cb(Localization.locale.split('-')[0]);
+		}
+	},
 	init: () => {},
 	cacheUserLanguage: () => {},
 };

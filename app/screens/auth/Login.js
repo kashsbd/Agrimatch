@@ -20,7 +20,7 @@ class LoginScreen extends Component {
 		userType: 'key0',
 		isLoggingIn: false,
 		errorText: '',
-		selectedIndex: 0,
+		selectedIndex: this.props.i18n.language == 'en' ? 0 : 1,
 	};
 
 	_validateSignIn = () => {
