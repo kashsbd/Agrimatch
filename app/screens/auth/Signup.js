@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { ScrollView, Image, StyleSheet, ActivityIndicator, Platform } from 'react-native';
 
 import { Content, Button, Item, Input, Form, Text, Picker, Icon } from 'native-base';
 
@@ -111,6 +111,7 @@ class SignupScreen extends Component {
 								iosIcon={<Icon name='arrow-down' />}
 								style={{ width: undefined }}
 								placeholderStyle={{ color: '#bfc6ea' }}
+								textStyle={{ fontFamily: 'Padauk_Regular' }}
 								placeholderIconColor='#007aff'
 								selectedValue={userType}
 								onValueChange={this.onUserTypeChange}>
@@ -159,7 +160,7 @@ class SignupScreen extends Component {
 					</Button>
 
 					<Text style={styles.bottomText}>
-						<Text>{t('signup:already_have_account')} </Text>
+						<Text>{t('signup:already_have_account')}</Text>
 						<Text style={styles.goBackBtn} onPress={this._goBack}>
 							{t('signup:sign_in_now')}
 						</Text>
@@ -198,6 +199,11 @@ const styles = StyleSheet.create({
 	goBackBtn: {
 		fontSize: 16,
 		fontWeight: '500',
+		...Platform.select({
+			ios: {
+				fontFamily: 'Padauk_Bold',
+			},
+		}),
 	},
 	errorText: {
 		color: 'red',

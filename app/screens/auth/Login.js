@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
+import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage, Platform } from 'react-native';
 
 import { Content, Button, Item, Input, Form, Text, Picker, Icon, View } from 'native-base';
 
@@ -157,6 +157,7 @@ class LoginScreen extends Component {
 								iosIcon={<Icon name='arrow-down' />}
 								style={{ width: undefined }}
 								placeholderStyle={{ color: '#bfc6ea' }}
+								textStyle={{ fontFamily: 'Padauk_Regular' }}
 								placeholderIconColor='#007aff'
 								selectedValue={userType}
 								onValueChange={this.onUserTypeChange}>
@@ -200,7 +201,7 @@ class LoginScreen extends Component {
 					</Button>
 
 					<Text style={styles.bottomText}>
-						<Text>{t("login:don't_have_account")} </Text>
+						<Text>{t("login:don't_have_account")}</Text>
 						<Text style={styles.signupBtn} onPress={this._goToSignup}>
 							{t('login:sign_up_now')}
 						</Text>
@@ -250,6 +251,11 @@ const styles = StyleSheet.create({
 		height: 280,
 		resizeMode: 'contain',
 		alignSelf: 'center',
+		...Platform.select({
+			ios: {
+				marginTop: 40,
+			},
+		}),
 	},
 	signinBtn: {
 		margin: 15,
@@ -261,6 +267,11 @@ const styles = StyleSheet.create({
 	signupBtn: {
 		fontSize: 16,
 		fontWeight: '500',
+		...Platform.select({
+			ios: {
+				fontFamily: 'Padauk_Bold',
+			},
+		}),
 	},
 	errorText: {
 		color: 'red',
@@ -271,10 +282,17 @@ const styles = StyleSheet.create({
 		height: 40,
 	},
 	switchContainer: {
-		paddingTop: 15,
 		position: 'absolute',
 		zIndex: 999,
 		width: '60%',
 		alignSelf: 'center',
+		...Platform.select({
+			ios: {
+				paddingTop: 40,
+			},
+			android: {
+				paddingTop: 15,
+			},
+		}),
 	},
 });

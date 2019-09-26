@@ -1,6 +1,7 @@
 import i18n from 'i18next';
 import { AsyncStorage } from 'react-native';
 import * as Localization from 'expo-localization';
+import LoggedUserCredentials from '../models/LoggedUserCredentials';
 
 const en = require('./locales/en.json');
 const my = require('./locales/my.json');
@@ -13,6 +14,7 @@ const languageDetector = {
 			const lng = await AsyncStorage.getItem('lng');
 
 			if (lng) {
+				LoggedUserCredentials.setLanguage(lng);
 				return cb(lng);
 			}
 
