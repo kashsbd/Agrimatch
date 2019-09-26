@@ -1,7 +1,24 @@
 import React from 'react';
 import { StyleSheet, View, AsyncStorage, ActivityIndicator } from 'react-native';
 
+import { setCustomTextInput, setCustomText } from 'react-native-global-props';
+
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
+
+const customTextInputProps = {
+	style: {
+		fontFamily: 'Padauk_Regular',
+	},
+};
+
+const customTextProps = {
+	style: {
+		fontFamily: 'Padauk_Regular',
+	},
+};
+
+setCustomTextInput(customTextInputProps);
+setCustomText(customTextProps);
 
 export class AuthLoading extends React.Component {
 	constructor(props) {

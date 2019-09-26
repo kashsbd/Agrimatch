@@ -36,6 +36,8 @@ async function loadResourcesAsync() {
 			Roboto: require('native-base/Fonts/Roboto.ttf'),
 			Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
 			...Ionicons.font,
+			Padauk_Bold: require('./app/assets/fonts/Padauk_Bold.ttf'),
+			Padauk_Regular: require('./app/assets/fonts/Padauk_Regular.ttf'),
 		}),
 	]);
 }

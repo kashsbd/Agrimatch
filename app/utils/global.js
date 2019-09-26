@@ -2,7 +2,7 @@ const local = 'http://192.168.8.116:3000';
 
 const server = 'http://104.197.224.155:3000';
 
-const baseUrl = local;
+const baseUrl = server;
 
 const loginUrl = baseUrl + '/users/login';
 
