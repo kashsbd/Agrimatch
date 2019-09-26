@@ -1,38 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, AsyncStorage, ActivityIndicator } from 'react-native';
 
-import { setCustomTextInput, setCustomText } from 'react-native-global-props';
-
-import { Input, Text, Picker } from 'native-base';
-
-import i18n from 'i18next';
-
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
-
-const customTextInputProps = {
-	style: {
-		fontFamily: i18n.getLanguage() == 'mm' ? 'Padauk_Regular' : 'Roboto_medium',
-	},
-};
-
-const customTextProps = {
-	style: {
-		fontFamily: i18n.getLanguage() == 'mm' ? 'Padauk_Regular' : 'Roboto_medium',
-	},
-};
-
-setCustomTextInput(customTextInputProps);
-setCustomText(customTextProps);
-
-Text.defaultProps.style = {
-	fontFamily: i18n.getLanguage() == 'mm' ? 'Padauk_Regular' : 'Roboto_medium',
-};
-Input.defaultProps.style = {
-	fontFamily: i18n.getLanguage() == 'mm' ? 'Padauk_Regular' : 'Roboto_medium',
-};
-Picker.defaultProps.style = {
-	fontFamily: i18n.getLanguage() == 'mm' ? 'Padauk_Regular' : 'Roboto_medium',
-};
 
 export class AuthLoading extends React.Component {
 	constructor(props) {
@@ -40,7 +9,6 @@ export class AuthLoading extends React.Component {
 		this.state = {
 			loading: true,
 		};
-		console.log(LoggedUserCredentials.getLanguage());
 	}
 
 	componentDidMount() {
