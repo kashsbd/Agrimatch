@@ -6,7 +6,7 @@ export default class LoggedUserCredentials {
 	userId = '';
 	userType = '';
 	location = null;
-	lng = 'en';
+	lng = '';
 
 	static setLoggedUserData(accessToken, userName, userId, userType) {
 		this.accessToken = accessToken;

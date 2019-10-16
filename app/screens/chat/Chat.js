@@ -94,8 +94,10 @@ const msgs = [
 
 export class Chat extends Component {
 	state = {
-		messages: msgs,
+		messages: [],
 	};
+
+	componentDidMount() {}
 
 	close = () => this.props.navigation.goBack();
 
@@ -106,27 +108,23 @@ export class Chat extends Component {
 	};
 
 	renderCustomView = props => {
-		if (props.currentMessage.location) {
+		const { currentMessage, containerStyle } = props;
+
+		if (currentMessage.location) {
 			return (
-				<View style={props.containerStyle}>
+				<View style={containerStyle}>
 					<MapView
 						provider={PROVIDER_GOOGLE}
 						style={[styles.mapView]}
 						region={{
-							latitude: props.currentMessage.location.latitude,
-							longitude: props.currentMessage.location.longitude,
+							latitude: currentMessage.location.coordinates[1],
+							longitude: currentMessage.location.coordinates[0],
 							latitudeDelta: 0.1,
 							longitudeDelta: 0.1,
 						}}
 						scrollEnabled={false}
-						zoomEnabled={false}>
-						<MapView.Marker
-							coordinate={{
-								latitude: props.currentMessage.location.latitude,
-								longitude: props.currentMessage.location.longitude,
-							}}
-						/>
-					</MapView>
+						zoomEnabled={false}
+					/>
 				</View>
 			);
 		}

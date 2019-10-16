@@ -9,7 +9,7 @@ import {
 	TouchableOpacity,
 } from 'react-native';
 
-import { Content, Button, Item, Input, Form, Text, Icon, View } from 'native-base';
+import { Button, Item, Input, Form, Text, Icon, View } from 'native-base';
 
 import ph_checker from 'myanmar-phonenumber';
 import md5 from 'react-native-md5';
@@ -231,8 +231,11 @@ export default class UserDetailModal extends Component {
 				transparent={false}
 				visible={modalVisible}
 				onRequestClose={this.close}>
-				<ScrollView style={styles.container}>
-					<Content>
+				<ScrollView
+					style={styles.container}
+					keyboardShouldPersistTaps='handled'
+					keyboardDismissMode='on-drag'>
+					<View>
 						<View style={styles.imgContainer}>
 							<Image source={pro_pic} style={styles.logo} />
 							<TouchableOpacity style={styles.uploadIcon} onPress={this.getPermissionAsync}>
@@ -287,7 +290,7 @@ export default class UserDetailModal extends Component {
 								<Text>{t('userdetailmodal:save')}</Text>
 							)}
 						</Button>
-					</Content>
+					</View>
 				</ScrollView>
 			</Modal>
 		);

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { ScrollView, Image, StyleSheet, ActivityIndicator } from 'react-native';
+import { ScrollView, Image, StyleSheet, ActivityIndicator, View } from 'react-native';
 
-import { Content, Button, Item, Input, Form, Text, Picker, Icon } from 'native-base';
+import { Button, Item, Input, Form, Text, Picker, Icon } from 'native-base';
 
 import { withTranslation } from 'react-i18next';
 
@@ -100,8 +100,11 @@ class SignupScreen extends Component {
 		const { t } = this.props;
 
 		return (
-			<ScrollView style={styles.container}>
-				<Content>
+			<ScrollView
+				style={styles.container}
+				keyboardShouldPersistTaps='handled'
+				keyboardDismissMode='on-drag'>
+				<View>
 					<Image source={imageLogo} style={styles.logo} />
 
 					<Form style={{ paddingRight: 15 }}>
@@ -164,7 +167,7 @@ class SignupScreen extends Component {
 							{t('signup:sign_in_now')}
 						</Text>
 					</Text>
-				</Content>
+				</View>
 
 				<UserDetailModal ref={this._setRef} {...this.props} />
 			</ScrollView>

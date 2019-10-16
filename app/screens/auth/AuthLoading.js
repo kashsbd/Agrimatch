@@ -30,9 +30,11 @@ export class AuthLoading extends React.Component {
 
 					this.setState({ loading: false }, () => navigate('Home'));
 				} else {
+					LoggedUserCredentials.setLanguage('en');
 					this.setState({ loading: false }, () => navigate('Auth'));
 				}
 			} else {
+				LoggedUserCredentials.setLanguage('en');
 				this.setState({ loading: false }, () => navigate('Auth'));
 			}
 		});

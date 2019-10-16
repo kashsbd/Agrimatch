@@ -98,6 +98,7 @@ class LoginScreen extends Component {
 				this.setState({ isLoggingIn: false, errorText });
 			}
 		} catch (error) {
+			console.log(error);
 			const errorText = t('errors:no_internet');
 			this.setState({ isLoggingIn: false, errorText });
 		}
@@ -127,12 +128,14 @@ class LoginScreen extends Component {
 
 	render() {
 		const { userType, email, password, isLoggingIn, errorText, selectedIndex } = this.state;
-
 		const { t } = this.props;
 
 		return (
-			<ScrollView style={styles.container}>
-				<Content>
+			<ScrollView
+				style={styles.container}
+				keyboardShouldPersistTaps='handled'
+				keyboardDismissMode='on-drag'>
+				<View>
 					<View style={styles.switchContainer}>
 						<SegmentedControlTab
 							tabsContainerStyle={segStyle.tabsContainerStyle}
@@ -205,7 +208,7 @@ class LoginScreen extends Component {
 							{t('login:sign_up_now')}
 						</Text>
 					</Text>
-				</Content>
+				</View>
 			</ScrollView>
 		);
 	}
