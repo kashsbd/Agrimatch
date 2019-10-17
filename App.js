@@ -2,11 +2,16 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 
 import AppNavigator from './app/navigation/AppNavigator';
+
+console.ignoredYellowBox = ['Remote debugger'];
+YellowBox.ignoreWarnings([
+	'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
+]);
 
 export default function App(props) {
 	const [isLoadingComplete, setLoadingComplete] = useState(false);

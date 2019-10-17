@@ -1,5 +1,7 @@
 const local = 'http://192.168.8.116:3000';
 
+const emulator_local = 'http://10.0.2.2:3000';
+
 const server = 'http://104.197.224.155:3000';
 
 const baseUrl = local;
@@ -16,4 +18,6 @@ const locationUrl = baseUrl + '/locations';
 
 const ratingUrl = baseUrl + '/ratings';
 
-export { baseUrl, loginUrl, signupUrl, userUrl, cropUrl, locationUrl, ratingUrl };
+const chatUrl = baseUrl + '/chats';
+
+export { baseUrl, loginUrl, signupUrl, userUrl, cropUrl, locationUrl, ratingUrl, chatUrl };

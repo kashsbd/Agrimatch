@@ -1,13 +1,15 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ActivityIndicator } from 'react-native';
 
-import { Container, Header, Left, Button, Icon, Body, Title, Right } from 'native-base';
+import { Container, Header, Left, Button, Icon, Body, Title, Right, Col } from 'native-base';
 
 import { GiftedChat } from 'react-native-gifted-chat';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import io from 'socket.io-client/dist/socket.io';
 
 import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
+import { baseUrl, chatUrl } from '../../utils/global';
 
 const msgs = [
 	{
@@ -93,21 +95,165 @@ const msgs = [
 ];
 
 export class Chat extends Component {
-	state = {
-		messages: [],
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			messages: [],
+			loading: false,
+			page: 1,
+		};
 
-	componentDidMount() {}
+		this.chat_socket = io(baseUrl + '/all_chats');
+	}
+
+	componentDidMount() {
+		this.chat_socket.on('chat::created', this._onChatMessageReceived);
+		this.setState({ loading: true }, () => this.getMessages());
+	}
+
+	getMessages() {
+		const {
+			selectedGroup: {
+				chatType,
+				user: { _id },
+			},
+		} = this.props.navigation.state.params.data;
+		const { page } = this.state;
+
+		const dataQueryString =
+			'?page=' +
+			page +
+			'&roomId=' +
+			undefined +
+			'&fromSenderId=' +
+			LoggedUserCredentials.getUserId() +
+			'&toReceiverId=' +
+			_id +
+			'&roomType=' +
+			chatType;
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
+			},
+			method: 'GET',
+		};
+
+		const url = chatUrl + '/messages/' + dataQueryString;
+
+		fetch(url, config)
+			.then(res => res.json())
+			.then(resJson => {
+				this.setState({ loading: false, error: false, messages: resJson.docs });
+			})
+			.catch(err => this.setState({ loading: false, error: true }));
+	}
+
+	componentWillUnmount() {
+		this.chat_socket.off('chat::created', this._onChatMessageReceived);
+	}
 
 	close = () => this.props.navigation.goBack();
 
-	onSend = (messages = []) => {
-		this.setState(previousState => ({
-			messages: GiftedChat.append(previousState.messages, messages),
-		}));
+	_onChatMessageReceived = message => {
+		const { roomId, toReceiverId } = this.props.navigation.state.params;
+
+		if (roomId) {
+			if (
+				message.meta.room_id === roomId &&
+				message.meta.toReceiverId === LoggedUserCredentials.getUserId()
+			) {
+				this.setState(
+					previousState => ({
+						messages: GiftedChat.append(previousState.messages, [message]),
+					}),
+					() => this._notifySeenMsg(message._id),
+				);
+			}
+		} else {
+			if (
+				message.user._id === toReceiverId &&
+				message.meta.toReceiverId === LoggedUserCredentials.getUserId()
+			) {
+				this.setState(
+					previousState => ({
+						messages: GiftedChat.append(previousState.messages, [message]),
+					}),
+					() => this._notifySeenMsg(message._id),
+				);
+			}
+		}
 	};
 
-	renderCustomView = props => {
+	_notifySeenMsg(msgId) {
+		const data = {
+			userId: LoggedUserCredentials.getUserId(),
+			msgId,
+		};
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
+			},
+			method: 'POST',
+			body: JSON.stringify(data),
+		};
+
+		const url = chatUrl + '/notifyChatMessage';
+
+		fetch(url, config)
+			.then(res => res.json())
+			.catch(err => alert(err));
+	}
+
+	_onSend = (msgs = []) => {
+		this.setState(
+			previousState => ({
+				messages: GiftedChat.append(previousState.messages, msgs),
+			}),
+			() => this._sendMessage(msgs),
+		);
+	};
+
+	_sendMessage(msgs) {
+		const { toReceiverId, roomId, roomType } = this.props.navigation.state.params;
+
+		let chat_data = {
+			fromSenderId: LoggedUserCredentials.getUserId(),
+			toReceiverId,
+			text: msgs[0].text,
+			roomType,
+		};
+
+		if (roomId) {
+			chat_data['roomId'] = roomId;
+		}
+
+		const config = {
+			headers: {
+				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
+				'Content-Type': 'application/json',
+			},
+			method: 'POST',
+			body: JSON.stringify(chat_data),
+		};
+
+		fetch(chatUrl, config)
+			.then(res => res.json())
+			.catch(err => console.log(err));
+	}
+
+	_renderLoadingView = () => {
+		return (
+			<View style={styles.centerContent}>
+				<ActivityIndicator size='large' color={Color.mainColor} />
+			</View>
+		);
+	};
+
+	_renderCustomView = props => {
 		const { currentMessage, containerStyle } = props;
 
 		if (currentMessage.location) {
@@ -133,7 +279,12 @@ export class Chat extends Component {
 
 	render() {
 		const { selectedGroup } = this.props.navigation.state.params.data;
-		const { messages } = this.state;
+		const { messages, loading } = this.state;
+
+		const currentUser = {
+			_id: LoggedUserCredentials.getUserId(),
+			name: LoggedUserCredentials.getUserName(),
+		};
 
 		return (
 			<Container>
@@ -149,14 +300,16 @@ export class Chat extends Component {
 					<Right />
 				</Header>
 
-				<ScrollView contentContainerStyle={styles.chatContainer}>
-					<GiftedChat
-						messages={messages}
-						onSend={this.onSend}
-						renderCustomView={this.renderCustomView}
-						user={{ _id: LoggedUserCredentials.getUserId() }}
-					/>
-				</ScrollView>
+				<GiftedChat
+					messages={messages}
+					onSend={this._onSend}
+					user={currentUser}
+					showUserAvatar
+					showAvatarForEveryMessage
+					isLoadingEarlier={loading}
+					renderCustomView={this._renderCustomView}
+					renderLoading={this._renderLoadingView}
+				/>
 			</Container>
 		);
 	}
@@ -174,5 +327,10 @@ const styles = StyleSheet.create({
 	},
 	chatContainer: {
 		flex: 1,
+	},
+	centerContent: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center',
 	},
 });

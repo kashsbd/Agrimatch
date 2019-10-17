@@ -61,6 +61,7 @@ export default class MessageItem extends PureComponent {
 		const data = {
 			toReceiverId: toReceiver._id,
 			roomId: room._id,
+			roomType: room.roomType,
 			title: toReceiver.name,
 		};
 
@@ -93,7 +94,7 @@ export default class MessageItem extends PureComponent {
 
 			fetch(url, config)
 				.then(res => res.json())
-				.catch(err => alert(err));
+				.catch(err => console.log(err));
 		}
 	}
 
