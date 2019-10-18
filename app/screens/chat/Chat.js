@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { StyleSheet, View, ActivityIndicator } from 'react-native';
 
-import { Container, Header, Left, Button, Icon, Body, Title, Right, Col } from 'native-base';
+import { Container, Header, Left, Button, Icon, Body, Title, Right } from 'native-base';
 
 import { GiftedChat } from 'react-native-gifted-chat';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -116,6 +116,7 @@ export class Chat extends Component {
 			selectedGroup: {
 				chatType,
 				user: { _id },
+				roomId,
 			},
 		} = this.props.navigation.state.params.data;
 		const { page } = this.state;
@@ -124,7 +125,7 @@ export class Chat extends Component {
 			'?page=' +
 			page +
 			'&roomId=' +
-			undefined +
+			roomId +
 			'&fromSenderId=' +
 			LoggedUserCredentials.getUserId() +
 			'&toReceiverId=' +
@@ -145,7 +146,7 @@ export class Chat extends Component {
 		fetch(url, config)
 			.then(res => res.json())
 			.then(resJson => {
-				this.setState({ loading: false, error: false, messages: resJson.docs });
+				this.setState({ loading: false, error: false, messages: resJson });
 			})
 			.catch(err => this.setState({ loading: false, error: true }));
 	}
@@ -157,7 +158,12 @@ export class Chat extends Component {
 	close = () => this.props.navigation.goBack();
 
 	_onChatMessageReceived = message => {
-		const { roomId, toReceiverId } = this.props.navigation.state.params;
+		const {
+			selectedGroup: {
+				user: { _id },
+				roomId,
+			},
+		} = this.props.navigation.state.params.data;
 
 		if (roomId) {
 			if (
@@ -172,10 +178,7 @@ export class Chat extends Component {
 				);
 			}
 		} else {
-			if (
-				message.user._id === toReceiverId &&
-				message.meta.toReceiverId === LoggedUserCredentials.getUserId()
-			) {
+			if (message.user._id === _id && message.meta.toReceiverId === LoggedUserCredentials.getUserId()) {
 				this.setState(
 					previousState => ({
 						messages: GiftedChat.append(previousState.messages, [message]),
@@ -218,13 +221,19 @@ export class Chat extends Component {
 	};
 
 	_sendMessage(msgs) {
-		const { toReceiverId, roomId, roomType } = this.props.navigation.state.params;
+		const {
+			selectedGroup: {
+				chatType,
+				user: { _id },
+				roomId,
+			},
+		} = this.props.navigation.state.params.data;
 
 		let chat_data = {
 			fromSenderId: LoggedUserCredentials.getUserId(),
-			toReceiverId,
+			toReceiverId: _id,
 			text: msgs[0].text,
-			roomType,
+			roomType: chatType,
 		};
 
 		if (roomId) {

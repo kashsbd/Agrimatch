@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import io from 'socket.io-client';
+import ImageLoad from 'react-native-image-placeholder';
 
-import { Left, Body, Right, ListItem, Thumbnail, Text } from 'native-base';
+import { Left, Body, Right, ListItem, Text } from 'native-base';
+import { TimeAgo } from '../../components';
 
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 import { baseUrl, userUrl } from '../../utils/global';
@@ -77,8 +79,8 @@ export default class MessageItem extends PureComponent {
 
 		if (!saw_message) {
 			const data = {
-				ownerId: LoggedUserCredentials.getUserId(),
-				chatId: this.lastMessage._id,
+				userId: LoggedUserCredentials.getUserId(),
+				msgId: this.lastMessage._id,
 			};
 
 			const config = {
@@ -98,38 +100,60 @@ export default class MessageItem extends PureComponent {
 		}
 	}
 
+	renderMessage() {
+		const { message, saw_message } = this.state;
+
+		return (
+			<Text numberOfLines={1} note={saw_message}>
+				{message}
+			</Text>
+		);
+	}
+
 	render() {
 		const { room } = this.props;
-
-		const { message } = this.state;
 
 		let fromSender;
 
 		const index = _.findIndex(room.participants, { _id: LoggedUserCredentials.getUserId() });
 
 		if (index === 0) {
-			fromSender = conversation.participants[1];
+			fromSender = room.participants[1];
 		} else if (index === 1) {
-			fromSender = conversation.participants[0];
+			fromSender = room.participants[0];
 		}
 
 		const propic_url = userUrl + '/' + fromSender._id + '/profile_pic';
 
 		return (
-			<ListItem thumbnail onPress={this.navigate(item)} button onPress={this.gotoChatScreen}>
+			<ListItem button thumbnail onPress={this.gotoChatScreen} style={{ width: '100%', marginTop: 3 }}>
 				<Left>
-					<Thumbnail source={data.img} />
+					<ImageLoad
+						style={styles.propic}
+						source={{ uri: propic_url }}
+						placeholderSource={require('../../assets/images/logo.png')}
+						isShowActivity={true}
+					/>
 				</Left>
 				<Body>
 					<Text>{fromSender.name}</Text>
-					<Text numberOfLines={1} note>
-						{message}
-					</Text>
+					{this.renderMessage()}
 				</Body>
 				<Right>
-					<Text note>{data.time}</Text>
+					<Text note>
+						<TimeAgo time={this.lastMessage.createdAt} />
+					</Text>
 				</Right>
 			</ListItem>
 		);
 	}
 }
+
+const styles = StyleSheet.create({
+	propic: {
+		width: 70,
+		height: 70,
+		alignSelf: 'center',
+		justifyContent: 'center',
+	},
+});
