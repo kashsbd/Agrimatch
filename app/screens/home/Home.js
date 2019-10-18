@@ -12,6 +12,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 
 import { Container, Icon, Text } from 'native-base';
 
+import io from 'socket.io-client/dist/socket.io';
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 
 import * as Location from 'expo-location';
@@ -20,21 +21,73 @@ import { withTranslation } from 'react-i18next';
 
 import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
-import { userUrl } from '../../utils/global';
+import { userUrl, baseUrl } from '../../utils/global';
 
 class HomeScreen extends Component {
-	state = {
-		selectedIndex: LoggedUserCredentials.getUserType() === 'FARMER' ? 0 : 1,
-		isLoading: false,
-		isError: false,
-		numberOfUser: 0,
-		wholeScreenLoading: true,
-		location: null,
-	};
+	constructor(props) {
+		super(props);
+		this.state = {
+			selectedIndex: LoggedUserCredentials.getUserType() === 'FARMER' ? 0 : 1,
+			isLoading: false,
+			isError: false,
+			numberOfUser: 0,
+			wholeScreenLoading: true,
+			location: null,
+			hasChatNoti: false,
+		};
+
+		this.chat_socket = io(baseUrl + '/all_chats?userId=' + LoggedUserCredentials.getUserId());
+	}
 
 	componentDidMount() {
-		this.setState({ wholeScreenLoading: true }, this._getLocationAsync);
+		this.setState(
+			{ wholeScreenLoading: true, hasChatNoti: LoggedUserCredentials.getChatNoti() },
+			this._getLocationAsync,
+		);
+		this.getChatNotiData();
+		this.subscribeToChatChannel();
 	}
+
+	async getChatNotiData() {
+		const path = userUrl + '/' + LoggedUserCredentials.getUserId() + '/chatrooms';
+
+		const config = {
+			headers: {
+				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
+			},
+			method: 'GET',
+		};
+
+		try {
+			const res = await fetch(path, config);
+
+			if (res.status == 200) {
+				const chat_msgs = await res.json();
+
+				const seenBys = chat_msgs.map(msg => msg.lastMessage.seenBy);
+
+				const unseenNotis = seenBys.filter(
+					seenBy => !seenBy.includes(LoggedUserCredentials.getUserId()),
+				);
+
+				if (unseenNotis.length > 0) {
+					this.setState({ hasChatNoti: true }, () => LoggedUserCredentials.setChatNoti(true));
+				}
+			}
+		} catch (error) {
+			this.setState({ loading: false, isError: true, refreshing: true });
+		}
+	}
+
+	subscribeToChatChannel() {
+		this.chat_socket.on('chat::created', this._onChatMessageReceived);
+	}
+
+	_onChatMessageReceived = data => {
+		if (data.meta.toReceiverId === LoggedUserCredentials.getUserId()) {
+			this.setState({ hasChatNoti: true }, () => LoggedUserCredentials.setChatNoti(true));
+		}
+	};
 
 	_getLocationAsync = async () => {
 		const loc = LoggedUserCredentials.getLocation();
@@ -114,10 +167,12 @@ class HomeScreen extends Component {
 
 	_openNearMe = () => this.props.navigation.navigate('NearMe');
 
-	openMessage = () => this.props.navigation.navigate('Message');
+	openMessage = () => {
+		this.setState({ hasChatNoti: false }, () => this.props.navigation.navigate('Message'));
+	};
 
 	render() {
-		const { numberOfUser, isLoading, isError, wholeScreenLoading, location } = this.state;
+		const { numberOfUser, isLoading, isError, wholeScreenLoading, location, hasChatNoti } = this.state;
 		const { t } = this.props;
 
 		if (wholeScreenLoading) {
@@ -205,6 +260,7 @@ class HomeScreen extends Component {
 											</View>
 											<Text style={styles.msgStyle}>{t('home:messages')}</Text>
 										</View>
+										{hasChatNoti ? <View style={styles.badge} /> : <View />}
 									</TouchableOpacity>
 
 									<TouchableOpacity
@@ -304,7 +360,7 @@ const styles = StyleSheet.create({
 		fontSize: 17,
 	},
 	bubbleMenuContainer: {
-		paddingTop: 5,
+		paddingTop: 8,
 		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-around',
@@ -349,5 +405,17 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	badge: {
+		width: 14,
+		height: 14,
+		borderRadius: 14 / 2,
+		backgroundColor: 'red',
+		position: 'absolute',
+		zIndex: 1000,
+		top: -5,
+		right: 23,
+		borderWidth: 2,
+		borderColor: 'white',
 	},
 });

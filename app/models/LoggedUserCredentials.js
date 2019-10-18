@@ -1,5 +1,3 @@
-import { AsyncStorage } from 'react-native';
-
 export default class LoggedUserCredentials {
 	accessToken = '';
 	userName = '';
@@ -7,6 +5,7 @@ export default class LoggedUserCredentials {
 	userType = '';
 	location = null;
 	lng = '';
+	hasChatNoti = false;
 
 	static setLoggedUserData(accessToken, userName, userId, userType) {
 		this.accessToken = accessToken;
@@ -45,5 +44,13 @@ export default class LoggedUserCredentials {
 
 	static getLanguage() {
 		return this.lng;
+	}
+
+	static setChatNoti(chatNoti) {
+		this.hasChatNoti = chatNoti;
+	}
+
+	static getChatNoti() {
+		return this.hasChatNoti;
 	}
 }
