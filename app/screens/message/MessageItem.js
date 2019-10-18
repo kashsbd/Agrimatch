@@ -7,7 +7,7 @@ import { Left, Body, Right, ListItem, Text } from 'native-base';
 import { TimeAgo } from '../../components';
 
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
-import { baseUrl, userUrl } from '../../utils/global';
+import { baseUrl, userUrl, chatUrl } from '../../utils/global';
 
 const _ = require('lodash');
 
@@ -61,13 +61,14 @@ export default class MessageItem extends PureComponent {
 		}
 
 		const data = {
-			toReceiverId: toReceiver._id,
+			user: toReceiver,
+			chatType: room.roomType,
 			roomId: room._id,
-			roomType: room.roomType,
 			title: toReceiver.name,
+			refreshNotiBadge: this.refreshNotiBadge,
 		};
 
-		gotoChatScreen(data, this.refreshNotiBadge);
+		gotoChatScreen(data);
 	};
 
 	refreshNotiBadge = () => {

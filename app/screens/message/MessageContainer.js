@@ -65,8 +65,12 @@ export class MessageContainer extends Component {
 
 	_keyExtractor = (chat, index) => chat._id + index;
 
-	goToChatScreen = (data, refreshNotiBadge) => {
-		this.props.navigation.navigate('Chat', { ...data, ...refreshNotiBadge });
+	goToChatScreen = selectedGroup => {
+		const data = {
+			selectedGroup,
+		};
+
+		this.props.navigation.navigate('Chat', { data });
 	};
 
 	_onRefresh = () => {
