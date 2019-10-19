@@ -103,10 +103,21 @@ export default class MessageItem extends PureComponent {
 
 	renderMessage() {
 		const { message, saw_message } = this.state;
+		const { media, loc } = this.props.room.lastMessage;
+
+		let msg = message;
+
+		if (media) {
+			msg = media.contentType.startsWith('image/') ? '[ Image ]' : '[ Audio ]';
+		}
+
+		if (loc) {
+			msg = '[ Location ]';
+		}
 
 		return (
 			<Text numberOfLines={1} note={saw_message}>
-				{message}
+				{msg}
 			</Text>
 		);
 	}

@@ -127,11 +127,17 @@ export class Chat extends Component {
 				const earlier_msgs = await res.json();
 
 				if (earlier_msgs.length > 0 && this._isMounted === true) {
-					this.setState(preState => ({
-						messages: GiftedChat.prepend(preState.messages, earlier_msgs, Platform.OS !== 'web'),
-						loadingEarlier: false,
-						hasEarlierMessage: true,
-					}));
+					this.setState(preState => {
+						return {
+							messages: GiftedChat.prepend(
+								preState.messages,
+								earlier_msgs,
+								Platform.OS !== 'web',
+							),
+							loadingEarlier: false,
+							hasEarlierMessage: true,
+						};
+					});
 				}
 			}
 		} catch (error) {
