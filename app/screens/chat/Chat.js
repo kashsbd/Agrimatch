@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, Platform } from 'react-native';
 
 import { Container, Header, Left, Button, Icon, Body, Title, Right } from 'native-base';
 
-import { GiftedChat } from 'react-native-gifted-chat';
-import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { GiftedChat, Bubble } from 'react-native-gifted-chat';
 import io from 'socket.io-client/dist/socket.io';
+
+import CustomActions from './CustomActions';
+import CustomView from './CustomView';
 
 import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
-import { baseUrl, chatUrl } from '../../utils/global';
+import { baseUrl, chatUrl, userUrl } from '../../utils/global';
 
 const msgs = [
 	{
@@ -100,15 +102,24 @@ export class Chat extends Component {
 		this.state = {
 			messages: [],
 			loading: false,
+			loadingEarlier: false,
+			hasEarlierMessage: true,
 			page: 1,
 		};
 
 		this.chat_socket = io(baseUrl + '/all_chats');
 	}
 
+	_isMounted = false;
+
 	componentDidMount() {
+		this._isMounted = true;
 		this.chat_socket.on('chat::created', this._onChatMessageReceived);
 		this.setState({ loading: true }, () => this.getMessages());
+	}
+
+	componentWillUnmount() {
+		this._isMounted = false;
 	}
 
 	getMessages() {
@@ -150,6 +161,74 @@ export class Chat extends Component {
 			})
 			.catch(err => this.setState({ loading: false, error: true }));
 	}
+
+	_onLoadEarlier = async () => {
+		const { page } = this.state;
+
+		const nextPage = page + 1;
+
+		this.setState({ page: nextPage, loadingEarlier: true }, this.getEarlierMessage);
+	};
+
+	getEarlierMessage = async () => {
+		const { page } = this.state;
+
+		const {
+			selectedGroup: {
+				chatType,
+				user: { _id },
+				roomId,
+			},
+		} = this.props.navigation.state.params.data;
+
+		const dataQueryString =
+			'?page=' +
+			page +
+			'&roomId=' +
+			roomId +
+			'&fromSenderId=' +
+			LoggedUserCredentials.getUserId() +
+			'&toReceiverId=' +
+			_id +
+			'&roomType=' +
+			chatType;
+
+		const config = {
+			headers: {
+				'Content-Type': 'application/json',
+				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
+			},
+			method: 'GET',
+		};
+
+		const url = chatUrl + '/messages/' + dataQueryString;
+
+		try {
+			let res = await fetch(url, config);
+
+			if (res.status === 200) {
+				const earlier_msgs = await res.json();
+
+				if (earlier_msgs.length > 0 && this._isMounted === true) {
+					this.setState(preState => ({
+						messages: GiftedChat.prepend(preState.messages, earlier_msgs, Platform.OS !== 'web'),
+						loadingEarlier: false,
+						hasEarlierMessage: true,
+					}));
+				}
+			}
+		} catch (error) {
+			console.log(error);
+			this.setState({ loadingEarlier: false });
+		}
+
+		fetch(url, config)
+			.then(res => res.json())
+			.then(resJson => {
+				this.setState({ error: false, messages: resJson, loadingEarlier: false });
+			})
+			.catch(err => this.setState({ error: true, loadingEarlier: false }));
+	};
 
 	componentWillUnmount() {
 		this.chat_socket.off('chat::created', this._onChatMessageReceived);
@@ -214,7 +293,7 @@ export class Chat extends Component {
 	_onSend = (msgs = []) => {
 		this.setState(
 			previousState => ({
-				messages: GiftedChat.append(previousState.messages, msgs),
+				messages: GiftedChat.append(previousState.messages, msgs, Platform.OS !== 'web'),
 			}),
 			() => this._sendMessage(msgs),
 		);
@@ -254,6 +333,21 @@ export class Chat extends Component {
 			.catch(err => console.log(err));
 	}
 
+	_renderCustomActions = props => <CustomActions {...props} onSend={this._onSend} />;
+
+	_renderBubble = props => {
+		return (
+			<Bubble
+				{...props}
+				wrapperStyle={{
+					left: {
+						backgroundColor: '#f0f0f0',
+					},
+				}}
+			/>
+		);
+	};
+
 	_renderLoadingView = () => {
 		return (
 			<View style={styles.centerContent}>
@@ -262,33 +356,22 @@ export class Chat extends Component {
 		);
 	};
 
-	_renderCustomView = props => {
-		const { currentMessage, containerStyle } = props;
+	_renderCustomView(props) {
+		return <CustomView {...props} />;
+	}
 
-		if (currentMessage.location) {
-			return (
-				<View style={containerStyle}>
-					<MapView
-						provider={PROVIDER_GOOGLE}
-						style={[styles.mapView]}
-						region={{
-							latitude: currentMessage.location.coordinates[1],
-							longitude: currentMessage.location.coordinates[0],
-							latitudeDelta: 0.1,
-							longitudeDelta: 0.1,
-						}}
-						scrollEnabled={false}
-						zoomEnabled={false}
-					/>
-				</View>
-			);
-		}
-		return null;
+	_parsePatterns = linkStyle => {
+		return [
+			{
+				pattern: /#(\w+)/,
+				style: { textDecorationLine: 'underline', color: 'darkorange' },
+			},
+		];
 	};
 
 	render() {
 		const { selectedGroup } = this.props.navigation.state.params.data;
-		const { messages, loading } = this.state;
+		const { messages, loading, loadingEarlier, hasEarlierMessage } = this.state;
 
 		const currentUser = {
 			_id: LoggedUserCredentials.getUserId(),
@@ -312,12 +395,19 @@ export class Chat extends Component {
 				<GiftedChat
 					messages={messages}
 					onSend={this._onSend}
+					loadEarlier
+					onLoadEarlier={this._onLoadEarlier}
+					isLoadingEarlier={loadingEarlier}
+					parsePatterns={this._parsePatterns}
 					user={currentUser}
 					showUserAvatar
 					showAvatarForEveryMessage
-					isLoadingEarlier={loading}
+					scrollToBottom
+					keyboardShouldPersistTaps='never'
+					renderActions={this._renderCustomActions}
+					renderBubble={this._renderBubble}
 					renderCustomView={this._renderCustomView}
-					renderLoading={this._renderLoadingView}
+					inverted={Platform.OS !== 'web'}
 				/>
 			</Container>
 		);
