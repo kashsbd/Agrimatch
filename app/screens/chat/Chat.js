@@ -13,89 +13,6 @@ import Color from '../../theme/Colors';
 import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 import { baseUrl, chatUrl, userUrl } from '../../utils/global';
 
-const msgs = [
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: 'awesome',
-		createdAt: new Date(),
-		user: {
-			_id: 1,
-			name: 'Developer',
-		},
-	},
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: '',
-		createdAt: new Date(),
-		user: {
-			_id: 2,
-			name: 'React Native',
-		},
-		image: 'http://www.pokerpost.fr/wp-content/uploads/2017/12/iStock-604371970-1.jpg',
-		sent: true,
-		received: true,
-	},
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: 'Send me a picture!',
-		createdAt: new Date(),
-		user: {
-			_id: 1,
-			name: 'Developer',
-		},
-	},
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: '',
-		createdAt: new Date(),
-		user: {
-			_id: 2,
-			name: 'React Native',
-		},
-		sent: true,
-		received: true,
-		location: {
-			latitude: 48.864601,
-			longitude: 2.398704,
-		},
-	},
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: 'Where are you?',
-		createdAt: new Date(),
-		user: {
-			_id: 1,
-			name: 'Developer',
-		},
-	},
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: 'Yes, and I use AgriMatch!',
-		createdAt: new Date(),
-		user: {
-			_id: 2,
-			name: 'React Native',
-		},
-		sent: true,
-		received: true,
-	},
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: 'Are you building a chat app?',
-		createdAt: new Date(),
-		user: {
-			_id: 1,
-			name: 'Developer',
-		},
-	},
-	{
-		_id: Math.round(Math.random() * 1000000),
-		text: 'You are officially rocking AgriMatch.',
-		createdAt: new Date(),
-		system: true,
-	},
-];
-
 export class Chat extends Component {
 	constructor(props) {
 		super(props);
@@ -290,16 +207,38 @@ export class Chat extends Component {
 			.catch(err => alert(err));
 	}
 
+	_onSendFromUser = (msgs = []) => {
+		const createdAt = new Date();
+
+		const msg = msgs[0];
+
+		if (msg) {
+			const msgToUpload = {
+				...msg,
+				user: { _id: LoggedUserCredentials.getUserId(), name: LoggedUserCredentials.getUserName() },
+				createdAt,
+				_id: Math.round(Math.random() * 1000000),
+			};
+
+			this.setState(
+				previousState => ({
+					messages: GiftedChat.append(previousState.messages, [msgToUpload], Platform.OS !== 'web'),
+				}),
+				() => this._sendMessage(msgToUpload),
+			);
+		}
+	};
+
 	_onSend = (msgs = []) => {
 		this.setState(
 			previousState => ({
 				messages: GiftedChat.append(previousState.messages, msgs, Platform.OS !== 'web'),
 			}),
-			() => this._sendMessage(msgs),
+			() => this._sendMessage(msgs[0]),
 		);
 	};
 
-	_sendMessage(msgs) {
+	_sendMessage({ text, image, location }) {
 		const {
 			selectedGroup: {
 				chatType,
@@ -308,24 +247,43 @@ export class Chat extends Component {
 			},
 		} = this.props.navigation.state.params.data;
 
-		let chat_data = {
-			fromSenderId: LoggedUserCredentials.getUserId(),
-			toReceiverId: _id,
-			text: msgs[0].text,
-			roomType: chatType,
-		};
+		const data = new FormData();
+		data.append('fromSenderId', LoggedUserCredentials.getUserId());
+		data.append('toReceiverId', _id);
+		data.append('roomType', chatType);
 
 		if (roomId) {
-			chat_data['roomId'] = roomId;
+			data.append('roomId', roomId);
+		}
+
+		if (text && text.trim().length > 0) {
+			data.append('text', text);
+		}
+
+		if (location) {
+			data.append('locationData', JSON.stringify(location));
+		}
+
+		if (image) {
+			const filename = image.split('/').pop();
+
+			const match = /\.(\w+)$/.exec(filename);
+			const type = match ? `image/${match[1]}` : `image`;
+
+			data.append('media', {
+				uri: image,
+				type,
+				name: filename,
+			});
 		}
 
 		const config = {
 			headers: {
 				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
-				'Content-Type': 'application/json',
+				'Content-Type': 'multipart/form-data',
 			},
 			method: 'POST',
-			body: JSON.stringify(chat_data),
+			body: data,
 		};
 
 		fetch(chatUrl, config)
@@ -333,7 +291,7 @@ export class Chat extends Component {
 			.catch(err => console.log(err));
 	}
 
-	_renderCustomActions = props => <CustomActions {...props} onSend={this._onSend} />;
+	_renderCustomActions = props => <CustomActions {...props} onSend={this._onSendFromUser} />;
 
 	_renderBubble = props => {
 		return (
