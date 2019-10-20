@@ -1,43 +1,37 @@
 {
-  "expo": {
-    "name": "AgriMatch",
-    "slug": "AgriMatch",
-    "privacy": "public",
-    "sdkVersion": "35.0.0",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./app/assets/images/icon.png",
-    "splash": {
-      "image": "./app/assets/images/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.digisoft.agrimatch"
-    },
-    "android": {
-      "package": "com.digisoft.agrimatch",
-      "config": {
-        "googleMaps": {
-          "apiKey": "AIzaSyB3BF14hot8GR-G5dw3gexPINP707C7TmE"
-        }
-      }
-    },
-    "androidStatusBar": {
-      "backgroundColor": "#000000"
-    },
-    "description": ""
-  }
+	"expo": {
+		"name": "AgriMatch",
+		"slug": "AgriMatch",
+		"privacy": "public",
+		"sdkVersion": "35.0.0",
+		"platforms": ["ios", "android", "web"],
+		"version": "1.0.0",
+		"orientation": "portrait",
+		"icon": "./app/assets/images/icon.png",
+		"splash": {
+			"image": "./app/assets/images/splash.png",
+			"resizeMode": "contain",
+			"backgroundColor": "#ffffff"
+		},
+		"updates": {
+			"fallbackToCacheTimeout": 0
+		},
+		"assetBundlePatterns": ["**/*"],
+		"ios": {
+			"supportsTablet": true,
+			"bundleIdentifier": "com.digisoft.agrimatch"
+		},
+		"android": {
+			"package": "com.digisoft.agrimatch",
+			"config": {
+				"googleMaps": {
+					"apiKey": "AIzaSyD4Kb7RuNP-EzkW0cw3ue_w_YV5vUHpKnI"
+				}
+			}
+		},
+		"androidStatusBar": {
+			"backgroundColor": "#000000"
+		},
+		"description": ""
+	}
 }
