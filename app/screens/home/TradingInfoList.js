@@ -138,7 +138,7 @@ class TradingInfoListScreen extends Component {
 				</Item>
 				<Item>
 					<Text>{t('tradinginfolist:quantity')} </Text>
-					<Text>{t('tradinginfolist:crop_type', { qt: item.quantity })}</Text>
+					<Text>{t('tradinginfolist:in_kg', { qt: item.quantity })}</Text>
 				</Item>
 				{item.media && (
 					<Item style={{ justifyContent: 'center', padding: 10 }}>

@@ -29,7 +29,7 @@ import { cropUrl } from '../../utils/global';
 
 class TradingInfoScreen extends Component {
 	state = {
-		cropType: 'Sesame',
+		cropType: 'Peanuts (groundnuts)',
 		quantity: '',
 		image: null,
 		isSaving: false,
@@ -171,8 +171,42 @@ class TradingInfoScreen extends Component {
 										placeholderIconColor='#007aff'
 										selectedValue={cropType}
 										onValueChange={this.onCropTypeChange}>
-										<Picker.Item label='Sesame' value='Sesame' />
-										<Picker.Item label='Beans' value='Beans' />
+										{/* Nuts */}
+										<Picker.Item
+											label='Peanuts (groundnuts)'
+											value='Peanuts (groundnuts)'
+										/>
+										<Picker.Item label='Arceas' value='Arceas' />
+										<Picker.Item label='Betel' value='Betel' />
+										<Picker.Item label='Cashews' value='Cashews' />
+										<Picker.Item label='Macadamia' value='Macadamia' />
+										{/* Beans and legumes (pulses) */}
+										<Picker.Item label='Soybeans' value='Soybeans' />
+										<Picker.Item label='Mung beans' value='Mung beans' />
+										<Picker.Item label='Adzuki beans' value='Adzuki beans' />
+										<Picker.Item label='Black beans' value='Black beans' />
+										<Picker.Item label='Coffee beans' value='Coffee beans' />
+										<Picker.Item label='Chickpeas' value='Chickpeas' />
+										<Picker.Item label='Lentils' value='Lentils' />
+										{/* Cerial grains */}
+										<Picker.Item label='Rice' value='Rice' />
+										<Picker.Item label='Corn' value='Corn' />
+										<Picker.Item label='Wheat' value='Wheat' />
+										<Picker.Item label='Barley' value='Barley' />
+										{/* Flowers */}
+										<Picker.Item label='Cotton' value='Cotton' />
+										<Picker.Item label='Roses' value='Roses' />
+										<Picker.Item label='Lilies' value='Lilies' />
+										{/* Herbs and vegetables */}
+										<Picker.Item label='Tea' value='Tea' />
+										<Picker.Item label='Kale' value='Kale' />
+										<Picker.Item label='Onion' value='Onion' />
+										<Picker.Item label='Shallot' value='Shallot' />
+										<Picker.Item label='Carrot' value='Carrot' />
+										<Picker.Item label='Potato' value='Potato' />
+										<Picker.Item label='Sweet potato' value='Sweet potato' />
+										<Picker.Item label='Chili' value='Chili' />
+										<Picker.Item label='Okra' value='Okra' />
 									</Picker>
 								</Item>
 							</View>

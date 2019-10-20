@@ -80,7 +80,7 @@
 		"sample_photo": "သီးနှံနမူနာဓာတ်ပုံ"
 	},
 	"tradinginfolist": {
-		"crop_type": "Crop Type :",
+		"crop_type": "သီးနှံအမျိုးအစား",
 		"quantity": "အရေအတွက် :",
 		"in_kg": "{{ qt }} ကီလို",
 		"no_crops": "No crop list to show !",
