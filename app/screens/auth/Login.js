@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
 
-import { Content, Button, Item, Input, Form, Text, Picker, Icon, View } from 'native-base';
+import { Button, Item, Input, Form, Text, Picker, Icon, View } from 'native-base';
 
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import md5 from 'react-native-md5';

@@ -335,11 +335,11 @@ class NearMeScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' color='white' />
 						</Button>
 					</Left>
 					<Body>
-						<Title>{t('nearme:title')}</Title>
+						<Title style={styles.whiteColor}>{t('nearme:title')}</Title>
 					</Body>
 					<Right />
 				</Header>
@@ -566,5 +566,8 @@ const styles = StyleSheet.create({
 		height: 80,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	whiteColor: {
+		color: 'white',
 	},
 });

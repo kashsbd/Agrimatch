@@ -94,11 +94,11 @@ export class MessageContainer extends Component {
 				<Header style={styles.header}>
 					<Left>
 						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' color='white' />
 						</Button>
 					</Left>
 					<Body>
-						<Title>Messages</Title>
+						<Title style={styles.whiteColor}>Messages</Title>
 					</Body>
 					<Right />
 				</Header>
@@ -147,5 +147,8 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		padding: 8,
+	},
+	whiteColor: {
+		color: 'white',
 	},
 });

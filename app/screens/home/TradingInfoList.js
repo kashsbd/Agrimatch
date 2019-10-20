@@ -179,21 +179,21 @@ class TradingInfoListScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this._goBack}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' color='white' />
 						</Button>
 					</Left>
 					<Body>
 						{LoggedUserCredentials.getUserType() === 'FARMER' ? (
-							<Title>{t('tradinginfolist:selling_info_list')}</Title>
+							<Title style={styles.whiteColor}>{t('tradinginfolist:selling_info_list')}</Title>
 						) : (
-							<Title>{t('tradinginfolist:buying_info_list')}</Title>
+							<Title style={styles.whiteColor}>{t('tradinginfolist:buying_info_list')}</Title>
 						)}
 					</Body>
 
 					{showAddButton ? (
 						<Right>
 							<Button transparent onPress={this._showTradingInfo}>
-								<Icon name='ios-add-circle-outline' />
+								<Icon name='ios-add-circle-outline' color='white' />
 							</Button>
 						</Right>
 					) : (
@@ -249,7 +249,7 @@ export { TradingInfoList };
 
 const styles = StyleSheet.create({
 	transactStyle: {
-		color: '#fff',
+		color: 'white',
 		fontSize: 17,
 		textAlign: 'center',
 	},
@@ -260,5 +260,8 @@ const styles = StyleSheet.create({
 	},
 	blackText: {
 		color: 'black',
+	},
+	whiteColor: {
+		color: 'white',
 	},
 });

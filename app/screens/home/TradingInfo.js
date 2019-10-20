@@ -130,19 +130,19 @@ class TradingInfoScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this._close}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' color='white' />
 						</Button>
 					</Left>
 					<Body>
 						{LoggedUserCredentials.getUserType() === 'FARMER' ? (
-							<Title>{t('tradinginfo:selling_info')}</Title>
+							<Title style={styles.whiteColor}>{t('tradinginfo:selling_info')}</Title>
 						) : (
-							<Title>{t('tradinginfo:buying_info')}</Title>
+							<Title style={styles.whiteColor}>{t('tradinginfo:buying_info')}</Title>
 						)}
 					</Body>
 					<Right>
 						<Button transparent onPress={this.onSave}>
-							<Icon name='checkmark' />
+							<Icon name='checkmark' color='white' />
 						</Button>
 					</Right>
 				</Header>
@@ -313,5 +313,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	whiteColor: {
+		color: 'white',
 	},
 });

@@ -144,15 +144,17 @@ class ProfileScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' color='white' />
 						</Button>
 					</Left>
 					<Body>
-						<Title>{user ? `${user.user.name}'s Profile` : 'Profile'}</Title>
+						<Title style={styles.whiteColor}>
+							{user ? `${user.user.name}'s Profile` : 'Profile'}
+						</Title>
 					</Body>
 					<Right>
 						<Button transparent onPress={this._validate} disabled={isSaving}>
-							<Icon name='checkmark' />
+							<Icon name='checkmark' color='white' />
 						</Button>
 					</Right>
 				</Header>
@@ -261,5 +263,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	whiteColor: {
+		color: 'white',
 	},
 });

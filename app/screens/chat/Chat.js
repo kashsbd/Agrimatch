@@ -347,11 +347,11 @@ export class Chat extends Component {
 				<Header style={styles.header}>
 					<Left>
 						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' />
+							<Icon name='arrow-back' color='white' />
 						</Button>
 					</Left>
 					<Body>
-						<Title>{selectedGroup.user.name}</Title>
+						<Title style={styles.whiteColor}>{selectedGroup.user.name}</Title>
 					</Body>
 					<Right />
 				</Header>
@@ -395,5 +395,8 @@ const styles = StyleSheet.create({
 		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center',
+	},
+	whiteColor: {
+		color: 'white',
 	},
 });
