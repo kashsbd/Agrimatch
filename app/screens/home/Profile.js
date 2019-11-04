@@ -144,7 +144,7 @@ class ProfileScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' color='white' />
+							<Icon name='arrow-back' style={styles.whiteColor} />
 						</Button>
 					</Left>
 					<Body>
@@ -152,11 +152,7 @@ class ProfileScreen extends Component {
 							{user ? `${user.user.name}'s Profile` : 'Profile'}
 						</Title>
 					</Body>
-					<Right>
-						<Button transparent onPress={this._validate} disabled={isSaving}>
-							<Icon name='checkmark' color='white' />
-						</Button>
-					</Right>
+					<Right />
 				</Header>
 
 				<Content contentContainerStyle={{ flexGrow: 1 }}>
@@ -218,6 +214,14 @@ class ProfileScreen extends Component {
 							<Recorder onDone={this._handleRecordingFinished} style={{ marginTop: 10 }} />
 
 							{this._maybeRenderLastRecording()}
+
+							<Button
+								transparent
+								onPress={this._validate}
+								disabled={isSaving}
+								style={styles.saveBtn}>
+								<Text style={styles.whiteColor}>{t('common:save')}</Text>
+							</Button>
 						</>
 					)}
 				</Content>
@@ -231,6 +235,12 @@ const Profile = withTranslation(['profile, errors', 'common'])(ProfileScreen);
 export { Profile };
 
 const styles = StyleSheet.create({
+	saveBtn: {
+		backgroundColor: Color.mainColor,
+		marginHorizontal: 10,
+		marginVertical: 13,
+		justifyContent: 'center',
+	},
 	logo: {
 		width: 120,
 		height: 120,

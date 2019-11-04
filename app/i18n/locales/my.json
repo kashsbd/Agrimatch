@@ -6,7 +6,8 @@
 		"email": "အီးမေးလ်လိပ်စာ",
 		"password": "လျှို့ဝှက်စကားလုံး",
 		"confirm_password": "လျှို့ဝှက်စကားလုံး နောက်တကြိမ်ရိုက်ပါ။",
-		"saving": "သိမ်းနေသည် ..."
+		"saving": "သိမ်းနေသည် ...",
+		"save": "သိမ်းမည်"
 	},
 	"errors": {
 		"no_internet": "Please connect to internet!",
@@ -59,7 +60,10 @@
 		"showing_middlemen": "အနီးအနားရှိ ပွဲစားများကို ပြသနေသည်။",
 		"show_farmers": "အနီးအနားရှိ တောင်သူများကို ကြည့်မည်။",
 		"show_middlemen": "အနီးအနားရှိ ပွဲစားများကို ကြည့်မည်။",
-		"results_found": "စုစုပေါင်း {{ count }}ယောက်ရှိပါသည်။"
+		"results_found": "စုစုပေါင်း {{ count }}ယောက်ရှိပါသည်။",
+		"message": "စာတိုပို့ရန်",
+		"call": "Call",
+		"items_for_sale": "Items for Sale"
 	},
 	"profile": {
 		"can_not_save": "Can't save without rating user.",

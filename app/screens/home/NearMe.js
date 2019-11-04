@@ -216,6 +216,8 @@ class NearMeScreen extends Component {
 
 		const averageRating = totalRateValue / rateCount;
 
+		const { t } = this.props;
+
 		return (
 			<View>
 				<View
@@ -248,6 +250,7 @@ class NearMeScreen extends Component {
 							<View style={styles.iconWrapper}>
 								<Icon name='ios-chatbubbles' style={styles.markerIcon} />
 							</View>
+							<Text style={styles.txtStyle}>{t('nearme:message')}</Text>
 						</View>
 					</TouchableOpacity>
 
@@ -256,6 +259,7 @@ class NearMeScreen extends Component {
 							<View style={styles.iconWrapper}>
 								<Icon name='call' style={styles.markerIcon} />
 							</View>
+							<Text style={styles.txtStyle}>{t('nearme:call')}</Text>
 						</View>
 					</TouchableOpacity>
 
@@ -264,6 +268,7 @@ class NearMeScreen extends Component {
 							<View style={styles.iconWrapper}>
 								<Icon name='eye' style={styles.markerIcon} />
 							</View>
+							<Text style={styles.txtStyle}>{t('nearme:items_for_sale')}</Text>
 						</View>
 					</TouchableOpacity>
 				</View>
@@ -335,7 +340,7 @@ class NearMeScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' color='white' />
+							<Icon name='arrow-back' style={styles.whiteColor} />
 						</Button>
 					</Left>
 					<Body>
@@ -569,5 +574,10 @@ const styles = StyleSheet.create({
 	},
 	whiteColor: {
 		color: 'white',
+	},
+	txtStyle: {
+		color: Color.mainColor,
+		textAlign: 'center',
+		paddingTop: 2,
 	},
 });

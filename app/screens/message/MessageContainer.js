@@ -94,7 +94,7 @@ export class MessageContainer extends Component {
 				<Header style={styles.header}>
 					<Left>
 						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' color='white' />
+							<Icon name='arrow-back' style={styles.whiteColor} />
 						</Button>
 					</Left>
 					<Body>

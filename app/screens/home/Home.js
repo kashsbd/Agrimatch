@@ -6,6 +6,7 @@ import {
 	TouchableOpacity,
 	AsyncStorage,
 	ActivityIndicator,
+	Platform,
 } from 'react-native';
 
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
@@ -334,7 +335,7 @@ const segStyle = StyleSheet.create({
 
 const styles = StyleSheet.create({
 	segmentContainer: {
-		paddingTop: 10,
+		paddingTop: Platform.OS === 'android' ? 10 : 30,
 		position: 'absolute',
 		zIndex: 999,
 		width: '60%',

@@ -113,6 +113,8 @@ class TradingInfoListScreen extends Component {
 
 	_renderAccordionHeader = item => {
 		const date = new Date(item.createdAt);
+		const headerString = `${date.toLocaleDateString()}  ( ${item.cropType} , ${item.quantity} kg )`;
+
 		return (
 			<View
 				style={{
@@ -122,7 +124,7 @@ class TradingInfoListScreen extends Component {
 					borderWidth: StyleSheet.hairlineWidth,
 				}}
 				key={item._id}>
-				<Text style={{ paddingLeft: 10 }}>{date.toLocaleDateString()}</Text>
+				<Text style={{ paddingLeft: 10 }}>{headerString}</Text>
 			</View>
 		);
 	};
@@ -179,7 +181,7 @@ class TradingInfoListScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this._goBack}>
-							<Icon name='arrow-back' color='white' />
+							<Icon name='arrow-back' style={styles.whiteColor} />
 						</Button>
 					</Left>
 					<Body>
@@ -193,7 +195,10 @@ class TradingInfoListScreen extends Component {
 					{showAddButton ? (
 						<Right>
 							<Button transparent onPress={this._showTradingInfo}>
-								<Icon name='ios-add-circle-outline' color='white' />
+								<Icon
+									name='ios-add-circle-outline'
+									style={{ color: 'white', fontSize: 32 }}
+								/>
 							</Button>
 						</Right>
 					) : (

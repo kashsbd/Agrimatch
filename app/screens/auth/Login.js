@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage } from 'react-native';
+import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage, Platform } from 'react-native';
 
 import { Button, Item, Input, Form, Text, Picker, Icon, View } from 'native-base';
 
@@ -253,6 +253,9 @@ const styles = StyleSheet.create({
 		height: 280,
 		resizeMode: 'contain',
 		alignSelf: 'center',
+		...Platform.select({
+			ios: { marginTop: 20 },
+		}),
 	},
 	signinBtn: {
 		margin: 15,
@@ -274,7 +277,7 @@ const styles = StyleSheet.create({
 		height: 40,
 	},
 	switchContainer: {
-		paddingTop: 15,
+		paddingTop: Platform.OS === 'android' ? 15 : 30,
 		position: 'absolute',
 		zIndex: 999,
 		width: '60%',

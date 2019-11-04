@@ -130,7 +130,7 @@ class TradingInfoScreen extends Component {
 				<Header style={{ backgroundColor: Color.mainColor }}>
 					<Left>
 						<Button transparent onPress={this._close}>
-							<Icon name='arrow-back' color='white' />
+							<Icon name='arrow-back' style={styles.whiteColor} />
 						</Button>
 					</Left>
 					<Body>
@@ -140,11 +140,7 @@ class TradingInfoScreen extends Component {
 							<Title style={styles.whiteColor}>{t('tradinginfo:buying_info')}</Title>
 						)}
 					</Body>
-					<Right>
-						<Button transparent onPress={this.onSave}>
-							<Icon name='checkmark' color='white' />
-						</Button>
-					</Right>
+					<Right />
 				</Header>
 
 				<Content padder contentContainerStyle={{ flexGrow: 1 }}>
@@ -160,7 +156,7 @@ class TradingInfoScreen extends Component {
 								<H3 style={styles.h3}>{t('tradinginfo:buy_today')} </H3>
 							)}
 
-							<View style={{ marginVertical: 40 }}>
+							<View style={{ marginTop: 20 }}>
 								<Text style={styles.h3}>{t('tradinginfo:type_of_crop')}</Text>
 								<Item picker style={{ marginLeft: 40, marginRight: 40 }}>
 									<Picker
@@ -211,7 +207,7 @@ class TradingInfoScreen extends Component {
 								</Item>
 							</View>
 
-							<View>
+							<View style={{ marginTop: 5 }}>
 								<Text style={styles.h3}>{t('tradinginfo:quantity')}</Text>
 								<View
 									style={{
@@ -240,7 +236,7 @@ class TradingInfoScreen extends Component {
 								</View>
 							</View>
 
-							<View style={{ marginVertical: 40 }}>
+							<View style={{ marginTop: 20 }}>
 								<Text style={styles.h3}>{t('tradinginfo:sample_photo')}</Text>
 								{image ? (
 									<View>
@@ -258,6 +254,10 @@ class TradingInfoScreen extends Component {
 									</Button>
 								)}
 							</View>
+
+							<Button style={styles.saveBtn} onPress={this.onSave}>
+								<Text style={styles.whiteColor}>{t('common:save')}</Text>
+							</Button>
 						</>
 					)}
 				</Content>
@@ -272,9 +272,10 @@ export { TradingInfo };
 
 const styles = StyleSheet.create({
 	saveBtn: {
-		margin: 15,
-		marginTop: 50,
 		backgroundColor: Color.mainColor,
+		marginHorizontal: 10,
+		marginTop: 20,
+		justifyContent: 'center',
 	},
 	h3: {
 		textAlign: 'center',
@@ -284,6 +285,7 @@ const styles = StyleSheet.create({
 	pickImgBtn: {
 		alignSelf: 'center',
 		marginTop: 10,
+		height: 150,
 	},
 	img: {
 		width: 160,
@@ -291,7 +293,7 @@ const styles = StyleSheet.create({
 		alignSelf: 'center',
 		borderWidth: 1,
 		borderColor: Color.mainColor,
-		marginTop: 10,
+		marginVertical: 10,
 	},
 	delBtn: {
 		position: 'absolute',

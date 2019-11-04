@@ -6,7 +6,8 @@
 		"email": "Email",
 		"password": "Password",
 		"confirm_password": "Confirm Password",
-		"saving": "Saving ..."
+		"saving": "Saving ...",
+		"save": "SAVE"
 	},
 	"errors": {
 		"no_internet": "Please connect to internet!",
@@ -59,7 +60,10 @@
 		"showing_middlemen": "Now Showing Middlemen Near You",
 		"show_farmers": "Show Farmers Near Me",
 		"show_middlemen": "Show Middlemen Near Me",
-		"results_found": "{{ count }} results found "
+		"results_found": "{{ count }} results found ",
+		"message": "Message",
+		"call": "Call",
+		"items_for_sale": "Items for Sale"
 	},
 	"profile": {
 		"can_not_save": "Can't save without rating user.",
