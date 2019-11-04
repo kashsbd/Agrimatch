@@ -29,6 +29,7 @@ import { cropUrl } from '../../utils/global';
 
 class TradingInfoScreen extends Component {
 	state = {
+		cropCategory: '',
 		cropType: 'Peanuts (groundnuts)',
 		quantity: '',
 		image: null,
@@ -38,7 +39,7 @@ class TradingInfoScreen extends Component {
 	_close = () => this.props.navigation.goBack();
 
 	onSave = async () => {
-		const { cropType, quantity, image } = this.state;
+		const { cropType, quantity, image, cropCategory } = this.state;
 		const { t } = this.props;
 
 		if (quantity.trim().length === 0) {
@@ -48,6 +49,7 @@ class TradingInfoScreen extends Component {
 		} else {
 			let data = new FormData();
 			data.append('userId', LoggedUserCredentials.getUserId());
+			data.append('cropCategory', cropCategory);
 			data.append('cropType', cropType);
 			data.append('quantity', quantity);
 
@@ -92,6 +94,8 @@ class TradingInfoScreen extends Component {
 
 	onCropTypeChange = cropType => this.setState({ cropType });
 
+	onCropCategoryChange = cropCategory => this.setState({ cropCategory });
+
 	onQuantityChange = quantity => this.setState({ quantity });
 
 	getPermissionAsync = async () => {
@@ -122,7 +126,7 @@ class TradingInfoScreen extends Component {
 	removeImage = () => this.setState({ image: null });
 
 	render() {
-		const { cropType, quantity, image, isSaving } = this.state;
+		const { cropType, quantity, image, isSaving, cropCategory } = this.state;
 		const { t } = this.props;
 
 		return (
@@ -155,6 +159,23 @@ class TradingInfoScreen extends Component {
 							) : (
 								<H3 style={styles.h3}>{t('tradinginfo:buy_today')} </H3>
 							)}
+
+							<View style={{ marginTop: 20 }}>
+								<Text style={styles.h3}>{t('tradinginfo:crop_category')}</Text>
+								<Item picker style={{ marginLeft: 40, marginRight: 40 }}>
+									<Picker
+										mode='dropdown'
+										iosIcon={<Icon name='arrow-down' />}
+										style={{ width: undefined }}
+										placeholderStyle={{ color: '#bfc6ea' }}
+										placeholderIconColor='#007aff'
+										selectedValue={cropCategory}
+										onValueChange={this.onCropCategoryChange}>
+										{/* Nuts */}
+										<Picker.Item label='Nuts' value='Nuts' />
+									</Picker>
+								</Item>
+							</View>
 
 							<View style={{ marginTop: 20 }}>
 								<Text style={styles.h3}>{t('tradinginfo:type_of_crop')}</Text>

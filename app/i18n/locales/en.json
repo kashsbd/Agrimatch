@@ -4,6 +4,7 @@
 		"farmer_label": "Farmer",
 		"middleman_label": "Middleman",
 		"email": "Email",
+		"ph_no": "Phone Number",
 		"password": "Password",
 		"confirm_password": "Confirm Password",
 		"saving": "Saving ...",
@@ -19,12 +20,17 @@
 		"enter_confirm_password": "Please enter confirm password.",
 		"password_do_not_match": "Passwords do not match.",
 		"login_fail": "Login fail.Try again!",
-		"try_later": "Something went wrong.Please try later."
+		"try_later": "Something went wrong.Please try later.",
+		"enter_ph_no": "Please enter phone number.",
+		"enter_valid_ph_no": "Please enter valid phone number.",
+		"enter_name": "Please enter name.",
+		"agree_permission": "You have to agree terms and conditions."
 	},
 	"login": {
 		"sign_in": "Sign In",
 		"don't_have_account": "Don't have an account?",
-		"sign_up_now": "Sign up now"
+		"sign_up_now": "Sign up now",
+		"permission": "Allow to use and share personal data in app such as phone number and location."
 	},
 	"signup": {
 		"already_mail_exists": "Mail already exists.Please try different email.",
@@ -33,9 +39,6 @@
 		"sign_in_now": "Sign in now"
 	},
 	"userdetailmodal": {
-		"enter_ph_no": "Please enter phone number.",
-		"enter_valid_ph_no": "Please enter valid phone number.",
-		"enter_name": "Please enter name.",
 		"ph_no": "Phone Number",
 		"name": "Name",
 		"gpa_cert_no": "GAP Cert. No",
@@ -79,6 +82,7 @@
 		"sell_today": "What do you want to sell today?",
 		"buy_today": "What do you want to buy today?",
 		"type_of_crop": "Type of Crop",
+		"crop_category": "Crop Category",
 		"quantity": "Quantity",
 		"kg": "Kg",
 		"sample_photo": "Sample Photo"

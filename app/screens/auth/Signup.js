@@ -14,7 +14,7 @@ import { userUrl } from '../../utils/global';
 
 class SignupScreen extends Component {
 	state = {
-		email: '',
+		ph_no: '',
 		password: '',
 		confirm_password: '',
 		userType: 'key0',
@@ -23,17 +23,17 @@ class SignupScreen extends Component {
 	};
 
 	_validateNext = () => {
-		const { email, password, confirm_password, userType } = this.state;
+		const { ph_no, password, confirm_password, userType } = this.state;
 		const { t } = this.props;
 
 		const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 		if (userType === 'key0') {
 			this.setState({ errorText: t('errors:select_user_type') });
-		} else if (email.trim().length === 0) {
-			this.setState({ errorText: t('errors:enter_email') });
-		} else if (reg.test(email) === false) {
-			this.setState({ errorText: t('errors:enter_valid_email') });
+		} else if (ph_no.trim().length === 0) {
+			this.setState({ errorText: t('errors:enter_ph_no') });
+		} else if (!ph_checker.isValidMMPhoneNumber(ph_no)) {
+			this.setState({ errorText: t('errors:enter_valid_ph_no') });
 		} else if (password.trim().length === 0) {
 			this.setState({ errorText: t('errors:enter_password') });
 		} else if (confirm_password.trim().length === 0) {
@@ -41,16 +41,16 @@ class SignupScreen extends Component {
 		} else if (password.trim() !== confirm_password.trim()) {
 			this.setState({ errorText: t('errors:password_do_not_match') });
 		} else {
-			this.setState({ isChecking: true, errorText: '' }, () => this._tryToCheckEmail());
+			this.setState({ isChecking: true, errorText: '' }, () => this._tryToCheckPhNo());
 		}
 	};
 
-	async _tryToCheckEmail() {
-		const { email, userType, password } = this.state;
+	async _tryToCheckPhNo() {
+		const { ph_no, userType, password } = this.state;
 		const { t } = this.props;
 
 		const data = {
-			email,
+			ph_no,
 			userType,
 		};
 

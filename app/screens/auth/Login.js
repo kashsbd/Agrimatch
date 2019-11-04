@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { ScrollView, Image, StyleSheet, ActivityIndicator, AsyncStorage, Platform } from 'react-native';
 
-import { Button, Item, Input, Form, Text, Picker, Icon, View } from 'native-base';
+import { Button, Item, Input, Form, Text, Picker, Icon, View, CheckBox, ListItem, Body } from 'native-base';
 
 import SegmentedControlTab from 'react-native-segmented-control-tab';
 import md5 from 'react-native-md5';
+import ph_checker from 'myanmar-phonenumber';
 import { withTranslation } from 'react-i18next';
 
 import imageLogo from '../../assets/images/logo.png';
@@ -15,26 +16,29 @@ import LoggedUserCredentials from '../../models/LoggedUserCredentials';
 
 class LoginScreen extends Component {
 	state = {
-		email: '',
+		ph_no: '',
 		password: '',
 		userType: 'key0',
 		isLoggingIn: false,
 		errorText: '',
 		selectedIndex: this.props.i18n.language == 'en' ? 0 : 1,
+		isPermitted: true,
 	};
 
 	_validateSignIn = () => {
-		const { email, password, userType } = this.state;
+		const { ph_no, password, userType, isPermitted } = this.state;
 		const { t } = this.props;
 
 		const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
-		if (userType === 'key0') {
+		if (!isPermitted) {
+			this.setState({ errorText: t('errors:agree_permission') });
+		} else if (userType === 'key0') {
 			this.setState({ errorText: t('errors:select_user_type') });
-		} else if (email.trim().length === 0) {
-			this.setState({ errorText: t('errors:enter_email') });
-		} else if (reg.test(email) === false) {
-			this.setState({ errorText: t('errors:enter_valid_email') });
+		} else if (ph_no.trim().length === 0) {
+			this.setState({ errorText: t('errors:enter_ph_no') });
+		} else if (!ph_checker.isValidMMPhoneNumber(ph_no)) {
+			this.setState({ errorText: t('errors:enter_valid_ph_no') });
 		} else if (password.trim().length === 0) {
 			this.setState({ errorText: t('errors:enter_password') });
 		} else {
@@ -43,11 +47,11 @@ class LoginScreen extends Component {
 	};
 
 	async _tryToSignIn() {
-		const { email, password, userType } = this.state;
+		const { ph_no, password, userType } = this.state;
 		const { t } = this.props;
 
 		const data = {
-			email,
+			ph_no,
 			password: md5.hex_md5(password),
 			userType,
 		};
@@ -108,7 +112,7 @@ class LoginScreen extends Component {
 
 	onUserTypeChange = userType => this.setState({ userType });
 
-	onEmailChange = email => this.setState({ email });
+	onPhNoChange = ph_no => this.setState({ ph_no });
 
 	onPasswordChange = password => this.setState({ password });
 
@@ -126,8 +130,10 @@ class LoginScreen extends Component {
 		}
 	};
 
+	onCheckBoxPressed = () => this.setState({ isPermitted: !this.state.isPermitted });
+
 	render() {
-		const { userType, email, password, isLoggingIn, errorText, selectedIndex } = this.state;
+		const { userType, ph_no, password, isLoggingIn, errorText, selectedIndex, isPermitted } = this.state;
 		const { t } = this.props;
 
 		return (
@@ -171,10 +177,10 @@ class LoginScreen extends Component {
 
 						<Item>
 							<Input
-								value={email}
-								placeholder={t('common:email')}
-								onChangeText={this.onEmailChange}
-								keyboardType='email-address'
+								value={ph_no}
+								placeholder={t('common:ph_no')}
+								onChangeText={this.onPhNoChange}
+								keyboardType='phone-pad'
 							/>
 						</Item>
 
@@ -193,6 +199,17 @@ class LoginScreen extends Component {
 					) : (
 						<Text style={styles.errorText} />
 					)}
+
+					<ListItem noBorder>
+						<CheckBox
+							checked={isPermitted}
+							color={Color.mainColor}
+							onPress={this.onCheckBoxPressed}
+						/>
+						<Body>
+							<Text style={{ fontSize: 13 }}>{t('login:permission')}</Text>
+						</Body>
+					</ListItem>
 
 					<Button
 						block
@@ -250,15 +267,14 @@ const styles = StyleSheet.create({
 	logo: {
 		flex: 1,
 		width: 200,
-		height: 280,
+		height: Platform.OS === 'android' ? 200 : 240,
 		resizeMode: 'contain',
 		alignSelf: 'center',
-		...Platform.select({
-			ios: { marginTop: 20 },
-		}),
+		marginTop: 50,
 	},
 	signinBtn: {
-		margin: 15,
+		marginVertical: 10,
+		marginHorizontal: 15,
 		backgroundColor: Color.mainColor,
 	},
 	bottomText: {
@@ -274,10 +290,10 @@ const styles = StyleSheet.create({
 		textAlign: 'right',
 		paddingRight: 17,
 		textAlignVertical: 'center',
-		height: 40,
+		height: 30,
 	},
 	switchContainer: {
-		paddingTop: Platform.OS === 'android' ? 15 : 30,
+		paddingTop: Platform.OS === 'android' ? 20 : 30,
 		position: 'absolute',
 		zIndex: 999,
 		width: '60%',
