@@ -113,7 +113,12 @@ class TradingInfoListScreen extends Component {
 
 	_renderAccordionHeader = item => {
 		const date = new Date(item.createdAt);
-		const headerString = `${date.toLocaleDateString()}  (${item.cropType}, ${item.quantity} kg)`;
+
+		const cropType = this.props.t(`croplist:${item.cropType}`);
+
+		const cropQuantity = this.props.t('tradinginfolist:in_kg', { qt: item.quantity });
+
+		const headerString = `${date.toLocaleDateString()}  (${cropType}, ${cropQuantity})`;
 
 		return (
 			<View
@@ -132,11 +137,13 @@ class TradingInfoListScreen extends Component {
 	_renderAccordionBody = item => {
 		const { t } = this.props;
 
+		const cropType = t(`croplist:${item.cropType}`);
+
 		return (
 			<View style={{ paddingLeft: 20 }} key={item._id}>
 				<Item>
-					<Text>{t('tradinginfolist:crop_type')}</Text>
-					<Text>{item.cropType}</Text>
+					<Text>{t('tradinginfolist:crop_type')} </Text>
+					<Text>{cropType}</Text>
 				</Item>
 				<Item>
 					<Text>{t('tradinginfolist:quantity')} </Text>
@@ -248,7 +255,9 @@ class TradingInfoListScreen extends Component {
 	}
 }
 
-const TradingInfoList = withTranslation(['tradinginfolist, errors', 'common'])(TradingInfoListScreen);
+const TradingInfoList = withTranslation(['tradinginfolist, errors', 'common', 'croplist'])(
+	TradingInfoListScreen,
+);
 
 export { TradingInfoList };
 

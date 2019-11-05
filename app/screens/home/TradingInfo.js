@@ -16,6 +16,7 @@ import {
 	Item,
 	Picker,
 	Input,
+	H2,
 } from 'native-base';
 
 import * as ImagePicker from 'expo-image-picker';
@@ -29,7 +30,7 @@ import { cropUrl } from '../../utils/global';
 
 class TradingInfoScreen extends Component {
 	state = {
-		cropCategory: 'Nuts',
+		cropCategory: '',
 		cropType: 'Peanuts (groundnuts)',
 		quantity: '',
 		image: null,
@@ -161,33 +162,6 @@ class TradingInfoScreen extends Component {
 							)}
 
 							<View style={{ marginTop: 20 }}>
-								<Text style={styles.h3}>{t('tradinginfo:crop_category')}</Text>
-								<Item picker style={{ marginLeft: 40, marginRight: 40 }}>
-									<Picker
-										mode='dropdown'
-										iosIcon={<Icon name='arrow-down' />}
-										style={{ width: undefined }}
-										placeholderStyle={{ color: '#bfc6ea' }}
-										placeholderIconColor='#007aff'
-										selectedValue={cropCategory}
-										onValueChange={this.onCropCategoryChange}>
-										{/* Nuts */}
-										<Picker.Item label='Nuts' value='Nuts' />
-										<Picker.Item
-											label='Beans and legumes (pulses)'
-											value='Beans and legumes (pulses)'
-										/>
-										<Picker.Item label='Cerial grains' value='Cerial grains' />
-										<Picker.Item label='Flowers' value='Flowers' />
-										<Picker.Item
-											label='Herbs and vegetables'
-											value='Herbs and vegetables'
-										/>
-									</Picker>
-								</Item>
-							</View>
-
-							<View style={{ marginTop: 20 }}>
 								<Text style={styles.h3}>{t('tradinginfo:type_of_crop')}</Text>
 								<Item picker style={{ marginLeft: 40, marginRight: 40 }}>
 									<Picker
@@ -200,40 +174,49 @@ class TradingInfoScreen extends Component {
 										onValueChange={this.onCropTypeChange}>
 										{/* Nuts */}
 										<Picker.Item
-											label='Peanuts (groundnuts)'
+											label={t('croplist:Peanuts (groundnuts)')}
 											value='Peanuts (groundnuts)'
 										/>
-										<Picker.Item label='Arceas' value='Arceas' />
-										<Picker.Item label='Betel' value='Betel' />
-										<Picker.Item label='Cashews' value='Cashews' />
-										<Picker.Item label='Macadamia' value='Macadamia' />
+										<Picker.Item label={t('croplist:Areca Nut')} value='Areca Nut' />
+										<Picker.Item label={t('croplist:Betel')} value='Betel' />
+										<Picker.Item label={t('croplist:Cashews')} value='Cashews' />
+										<Picker.Item label={t('croplist:Macadamia')} value='Macadamia' />
 										{/* Beans and legumes (pulses) */}
-										<Picker.Item label='Soybeans' value='Soybeans' />
-										<Picker.Item label='Mung beans' value='Mung beans' />
-										<Picker.Item label='Adzuki beans' value='Adzuki beans' />
-										<Picker.Item label='Black beans' value='Black beans' />
-										<Picker.Item label='Coffee beans' value='Coffee beans' />
-										<Picker.Item label='Chickpeas' value='Chickpeas' />
-										<Picker.Item label='Lentils' value='Lentils' />
+										<Picker.Item label={t('croplist:Soybeans')} value='Soybeans' />
+										<Picker.Item label={t('croplist:Mung beans')} value='Mung beans' />
+										<Picker.Item
+											label={t('croplist:Adzuki beans')}
+											value='Adzuki beans'
+										/>
+										<Picker.Item label={t('croplist:Black beans')} value='Black beans' />
+										<Picker.Item
+											label={t('croplist:Coffee beans')}
+											value='Coffee beans'
+										/>
+										<Picker.Item label={t('croplist:Chickpeas')} value='Chickpeas' />
+										<Picker.Item label={t('croplist:Lentils')} value='Lentils' />
 										{/* Cerial grains */}
-										<Picker.Item label='Rice' value='Rice' />
-										<Picker.Item label='Corn' value='Corn' />
-										<Picker.Item label='Wheat' value='Wheat' />
-										<Picker.Item label='Barley' value='Barley' />
+										<Picker.Item label={t('croplist:Rice')} value='Rice' />
+										<Picker.Item label={t('croplist:Corn')} value='Corn' />
+										<Picker.Item label={t('croplist:Wheat')} value='Wheat' />
+										<Picker.Item label={t('croplist:Barley')} value='Barley' />
 										{/* Flowers */}
-										<Picker.Item label='Cotton' value='Cotton' />
-										<Picker.Item label='Roses' value='Roses' />
-										<Picker.Item label='Lilies' value='Lilies' />
+										<Picker.Item label={t('croplist:Cotton')} value='Cotton' />
+										<Picker.Item label={t('croplist:Roses')} value='Roses' />
+										<Picker.Item label={t('croplist:Lilies')} value='Lilies' />
 										{/* Herbs and vegetables */}
-										<Picker.Item label='Tea' value='Tea' />
-										<Picker.Item label='Kale' value='Kale' />
-										<Picker.Item label='Onion' value='Onion' />
-										<Picker.Item label='Shallot' value='Shallot' />
-										<Picker.Item label='Carrot' value='Carrot' />
-										<Picker.Item label='Potato' value='Potato' />
-										<Picker.Item label='Sweet potato' value='Sweet potato' />
-										<Picker.Item label='Chili' value='Chili' />
-										<Picker.Item label='Okra' value='Okra' />
+										<Picker.Item label={t('croplist:Tea')} value='Tea' />
+										<Picker.Item label={t('croplist:Kale')} value='Kale' />
+										<Picker.Item label={t('croplist:Onion')} value='Onion' />
+										<Picker.Item label={t('croplist:Shallot')} value='Shallot' />
+										<Picker.Item label={t('croplist:Carrot')} value='Carrot' />
+										<Picker.Item label={t('croplist:Potato')} value='Potato' />
+										<Picker.Item
+											label={t('croplist:Sweet potato')}
+											value='Sweet potato'
+										/>
+										<Picker.Item label={t('croplist:Chili')} value='Chili' />
+										<Picker.Item label={t('croplist:Okra')} value='Okra' />
 									</Picker>
 								</Item>
 							</View>
@@ -297,7 +280,7 @@ class TradingInfoScreen extends Component {
 	}
 }
 
-const TradingInfo = withTranslation(['tradinginfo, errors', 'common'])(TradingInfoScreen);
+const TradingInfo = withTranslation(['tradinginfo, errors', 'common', 'croplist'])(TradingInfoScreen);
 
 export { TradingInfo };
 
@@ -311,7 +294,7 @@ const styles = StyleSheet.create({
 	h3: {
 		textAlign: 'center',
 		color: Color.mainColor,
-		paddingTop: 10,
+		paddingTop: 20,
 	},
 	pickImgBtn: {
 		alignSelf: 'center',

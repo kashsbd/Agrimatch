@@ -86,7 +86,7 @@
 		"sample_photo": "သီးနှံနမူနာဓာတ်ပုံ"
 	},
 	"tradinginfolist": {
-		"crop_type": "သီးနှံအမျိုးအစား",
+		"crop_type": "သီးနှံအမျိုးအစား ",
 		"quantity": "အရေအတွက် :",
 		"in_kg": "{{ qt }} ကီလို",
 		"no_crops": "No crop list to show !",
@@ -95,5 +95,42 @@
 		"transact": "အရောင်းအဝယ်ပြုလုပ်မည်",
 		"no_internet": "Internet Connection မရှိပါ!",
 		"tap_to_retry": "Tap To Retry"
+	},
+	"cropcategory": {
+		"Nuts": "Nuts",
+		"Beans and legumes (pulses)": "Beans and legumes (pulses)",
+		"Cerial grains": "Cerial grains",
+		"Flowers": "Flowers",
+		"Herbs and vegetables": "Herbs and vegetables"
+	},
+	"croplist": {
+		"Peanuts (groundnuts)": "မြေပဲ",
+		"Areca Nut": "ကွမ်းသီး",
+		"Betel": "ကွမ်းရွက်",
+		"Cashews": "သီဟိုဠ်စေ့",
+		"Macadamia": "မက္ကဒေးမီးယား",
+		"Soybeans": "ပဲပုတ်စေ့",
+		"Mung beans": "ပဲစိမ်းငုံ",
+		"Adzuki beans": "မြေတောက်ပဲ",
+		"Black beans": "ပဲညို",
+		"Coffee beans": "ကော်ဖီစေ့",
+		"Chickpeas": "ကုလားပဲ",
+		"Lentils": "ပဲနီကလေး",
+		"Rice": "ဆန်",
+		"Corn": "ပြောင်းဖူး",
+		"Wheat": "ဂျုံ",
+		"Barley": "ဘာလီစေ့",
+		"Cotton": "ဝါဂွမ်း",
+		"Roses": "နှင်းဆီပန်း",
+		"Lilies": "လီလီပန်း",
+		"Tea": "လက်ဖက်",
+		"Kale": "ကိုက်လန်",
+		"Onion": "ကြက်သွန်နီ",
+		"Shallot": "ကြက်သွန်နီကလေး",
+		"Carrot": "ခါကျက်ဥ",
+		"Potato": "အာလူး",
+		"Sweet potato": "ကန်စွန်းဥ",
+		"Chili": "ငရုတ်သီး",
+		"Okra": "ရုံးပတီသီး"
 	}
 }
