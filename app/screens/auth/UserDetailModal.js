@@ -27,7 +27,7 @@ export default class UserDetailModal extends Component {
 	state = {
 		modalVisible: false,
 		isFarmer: false,
-		ph_no: '',
+		email: '',
 		gpa_cert_no: '',
 		gpa_cert_pic: null,
 		name: '',
@@ -61,30 +61,32 @@ export default class UserDetailModal extends Component {
 	};
 
 	_validateSignUp = () => {
-		const { isFarmer, ph_no, gpa_cert_no, name } = this.state;
+		const { email, name } = this.state;
 		const { t } = this.props;
 
-		if (ph_no.trim().length === 0) {
-			this.setState({ errorText: t('userdetailmodal:enter_ph_no') });
-		} else if (!ph_checker.isValidMMPhoneNumber(ph_no)) {
-			this.setState({ errorText: t('userdetailmodal:enter_valid_ph_no') });
+		const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
+		if (email.trim().length === 0) {
+			this.setState({ errorText: t('errors:enter_email') });
+		} else if (!reg.test(email)) {
+			this.setState({ errorText: t('errors:enter_valid_email') });
 		} else if (name.trim().length === 0) {
-			this.setState({ errorText: t('userdetailmodal:enter_name') });
+			this.setState({ errorText: t('errors:enter_name') });
 		} else {
 			this.setState({ isSigningUp: true, errorText: '' }, () => this._tryToSignUp());
 		}
 	};
 
 	async _tryToSignUp() {
-		const { isFarmer, ph_no, gpa_cert_no, gpa_cert_pic, name, param, proPic, location } = this.state;
+		const { isFarmer, email, gpa_cert_no, gpa_cert_pic, name, param, proPic, location } = this.state;
 		const { t } = this.props;
 
 		const data = new FormData();
-		data.append('email', param.email);
+		data.append('email', email);
 		data.append('password', md5.hex_md5(param.password));
 		data.append('userType', param.userType);
 		data.append('name', name);
-		data.append('phno', ph_no);
+		data.append('phno', param.ph_no);
 		data.append('lng', location.longitude);
 		data.append('lat', location.latitude);
 
@@ -204,7 +206,7 @@ export default class UserDetailModal extends Component {
 
 	close = () => this.setState({ modalVisible: false });
 
-	onPhNoChange = ph_no => this.setState({ ph_no });
+	onEmailChange = email => this.setState({ email });
 
 	onNameChange = name => this.setState({ name });
 
@@ -213,7 +215,7 @@ export default class UserDetailModal extends Component {
 	render() {
 		const {
 			modalVisible,
-			ph_no,
+			email,
 			name,
 			isFarmer,
 			gpa_cert_no,
@@ -246,10 +248,10 @@ export default class UserDetailModal extends Component {
 						<Form style={{ paddingRight: 15 }}>
 							<Item>
 								<Input
-									value={ph_no}
-									placeholder={t('userdetailmodal:ph_no')}
-									onChangeText={this.onPhNoChange}
-									keyboardType='phone-pad'
+									value={email}
+									placeholder={t('common:email')}
+									onChangeText={this.onEmailChange}
+									keyboardType='email-address'
 								/>
 							</Item>
 
@@ -287,7 +289,7 @@ export default class UserDetailModal extends Component {
 							{isSigningUp ? (
 								<ActivityIndicator color='#fff' />
 							) : (
-								<Text>{t('userdetailmodal:save')}</Text>
+								<Text>{t('common:save')}</Text>
 							)}
 						</Button>
 					</View>

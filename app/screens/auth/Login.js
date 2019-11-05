@@ -29,8 +29,6 @@ class LoginScreen extends Component {
 		const { ph_no, password, userType, isPermitted } = this.state;
 		const { t } = this.props;
 
-		const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-
 		if (!isPermitted) {
 			this.setState({ errorText: t('errors:agree_permission') });
 		} else if (userType === 'key0') {
@@ -51,7 +49,7 @@ class LoginScreen extends Component {
 		const { t } = this.props;
 
 		const data = {
-			ph_no,
+			phno: ph_no,
 			password: md5.hex_md5(password),
 			userType,
 		};

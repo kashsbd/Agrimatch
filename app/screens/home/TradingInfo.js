@@ -29,7 +29,7 @@ import { cropUrl } from '../../utils/global';
 
 class TradingInfoScreen extends Component {
 	state = {
-		cropCategory: '',
+		cropCategory: 'Nuts',
 		cropType: 'Peanuts (groundnuts)',
 		quantity: '',
 		image: null,
@@ -173,6 +173,16 @@ class TradingInfoScreen extends Component {
 										onValueChange={this.onCropCategoryChange}>
 										{/* Nuts */}
 										<Picker.Item label='Nuts' value='Nuts' />
+										<Picker.Item
+											label='Beans and legumes (pulses)'
+											value='Beans and legumes (pulses)'
+										/>
+										<Picker.Item label='Cerial grains' value='Cerial grains' />
+										<Picker.Item label='Flowers' value='Flowers' />
+										<Picker.Item
+											label='Herbs and vegetables'
+											value='Herbs and vegetables'
+										/>
 									</Picker>
 								</Item>
 							</View>

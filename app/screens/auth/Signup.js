@@ -4,6 +4,7 @@ import { ScrollView, Image, StyleSheet, ActivityIndicator, View } from 'react-na
 import { Button, Item, Input, Form, Text, Picker, Icon } from 'native-base';
 
 import { withTranslation } from 'react-i18next';
+import ph_checker from 'myanmar-phonenumber';
 
 import UserDetailModal from './UserDetailModal';
 
@@ -25,8 +26,6 @@ class SignupScreen extends Component {
 	_validateNext = () => {
 		const { ph_no, password, confirm_password, userType } = this.state;
 		const { t } = this.props;
-
-		const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 		if (userType === 'key0') {
 			this.setState({ errorText: t('errors:select_user_type') });
@@ -50,7 +49,7 @@ class SignupScreen extends Component {
 		const { t } = this.props;
 
 		const data = {
-			ph_no,
+			phno: ph_no,
 			userType,
 		};
 
@@ -62,16 +61,16 @@ class SignupScreen extends Component {
 			body: JSON.stringify(data),
 		};
 
-		const path = userUrl + '/checkEmail';
+		const path = userUrl + '/checkPhNo';
 
 		try {
 			const res = await fetch(path, config);
 
 			if (res.status == 409) {
-				const errorText = t('signup:already_mail_exists');
+				const errorText = t('signup:already_ph_no_exists');
 				this.setState({ isChecking: false, errorText });
 			} else if (res.status == 200) {
-				const param = { email, password, userType };
+				const param = { ph_no, password, userType };
 				this.setState({ isChecking: false, errorText: '' }, () => this.userDetailRef.open(param));
 			} else {
 				const errorText = t('errors:500_error');
@@ -87,7 +86,7 @@ class SignupScreen extends Component {
 
 	onUserTypeChange = userType => this.setState({ userType });
 
-	onEmailChange = email => this.setState({ email });
+	onPhNoChange = ph_no => this.setState({ ph_no });
 
 	onPasswordChange = password => this.setState({ password });
 
@@ -96,7 +95,7 @@ class SignupScreen extends Component {
 	_setRef = ref => (this.userDetailRef = ref);
 
 	render() {
-		const { userType, email, password, confirm_password, isChecking, errorText } = this.state;
+		const { userType, ph_no, password, confirm_password, isChecking, errorText } = this.state;
 		const { t } = this.props;
 
 		return (
@@ -125,10 +124,10 @@ class SignupScreen extends Component {
 
 						<Item>
 							<Input
-								value={email}
-								placeholder={t('common:email')}
-								onChangeText={this.onEmailChange}
-								keyboardType='email-address'
+								value={ph_no}
+								placeholder={t('common:ph_no')}
+								onChangeText={this.onPhNoChange}
+								keyboardType='phone-pad'
 							/>
 						</Item>
 

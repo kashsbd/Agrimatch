@@ -33,16 +33,14 @@
 		"permission": "App အသုံးပြုနေစဉ် ဖုန်းနံပါတ်နှင့် နေရာကို မျှဝေအသုံးပြုရန် သဘောတူပါသည်။"
 	},
 	"signup": {
-		"already_mail_exists": "Mail already exists.Please try different email.",
+		"already_ph_no_exists": "Phone number already exists.Please try different one.",
 		"next": "ရှေ့ဆက်ရန်",
 		"already_have_account": "အကောင့်ရှိပြီးသားဖြစ်ပါက ",
 		"sign_in_now": "ဤနေရာမှတဆင့် ဝင်ပါ။"
 	},
 	"userdetailmodal": {
-		"ph_no": "ဖုန်းနံပါတ်",
 		"name": "အမည်",
-		"gpa_cert_no": "ဂျီအေပီ အမှတ်",
-		"save": "သိမ်းမည်"
+		"gpa_cert_no": "ဂျီအေပီ အမှတ်"
 	},
 	"chat": {},
 	"home": {

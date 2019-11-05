@@ -33,16 +33,14 @@
 		"permission": "Allow to use and share personal data in app such as phone number and location."
 	},
 	"signup": {
-		"already_mail_exists": "Mail already exists.Please try different email.",
+		"already_ph_no_exists": "Phone number already exists.Please try different one.",
 		"next": "Next",
 		"already_have_account": "Already have an account?",
 		"sign_in_now": "Sign in now"
 	},
 	"userdetailmodal": {
-		"ph_no": "Phone Number",
 		"name": "Name",
-		"gpa_cert_no": "GAP Cert. No",
-		"save": "Save"
+		"gpa_cert_no": "GAP Cert. No"
 	},
 	"chat": {},
 	"home": {

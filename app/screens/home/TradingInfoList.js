@@ -113,7 +113,7 @@ class TradingInfoListScreen extends Component {
 
 	_renderAccordionHeader = item => {
 		const date = new Date(item.createdAt);
-		const headerString = `${date.toLocaleDateString()}  ( ${item.cropType} , ${item.quantity} kg )`;
+		const headerString = `${date.toLocaleDateString()}  (${item.cropType}, ${item.quantity} kg)`;
 
 		return (
 			<View
