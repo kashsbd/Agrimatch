@@ -16,7 +16,6 @@ import {
 	Item,
 	Picker,
 	Input,
-	H2,
 } from 'native-base';
 
 import * as ImagePicker from 'expo-image-picker';

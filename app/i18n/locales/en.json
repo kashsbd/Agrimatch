@@ -64,7 +64,7 @@
 		"results_found": "{{ count }} results found ",
 		"message": "Message",
 		"call": "Call",
-		"items_for_sale": "Items for Sale"
+		"items_for_sale": "Crops for Sale"
 	},
 	"profile": {
 		"can_not_save": "Can't save without rating user.",

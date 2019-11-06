@@ -64,7 +64,7 @@
 		"results_found": "စုစုပေါင်း {{ count }}ယောက်ရှိပါသည်။",
 		"message": "စာတိုပို့ရန်",
 		"call": "ဖုန်းခေါ်ရန်",
-		"items_for_sale": "ရောင်းမည့်သီးနှံ"
+		"items_for_sale": "သီးနှံများ"
 	},
 	"profile": {
 		"can_not_save": "Can't save without rating user.",
