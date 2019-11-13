@@ -1,43 +1,50 @@
 {
-	"expo": {
-		"name": "AgriMatch",
-		"slug": "AgriMatch",
-		"privacy": "public",
-		"sdkVersion": "35.0.0",
-		"platforms": ["ios", "android", "web"],
-		"version": "1.3.1",
-		"orientation": "portrait",
-		"icon": "./app/assets/images/icon.png",
-		"splash": {
-			"image": "./app/assets/images/splash.png",
-			"resizeMode": "contain",
-			"backgroundColor": "#ffffff"
-		},
-		"updates": {
-			"fallbackToCacheTimeout": 0
-		},
-		"assetBundlePatterns": ["**/*"],
-		"ios": {
-			"supportsTablet": true,
-			"bundleIdentifier": "com.digisoft.agrimatch",
-			"infoPlist": {
-				"NSLocationWhenInUseUsageDescription": "AgriMatch uses your location to find out nearby farmers/middlemen."
-			},
-			"config": {
-				"googleMapsApiKey": "AIzaSyCTQNmXCL73e3AInoWnXSMs6HtrnHPRv54"
-			}
-		},
-		"android": {
-			"package": "com.digisoft.agrimatch",
-			"config": {
-				"googleMaps": {
-					"apiKey": "AIzaSyD4Kb7RuNP-EzkW0cw3ue_w_YV5vUHpKnI"
-				}
-			}
-		},
-		"androidStatusBar": {
-			"backgroundColor": "#000000"
-		},
-		"description": ""
-	}
+  "expo": {
+    "name": "AgriMatch",
+    "slug": "AgriMatch",
+    "privacy": "public",
+    "sdkVersion": "35.0.0",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "version": "1.3.2",
+    "orientation": "portrait",
+    "icon": "./app/assets/images/icon.png",
+    "splash": {
+      "image": "./app/assets/images/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.digisoft.agrimatch",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "AgriMatch uses your location to find out nearby farmers/middlemen."
+      },
+      "config": {
+        "googleMapsApiKey": "AIzaSyCTQNmXCL73e3AInoWnXSMs6HtrnHPRv54"
+      }
+    },
+    "android": {
+      "package": "com.digisoft.agrimatch",
+      "versionCode": 2,
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyD4Kb7RuNP-EzkW0cw3ue_w_YV5vUHpKnI"
+        }
+      }
+    },
+    "androidStatusBar": {
+      "backgroundColor": "#000000"
+    },
+    "description": ""
+  }
 }
