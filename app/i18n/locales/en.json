@@ -95,7 +95,7 @@
     "transact": "Transact",
     "no_internet": "No Internet Connection !",
     "tap_to_retry": "Tap To Retry",
-    "filter_crop": "Filter Crop :"
+    "filter_crop": "Type of Crop :"
   },
   "croplist": {
     "All": "All",

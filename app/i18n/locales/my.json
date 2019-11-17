@@ -95,7 +95,7 @@
     "transact": "အရောင်းအဝယ်ပြုလုပ်မည်",
     "no_internet": "Internet Connection မရှိပါ!",
     "tap_to_retry": "Tap To Retry",
-    "filter_crop": "Filter Crop :"
+    "filter_crop": "သီးနှံအမျိုးအစား :"
   },
   "cropcategory": {
     "Nuts": "Nuts",
@@ -105,7 +105,7 @@
     "Herbs and vegetables": "Herbs and vegetables"
   },
   "croplist": {
-    "All": "All",
+    "All": "အားလုံး",
     "Peanuts (groundnuts)": "မြေပဲ",
     "Areca Nut": "ကွမ်းသီး",
     "Betel": "ကွမ်းရွက်",

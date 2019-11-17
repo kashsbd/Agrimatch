@@ -305,7 +305,7 @@ class TradingInfoScreen extends Component {
                     style={styles.pickImgBtn}
                     onPress={this.getPermissionAsync}
                   >
-                    <Icon name="camera" size={20} style={styles.cameraIcon} />
+                    <Icon name="camera" size={30} style={styles.cameraIcon} />
                   </Button>
                 )}
               </View>

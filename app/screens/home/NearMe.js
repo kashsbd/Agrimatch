@@ -53,11 +53,10 @@ class NearMeScreen extends Component {
   }
 
   _getLocationAsync = async () => {
+    let loc;
+
     if (LoggedUserCredentials.getLocation()) {
-      this.setState({
-        location: LoggedUserCredentials.getLocation(),
-        wholeScreenLoading: false
-      });
+      loc = LoggedUserCredentials.getLocation();
     } else {
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
 
@@ -67,9 +66,43 @@ class NearMeScreen extends Component {
         });
       }
 
-      const { coords } = await Location.getCurrentPositionAsync({});
+      const { coords } = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true
+      });
 
-      this.setState({ location: coords, wholeScreenLoading: false });
+      loc = coords;
+    }
+
+    this.setState(
+      { location: loc, wholeScreenLoading: false },
+      this._notifyLocation
+    );
+  };
+
+  _notifyLocation = async () => {
+    const { location } = this.state;
+
+    const data = {
+      user: LoggedUserCredentials.getUserId(),
+      lng: location.longitude,
+      lat: location.latitude
+    };
+
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + LoggedUserCredentials.getAccessToken()
+      },
+      method: "POST",
+      body: JSON.stringify(data)
+    };
+
+    const path = locationUrl + "/notifyLocationChange";
+
+    try {
+      const res = await fetch(path, config);
+    } catch (error) {
+      console.log("error in sending loc data.");
     }
   };
 
