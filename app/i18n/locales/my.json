@@ -9,7 +9,7 @@
         "confirm_password": "လျှို့ဝှက်စကားလုံး နောက်တကြိမ်ရိုက်ပါ။",
         "saving": "သိမ်းနေသည် ...",
         "save": "သိမ်းမည်",
-        "create": "CREATE"
+        "create": "ဖွဲ့စည်းမည်"
     },
     "errors": {
         "no_internet": "Please connect to internet!",
@@ -66,12 +66,13 @@
         "message": "စာတိုပို့ရန်",
         "call": "ဖုန်းခေါ်ရန်",
         "items_for_sale": "သီးနှံများ",
-        "join_group": "Join Group",
+        "join_group": "ဆွေးနွေးခန်းဝင်ရောက်မည်",
+        "view_chat": "ဆွေးနွေးချက်များကြည့်မည်",
         "people_are_in_this_group": "ဤဆွေးနွေးခန်းတွင် လူ {{ num }} ဦးရှိသည်။"
     },
     "profile": {
         "can_not_save": "Can't save without rating user.",
-        "additional_feedback": "ထပ်မံဖော်ပြလိုသည့် တုံ့ပြန်ချက်များ",
+        "additional_feedback": "ထပ်မံဖော်ပြလိုသည်များ",
         "how_is_farmer": "တောင်သူ {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။",
         "how_is_middleman": "ပွဲစား {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။"
     },
@@ -139,9 +140,9 @@
         "Okra": "ရုံးပတီသီး"
     },
     "creategroup": {
-        "enter_group_name": "Enter Group Name",
+        "enter_group_name": "ဆွေးနွေးခန်းအမည်",
         "info": "ဤဆွေးနွေးခန်းသို့ အနီးအနားရှိ တောင်သူ/ ပွဲစားများ ဝင်ရောက်ဆွေးနွေးမှုများ ပြုလုပ်နိုင်မည်ဖြစ်သည်။",
-        "create_group": "Create Group",
+        "create_group": "ဆွေးနွေးခန်းဖွဲ့မည်",
         "can_not_save": "Can't create group without name.",
         "already_exist": "Group name already exist.Please try another one."
     }

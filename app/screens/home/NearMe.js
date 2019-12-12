@@ -244,7 +244,11 @@ class NearMeScreen extends Component {
     };
 
     onMarkerPressed = marker => () => {
-        this.setState({ previewVisible: true, selectedGroup: marker });
+        this.setState({
+            previewVisible: true,
+            selectedGroup: marker,
+            dialogVisible: false
+        });
     };
 
     _backToOriginalScreen = () =>
@@ -434,9 +438,7 @@ class NearMeScreen extends Component {
         const {
             showFarmersCount,
             showMiddlemenCount,
-            markers,
-            singleUsers,
-            groupUsers
+            singleUsers
         } = this.state;
         const { t } = this.props;
 
@@ -515,7 +517,6 @@ class NearMeScreen extends Component {
     render() {
         const {
             markers,
-            groupUsers,
             dialogVisible,
             previewVisible,
             selectedGroup,
@@ -541,7 +542,7 @@ class NearMeScreen extends Component {
                         </Title>
                     </Body>
                     <Right>
-                        {markers && markers.length > 0 ? (
+                        {LoggedUserCredentials.getUserType() === "FARMER" ? (
                             <Button
                                 transparent
                                 onPress={this.onCreateGroupPressed}
@@ -660,10 +661,12 @@ class NearMeScreen extends Component {
                                         <Body style={{ flex: 0 }}>
                                             <Text style={styles.nameStyle}>
                                                 {selectedGroup &&
-                                                selectedGroup.user
+                                                selectedGroup.chatType ===
+                                                    "SINGLE"
                                                     ? selectedGroup.user.name
                                                     : selectedGroup &&
-                                                      selectedGroup.chatRoom
+                                                      selectedGroup.chatType ===
+                                                          "GROUP"
                                                     ? selectedGroup.chatRoom
                                                           .roomName
                                                     : t("nearme:greeting", {
@@ -736,7 +739,14 @@ class NearMeScreen extends Component {
                                                 {t(
                                                     "nearme:people_are_in_this_group",
                                                     {
-                                                        num: groupUsers.length
+                                                        num:
+                                                            selectedGroup.chatType ===
+                                                            "GROUP"
+                                                                ? selectedGroup
+                                                                      .chatRoom
+                                                                      .participants
+                                                                      .length
+                                                                : 0
                                                     }
                                                 )}
                                             </Text>
@@ -765,7 +775,13 @@ class NearMeScreen extends Component {
                                                         alignSelf: "center"
                                                     }}
                                                 >
-                                                    {t("nearme:join_group")}
+                                                    {selectedGroup.chatRoom.participants.includes(
+                                                        LoggedUserCredentials.getUserId()
+                                                    )
+                                                        ? t("nearme:view_chat")
+                                                        : t(
+                                                              "nearme:join_group"
+                                                          )}
                                                 </RNText>
                                             </Button>
                                         </View>

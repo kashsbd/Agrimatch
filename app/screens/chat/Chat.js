@@ -296,7 +296,14 @@ export class Chat extends Component {
 
         const users = Array.isArray(user) ? user : [user];
 
-        const receiverIds = users.map(usr => usr._id);
+        const receiverIds = users.map(usr => {
+            if (usr._id !== LoggedUserCredentials.getUserId()) {
+                return usr._id;
+            }
+        });
+
+        console.log(LoggedUserCredentials.getUserId());
+        console.log(receiverIds);
 
         const data = new FormData();
         data.append("fromSenderId", LoggedUserCredentials.getUserId());

@@ -1,63 +1,66 @@
-import { AppLoading } from 'expo';
-import { Asset } from 'expo-asset';
-import * as Font from 'expo-font';
-import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View, YellowBox } from 'react-native';
+import { AppLoading } from "expo";
+import { Asset } from "expo-asset";
+import * as Font from "expo-font";
+import React, { useState } from "react";
+import { Platform, StatusBar, StyleSheet, View, YellowBox } from "react-native";
 
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 
-import AppNavigator from './app/navigation/AppNavigator';
+import AppNavigator from "./app/navigation/AppNavigator";
 
-console.ignoredYellowBox = ['Remote debugger'];
+console.ignoredYellowBox = ["Remote debugger"];
 YellowBox.ignoreWarnings([
-	'Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?',
+    "Unrecognized WebSocket connection option(s) `agent`, `perMessageDeflate`, `pfx`, `key`, `passphrase`, `cert`, `ca`, `ciphers`, `rejectUnauthorized`. Did you mean to put these under `headers`?"
 ]);
 
 export default function App(props) {
-	const [isLoadingComplete, setLoadingComplete] = useState(false);
+    const [isLoadingComplete, setLoadingComplete] = useState(false);
 
-	if (!isLoadingComplete && !props.skipLoadingScreen) {
-		return (
-			<AppLoading
-				startAsync={loadResourcesAsync}
-				onError={handleLoadingError}
-				onFinish={() => handleFinishLoading(setLoadingComplete)}
-			/>
-		);
-	} else {
-		return (
-			<View style={styles.container}>
-				{Platform.OS === 'ios' && <StatusBar barStyle='default' />}
-				<AppNavigator />
-			</View>
-		);
-	}
+    if (!isLoadingComplete && !props.skipLoadingScreen) {
+        return (
+            <AppLoading
+                startAsync={loadResourcesAsync}
+                onError={handleLoadingError}
+                onFinish={() => handleFinishLoading(setLoadingComplete)}
+            />
+        );
+    } else {
+        return (
+            <View style={styles.container}>
+                {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+                <AppNavigator />
+            </View>
+        );
+    }
 }
 
 async function loadResourcesAsync() {
-	await Promise.all([
-		Asset.loadAsync([require('./app/assets/images/logo.png'), require('./app/assets/images/propic.png')]),
-		Font.loadAsync({
-			Roboto: require('native-base/Fonts/Roboto.ttf'),
-			Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-			...Ionicons.font,
-			Padauk_Bold: require('./app/assets/fonts/Padauk_Bold.ttf'),
-			Padauk_Regular: require('./app/assets/fonts/Padauk_Regular.ttf'),
-		}),
-	]);
+    await Promise.all([
+        Asset.loadAsync([
+            require("./app/assets/images/logo.png"),
+            require("./app/assets/images/propic.png")
+        ]),
+        Font.loadAsync({
+            Roboto: require("native-base/Fonts/Roboto.ttf"),
+            Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf"),
+            ...Ionicons.font,
+            Padauk_Bold: require("./app/assets/fonts/Padauk_Bold.ttf"),
+            Padauk_Regular: require("./app/assets/fonts/Padauk_Regular.ttf")
+        })
+    ]);
 }
 
 function handleLoadingError(error) {
-	console.warn(error);
+    console.warn(error);
 }
 
 function handleFinishLoading(setLoadingComplete) {
-	setLoadingComplete(true);
+    setLoadingComplete(true);
 }
 
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		backgroundColor: '#fff',
-	},
+    container: {
+        flex: 1,
+        backgroundColor: "#fff"
+    }
 });

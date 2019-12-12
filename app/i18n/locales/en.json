@@ -67,6 +67,7 @@
         "call": "Call",
         "items_for_sale": "Crops",
         "join_group": "Join Group",
+        "view_chat": "View Chat",
         "people_are_in_this_group": "{{ num }} people are in this group."
     },
     "profile": {
