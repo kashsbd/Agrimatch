@@ -1,402 +1,457 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, ActivityIndicator, Platform } from 'react-native';
+import React, { Component } from "react";
+import { StyleSheet, View, ActivityIndicator, Platform } from "react-native";
 
-import { Container, Header, Left, Button, Icon, Body, Title, Right } from 'native-base';
+import {
+    Container,
+    Header,
+    Left,
+    Button,
+    Icon,
+    Body,
+    Title,
+    Right
+} from "native-base";
 
-import { GiftedChat, Bubble } from 'react-native-gifted-chat';
-import io from 'socket.io-client/dist/socket.io';
+import { GiftedChat, Bubble } from "react-native-gifted-chat";
+import io from "socket.io-client/dist/socket.io";
 
-import CustomActions from './CustomActions';
-import CustomView from './CustomView';
+import CustomActions from "./CustomActions";
+import CustomView from "./CustomView";
 
-import Color from '../../theme/Colors';
-import LoggedUserCredentials from '../../models/LoggedUserCredentials';
-import { baseUrl, chatUrl, userUrl } from '../../utils/global';
+import Color from "../../theme/Colors";
+import LoggedUserCredentials from "../../models/LoggedUserCredentials";
+import { baseUrl, chatUrl, userUrl, chatRoomUrl } from "../../utils/global";
 
 export class Chat extends Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			messages: [],
-			loading: false,
-			loadingEarlier: false,
-			hasEarlierMessage: true,
-			page: 1,
-		};
+    constructor(props) {
+        super(props);
+        this.state = {
+            messages: [],
+            loading: false,
+            loadingEarlier: false,
+            hasEarlierMessage: true,
+            page: 1
+        };
 
-		this.chat_socket = io(baseUrl + '/all_chats');
-	}
+        this.chat_socket = io(baseUrl + "/all_chats");
+    }
 
-	_isMounted = false;
+    _isMounted = false;
 
-	componentDidMount() {
-		this._isMounted = true;
-		this.chat_socket.on('chat::created', this._onChatMessageReceived);
-		this.setState({ loading: true }, () => this.getMessages());
-	}
+    componentDidMount() {
+        this._isMounted = true;
+        this.chat_socket.on("chat::created", this._onChatMessageReceived);
+        this.setState({ loading: true }, () => this.getMessages());
+    }
 
-	componentWillUnmount() {
-		this._isMounted = false;
-	}
+    componentWillUnmount() {
+        this._isMounted = false;
+    }
 
-	getMessages() {
-		const {
-			selectedGroup: {
-				chatType,
-				user: { _id },
-				roomId,
-			},
-		} = this.props.navigation.state.params.data;
-		const { page } = this.state;
+    getMessages() {
+        const {
+            selectedGroup: { chatType, user, roomId }
+        } = this.props.navigation.state.params.data;
 
-		const dataQueryString =
-			'?page=' +
-			page +
-			'&roomId=' +
-			roomId +
-			'&fromSenderId=' +
-			LoggedUserCredentials.getUserId() +
-			'&toReceiverId=' +
-			_id +
-			'&roomType=' +
-			chatType;
+        const { page } = this.state;
 
-		const config = {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
-			},
-			method: 'GET',
-		};
+        const users = Array.isArray(user) ? user : [user];
 
-		const url = chatUrl + '/messages/' + dataQueryString;
+        const receiverIds = users.map(usr => usr._id);
 
-		fetch(url, config)
-			.then(res => res.json())
-			.then(resJson => {
-				this.setState({ loading: false, error: false, messages: resJson });
-			})
-			.catch(err => this.setState({ loading: false, error: true }));
-	}
+        const dataQueryString =
+            "?page=" +
+            page +
+            "&roomId=" +
+            roomId +
+            "&fromSenderId=" +
+            LoggedUserCredentials.getUserId() +
+            "&toReceiverIds=" +
+            JSON.stringify(receiverIds) +
+            "&roomType=" +
+            chatType;
 
-	_onLoadEarlier = async () => {
-		const { page } = this.state;
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                    "Bearer " + LoggedUserCredentials.getAccessToken()
+            },
+            method: "GET"
+        };
 
-		const nextPage = page + 1;
+        const url = chatUrl + "/messages/" + dataQueryString;
 
-		this.setState({ page: nextPage, loadingEarlier: true }, this.getEarlierMessage);
-	};
+        fetch(url, config)
+            .then(res => res.json())
+            .then(resJson => {
+                this.setState({
+                    loading: false,
+                    error: false,
+                    messages: resJson
+                });
+            })
+            .catch(err => this.setState({ loading: false, error: true }));
+    }
 
-	getEarlierMessage = async () => {
-		const { page } = this.state;
+    _onLoadEarlier = async () => {
+        const { page } = this.state;
 
-		const {
-			selectedGroup: {
-				chatType,
-				user: { _id },
-				roomId,
-			},
-		} = this.props.navigation.state.params.data;
+        const nextPage = page + 1;
 
-		const dataQueryString =
-			'?page=' +
-			page +
-			'&roomId=' +
-			roomId +
-			'&fromSenderId=' +
-			LoggedUserCredentials.getUserId() +
-			'&toReceiverId=' +
-			_id +
-			'&roomType=' +
-			chatType;
+        this.setState(
+            { page: nextPage, loadingEarlier: true },
+            this.getEarlierMessage
+        );
+    };
 
-		const config = {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
-			},
-			method: 'GET',
-		};
+    getEarlierMessage = async () => {
+        const { page } = this.state;
 
-		const url = chatUrl + '/messages/' + dataQueryString;
+        const {
+            selectedGroup: { chatType, user, roomId }
+        } = this.props.navigation.state.params.data;
 
-		try {
-			let res = await fetch(url, config);
+        const users = Array.isArray(user) ? user : [user];
 
-			if (res.status === 200) {
-				const earlier_msgs = await res.json();
+        const receiverIds = users.map(usr => usr._id);
 
-				if (earlier_msgs.length > 0 && this._isMounted === true) {
-					this.setState(preState => {
-						return {
-							messages: GiftedChat.prepend(
-								preState.messages,
-								earlier_msgs,
-								Platform.OS !== 'web',
-							),
-							loadingEarlier: false,
-							hasEarlierMessage: true,
-						};
-					});
-				}
-			}
-		} catch (error) {
-			console.log(error);
-			this.setState({ loadingEarlier: false });
-		}
+        const dataQueryString =
+            "?page=" +
+            page +
+            "&roomId=" +
+            roomId +
+            "&fromSenderId=" +
+            LoggedUserCredentials.getUserId() +
+            "&toReceiverIds=" +
+            JSON.stringify(receiverIds) +
+            "&roomType=" +
+            chatType;
 
-		fetch(url, config)
-			.then(res => res.json())
-			.then(resJson => {
-				this.setState({ error: false, messages: resJson, loadingEarlier: false });
-			})
-			.catch(err => this.setState({ error: true, loadingEarlier: false }));
-	};
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                    "Bearer " + LoggedUserCredentials.getAccessToken()
+            },
+            method: "GET"
+        };
 
-	componentWillUnmount() {
-		this.chat_socket.off('chat::created', this._onChatMessageReceived);
-	}
+        const url = chatUrl + "/messages/" + dataQueryString;
 
-	close = () => this.props.navigation.goBack();
+        try {
+            let res = await fetch(url, config);
 
-	_onChatMessageReceived = message => {
-		const {
-			selectedGroup: {
-				user: { _id },
-				roomId,
-			},
-		} = this.props.navigation.state.params.data;
+            if (res.status === 200) {
+                const earlier_msgs = await res.json();
 
-		if (roomId) {
-			if (
-				message.meta.room_id === roomId &&
-				message.meta.toReceiverId === LoggedUserCredentials.getUserId()
-			) {
-				this.setState(
-					previousState => ({
-						messages: GiftedChat.append(previousState.messages, [message]),
-					}),
-					() => this._notifySeenMsg(message._id),
-				);
-			}
-		} else {
-			if (message.user._id === _id && message.meta.toReceiverId === LoggedUserCredentials.getUserId()) {
-				this.setState(
-					previousState => ({
-						messages: GiftedChat.append(previousState.messages, [message]),
-					}),
-					() => this._notifySeenMsg(message._id),
-				);
-			}
-		}
-	};
+                if (earlier_msgs.length > 0 && this._isMounted === true) {
+                    this.setState(preState => {
+                        return {
+                            messages: GiftedChat.prepend(
+                                preState.messages,
+                                earlier_msgs,
+                                Platform.OS !== "web"
+                            ),
+                            loadingEarlier: false,
+                            hasEarlierMessage: true
+                        };
+                    });
+                }
+            }
+        } catch (error) {
+            console.log(error);
+            this.setState({ loadingEarlier: false });
+        }
 
-	_notifySeenMsg(msgId) {
-		const data = {
-			userId: LoggedUserCredentials.getUserId(),
-			msgId,
-		};
+        fetch(url, config)
+            .then(res => res.json())
+            .then(resJson => {
+                this.setState({
+                    error: false,
+                    messages: resJson,
+                    loadingEarlier: false
+                });
+            })
+            .catch(err =>
+                this.setState({ error: true, loadingEarlier: false })
+            );
+    };
 
-		const config = {
-			headers: {
-				'Content-Type': 'application/json',
-				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
-			},
-			method: 'POST',
-			body: JSON.stringify(data),
-		};
+    componentWillUnmount() {
+        this.chat_socket.off("chat::created", this._onChatMessageReceived);
+    }
 
-		const url = chatUrl + '/notifyChatMessage';
+    close = () => this.props.navigation.goBack();
 
-		fetch(url, config)
-			.then(res => res.json())
-			.catch(err => alert(err));
-	}
+    _onChatMessageReceived = message => {
+        const {
+            selectedGroup: { roomId }
+        } = this.props.navigation.state.params.data;
 
-	_onSendFromUser = (msgs = []) => {
-		const createdAt = new Date();
+        if (roomId) {
+            if (
+                message.meta.room_id === roomId &&
+                message.meta.toReceiverIds.includes(
+                    LoggedUserCredentials.getUserId()
+                )
+            ) {
+                this.setState(
+                    previousState => ({
+                        messages: GiftedChat.append(previousState.messages, [
+                            message
+                        ])
+                    }),
+                    () => this._notifySeenMsg(message._id)
+                );
+            }
+        } else {
+            if (
+                message.user._id === LoggedUserCredentials.getUserId() &&
+                message.meta.toReceiverIds.includes(
+                    LoggedUserCredentials.getUserId()
+                )
+            ) {
+                this.setState(
+                    previousState => ({
+                        messages: GiftedChat.append(previousState.messages, [
+                            message
+                        ])
+                    }),
+                    () => this._notifySeenMsg(message._id)
+                );
+            }
+        }
+    };
 
-		const msg = msgs[0];
+    _notifySeenMsg(msgId) {
+        const data = {
+            userId: LoggedUserCredentials.getUserId(),
+            msgId
+        };
 
-		if (msg) {
-			const msgToUpload = {
-				...msg,
-				user: { _id: LoggedUserCredentials.getUserId(), name: LoggedUserCredentials.getUserName() },
-				createdAt,
-				_id: Math.round(Math.random() * 1000000),
-			};
+        const config = {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization:
+                    "Bearer " + LoggedUserCredentials.getAccessToken()
+            },
+            method: "POST",
+            body: JSON.stringify(data)
+        };
 
-			this.setState(
-				previousState => ({
-					messages: GiftedChat.append(previousState.messages, [msgToUpload], Platform.OS !== 'web'),
-				}),
-				() => this._sendMessage(msgToUpload),
-			);
-		}
-	};
+        const url = chatUrl + "/notifyChatMessage";
 
-	_onSend = (msgs = []) => {
-		this.setState(
-			previousState => ({
-				messages: GiftedChat.append(previousState.messages, msgs, Platform.OS !== 'web'),
-			}),
-			() => this._sendMessage(msgs[0]),
-		);
-	};
+        fetch(url, config)
+            .then(res => res.json())
+            .catch(err => alert(err));
+    }
 
-	_sendMessage({ text, image, location }) {
-		const {
-			selectedGroup: {
-				chatType,
-				user: { _id },
-				roomId,
-			},
-		} = this.props.navigation.state.params.data;
+    _onSendFromUser = (msgs = []) => {
+        const createdAt = new Date();
 
-		const data = new FormData();
-		data.append('fromSenderId', LoggedUserCredentials.getUserId());
-		data.append('toReceiverId', _id);
-		data.append('roomType', chatType);
+        const msg = msgs[0];
 
-		if (roomId) {
-			data.append('roomId', roomId);
-		}
+        if (msg) {
+            const msgToUpload = {
+                ...msg,
+                user: {
+                    _id: LoggedUserCredentials.getUserId(),
+                    name: LoggedUserCredentials.getUserName()
+                },
+                createdAt,
+                _id: Math.round(Math.random() * 1000000)
+            };
 
-		if (text && text.trim().length > 0) {
-			data.append('text', text);
-		}
+            this.setState(
+                previousState => ({
+                    messages: GiftedChat.append(
+                        previousState.messages,
+                        [msgToUpload],
+                        Platform.OS !== "web"
+                    )
+                }),
+                () => this._sendMessage(msgToUpload)
+            );
+        }
+    };
 
-		if (location) {
-			data.append('locationData', JSON.stringify(location));
-		}
+    _onSend = (msgs = []) => {
+        this.setState(
+            previousState => ({
+                messages: GiftedChat.append(
+                    previousState.messages,
+                    msgs,
+                    Platform.OS !== "web"
+                )
+            }),
+            () => this._sendMessage(msgs[0])
+        );
+    };
 
-		if (image) {
-			const filename = image.split('/').pop();
+    _sendMessage({ text, image, location }) {
+        const {
+            selectedGroup: { chatType, user, roomId }
+        } = this.props.navigation.state.params.data;
 
-			const match = /\.(\w+)$/.exec(filename);
-			const type = match ? `image/${match[1]}` : `image`;
+        const users = Array.isArray(user) ? user : [user];
 
-			data.append('media', {
-				uri: image,
-				type,
-				name: filename,
-			});
-		}
+        const receiverIds = users.map(usr => usr._id);
 
-		const config = {
-			headers: {
-				Authorization: 'Bearer ' + LoggedUserCredentials.getAccessToken(),
-				'Content-Type': 'multipart/form-data',
-			},
-			method: 'POST',
-			body: data,
-		};
+        const data = new FormData();
+        data.append("fromSenderId", LoggedUserCredentials.getUserId());
+        data.append("toReceiverIds", JSON.stringify(receiverIds));
+        data.append("roomType", chatType);
 
-		fetch(chatUrl, config)
-			.then(res => res.json())
-			.catch(err => console.log(err));
-	}
+        if (roomId) {
+            data.append("roomId", roomId);
+        }
 
-	_renderCustomActions = props => <CustomActions {...props} onSend={this._onSendFromUser} />;
+        if (text && text.trim().length > 0) {
+            data.append("text", text);
+        }
 
-	_renderBubble = props => {
-		return (
-			<Bubble
-				{...props}
-				wrapperStyle={{
-					left: {
-						backgroundColor: '#f0f0f0',
-					},
-				}}
-			/>
-		);
-	};
+        if (location) {
+            data.append("locationData", JSON.stringify(location));
+        }
 
-	_renderLoadingView = () => {
-		return (
-			<View style={styles.centerContent}>
-				<ActivityIndicator size='large' color={Color.mainColor} />
-			</View>
-		);
-	};
+        if (image) {
+            const filename = image.split("/").pop();
 
-	_renderCustomView(props) {
-		return <CustomView {...props} />;
-	}
+            const match = /\.(\w+)$/.exec(filename);
+            const type = match ? `image/${match[1]}` : `image`;
 
-	_parsePatterns = linkStyle => {
-		return [
-			{
-				pattern: /#(\w+)/,
-				style: { textDecorationLine: 'underline', color: 'darkorange' },
-			},
-		];
-	};
+            data.append("media", {
+                uri: image,
+                type,
+                name: filename
+            });
+        }
 
-	render() {
-		const { selectedGroup } = this.props.navigation.state.params.data;
-		const { messages, loading, loadingEarlier, hasEarlierMessage } = this.state;
+        const config = {
+            headers: {
+                Authorization:
+                    "Bearer " + LoggedUserCredentials.getAccessToken(),
+                "Content-Type": "multipart/form-data"
+            },
+            method: "POST",
+            body: data
+        };
 
-		const currentUser = {
-			_id: LoggedUserCredentials.getUserId(),
-			name: LoggedUserCredentials.getUserName(),
-		};
+        fetch(chatUrl, config)
+            .then(res => res.json())
+            .catch(err => console.log(err));
+    }
 
-		return (
-			<Container>
-				<Header style={styles.header}>
-					<Left>
-						<Button transparent onPress={this.close}>
-							<Icon name='arrow-back' style={styles.whiteColor} />
-						</Button>
-					</Left>
-					<Body>
-						<Title style={styles.whiteColor}>{selectedGroup.user.name}</Title>
-					</Body>
-					<Right />
-				</Header>
+    _renderCustomActions = props => (
+        <CustomActions {...props} onSend={this._onSendFromUser} />
+    );
 
-				<GiftedChat
-					messages={messages}
-					onSend={this._onSend}
-					loadEarlier
-					onLoadEarlier={this._onLoadEarlier}
-					isLoadingEarlier={loadingEarlier}
-					parsePatterns={this._parsePatterns}
-					user={currentUser}
-					showUserAvatar
-					showAvatarForEveryMessage
-					scrollToBottom
-					keyboardShouldPersistTaps='never'
-					renderActions={this._renderCustomActions}
-					renderBubble={this._renderBubble}
-					renderCustomView={this._renderCustomView}
-					inverted={Platform.OS !== 'web'}
-				/>
-			</Container>
-		);
-	}
+    _renderBubble = props => {
+        return (
+            <Bubble
+                {...props}
+                wrapperStyle={{
+                    left: {
+                        backgroundColor: "#f0f0f0"
+                    }
+                }}
+            />
+        );
+    };
+
+    _renderLoadingView = () => {
+        return (
+            <View style={styles.centerContent}>
+                <ActivityIndicator size="large" color={Color.mainColor} />
+            </View>
+        );
+    };
+
+    _renderCustomView(props) {
+        return <CustomView {...props} />;
+    }
+
+    _parsePatterns = linkStyle => {
+        return [
+            {
+                pattern: /#(\w+)/,
+                style: { textDecorationLine: "underline", color: "darkorange" }
+            }
+        ];
+    };
+
+    render() {
+        const {
+            selectedGroup: { title }
+        } = this.props.navigation.state.params.data;
+        const {
+            messages,
+            loading,
+            loadingEarlier,
+            hasEarlierMessage
+        } = this.state;
+
+        const currentUser = {
+            _id: LoggedUserCredentials.getUserId(),
+            name: LoggedUserCredentials.getUserName()
+        };
+
+        return (
+            <Container>
+                <Header style={styles.header}>
+                    <Left>
+                        <Button transparent onPress={this.close}>
+                            <Icon name="arrow-back" style={styles.whiteColor} />
+                        </Button>
+                    </Left>
+                    <Body>
+                        <Title style={styles.whiteColor}>{title}</Title>
+                    </Body>
+                    <Right />
+                </Header>
+
+                <GiftedChat
+                    messages={messages}
+                    onSend={this._onSend}
+                    loadEarlier
+                    onLoadEarlier={this._onLoadEarlier}
+                    isLoadingEarlier={loadingEarlier}
+                    parsePatterns={this._parsePatterns}
+                    user={currentUser}
+                    showUserAvatar
+                    showAvatarForEveryMessage
+                    scrollToBottom
+                    keyboardShouldPersistTaps="never"
+                    renderActions={this._renderCustomActions}
+                    renderBubble={this._renderBubble}
+                    renderCustomView={this._renderCustomView}
+                    inverted={Platform.OS !== "web"}
+                />
+            </Container>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-	header: {
-		backgroundColor: Color.mainColor,
-	},
-	mapView: {
-		width: 150,
-		height: 100,
-		borderRadius: 13,
-		margin: 3,
-	},
-	chatContainer: {
-		flex: 1,
-	},
-	centerContent: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-	},
-	whiteColor: {
-		color: 'white',
-	},
+    header: {
+        backgroundColor: Color.mainColor
+    },
+    mapView: {
+        width: 150,
+        height: 100,
+        borderRadius: 13,
+        margin: 3
+    },
+    chatContainer: {
+        flex: 1
+    },
+    centerContent: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    whiteColor: {
+        color: "white"
+    }
 });
