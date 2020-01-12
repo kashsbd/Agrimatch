@@ -302,9 +302,6 @@ export class Chat extends Component {
             }
         });
 
-        console.log(LoggedUserCredentials.getUserId());
-        console.log(receiverIds);
-
         const data = new FormData();
         data.append("fromSenderId", LoggedUserCredentials.getUserId());
         data.append("toReceiverIds", JSON.stringify(receiverIds));

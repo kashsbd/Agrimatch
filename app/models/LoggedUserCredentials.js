@@ -6,6 +6,7 @@ export default class LoggedUserCredentials {
 	location = null;
 	lng = '';
 	hasChatNoti = false;
+	hasNoti = false;
 
 	static setLoggedUserData(accessToken, userName, userId, userType) {
 		this.accessToken = accessToken;
@@ -52,5 +53,13 @@ export default class LoggedUserCredentials {
 
 	static getChatNoti() {
 		return this.hasChatNoti;
+	}
+
+	static setNoti(noti) {
+		this.hasNoti = noti;
+	}
+
+	static getNoti() {
+		return this.hasNoti;
 	}
 }

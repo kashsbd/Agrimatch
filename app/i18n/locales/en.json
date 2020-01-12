@@ -74,7 +74,13 @@
         "can_not_save": "Can't save without rating user.",
         "additional_feedback": "Additional Feedback",
         "how_is_farmer": "How was farmer {{ name }} ?",
-        "how_is_middleman": "How was middleman {{ name }} ?"
+        "how_is_middleman": "How was middleman {{ name }} ?",
+        "feedback_has_been_sent": "Your feedback has been sent."
+    },
+    "notification": {
+        "submitted_feedback": "submitted feedback.",
+        "accept": "Accept",
+        "reject": "Reject"
     },
     "tradinginfo": {
         "enter_quantity": "Please enter quantity.",

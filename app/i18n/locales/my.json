@@ -53,7 +53,7 @@
         "messages": "စာတိုပို့ရန်",
         "sell_goods": "သီးနှံရောင်းရန်",
         "buy_goods": "သီးနှံဝယ်ရန်",
-        "find_people": "လူရှာမည်"
+        "find_people": "လူရှာမည်",
     },
     "nearme": {
         "title": "လူရှာမည်",
@@ -74,7 +74,13 @@
         "can_not_save": "Can't save without rating user.",
         "additional_feedback": "ထပ်မံဖော်ပြလိုသည်များ",
         "how_is_farmer": "တောင်သူ {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။",
-        "how_is_middleman": "ပွဲစား {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။"
+        "how_is_middleman": "ပွဲစား {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။",
+        "feedback_has_been_sent": "Your feedback has been sent."
+    },
+    "notification": {
+        "submitted_feedback": " မှ တုံ့ပြန်ချက် ပေးပို့ထားသည်။",
+        "accept": "လက်ခံမည်",
+        "reject": "ငြင်းပယ်မည်"
     },
     "tradinginfo": {
         "enter_quantity": "Please enter quantity.",

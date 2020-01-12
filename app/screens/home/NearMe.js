@@ -466,17 +466,17 @@ class NearMeScreen extends Component {
                         </Text>
                     </View>
                 ) : (
-                    <Button
-                        block
-                        light
-                        style={{ height: 42 }}
-                        onPress={this._findFarmers}
-                    >
-                        <RNText style={styles.nearMeText}>
-                            {t("nearme:show_farmers")}
-                        </RNText>
-                    </Button>
-                )}
+                        <Button
+                            block
+                            light
+                            style={{ height: 42 }}
+                            onPress={this._findFarmers}
+                        >
+                            <RNText style={styles.nearMeText}>
+                                {t("nearme:show_farmers")}
+                            </RNText>
+                        </Button>
+                    )}
 
                 {showMiddlemenCount ? (
                     <View style={{ alignSelf: "center" }}>
@@ -495,17 +495,17 @@ class NearMeScreen extends Component {
                         </Text>
                     </View>
                 ) : (
-                    <Button
-                        block
-                        style={{ marginTop: 5, height: 42 }}
-                        light
-                        onPress={this._findMiddlemen}
-                    >
-                        <RNText style={styles.nearMeText}>
-                            {t("nearme:show_middlemen")}
-                        </RNText>
-                    </Button>
-                )}
+                        <Button
+                            block
+                            style={{ marginTop: 5, height: 42 }}
+                            light
+                            onPress={this._findMiddlemen}
+                        >
+                            <RNText style={styles.nearMeText}>
+                                {t("nearme:show_middlemen")}
+                            </RNText>
+                        </Button>
+                    )}
             </View>
         );
     }
@@ -554,8 +554,8 @@ class NearMeScreen extends Component {
                                 />
                             </Button>
                         ) : (
-                            <Button transparent />
-                        )}
+                                <Button transparent />
+                            )}
                     </Right>
                 </Header>
 
@@ -573,228 +573,226 @@ class NearMeScreen extends Component {
                         />
                     </View>
                 ) : (
-                    <ScrollView contentContainerStyle={{ flex: 1 }}>
-                        <MapView
-                            style={{ height: "100%" }}
-                            provider={PROVIDER_GOOGLE}
-                            showsUserLocation
-                            initialRegion={{
-                                latitude: location.latitude,
-                                longitude: location.longitude,
-                                latitudeDelta: 0.02,
-                                longitudeDelta: 0.02
-                            }}
-                        >
-                            {markers.map((marker, index) => {
-                                const chatType = marker.chatType;
+                        <ScrollView contentContainerStyle={{ flex: 1 }}>
+                            <MapView
+                                style={{ height: "100%" }}
+                                provider={PROVIDER_GOOGLE}
+                                showsUserLocation
+                                initialRegion={{
+                                    latitude: location.latitude,
+                                    longitude: location.longitude,
+                                    latitudeDelta: 0.02,
+                                    longitudeDelta: 0.02
+                                }}
+                            >
+                                {markers.map((marker, index) => {
+                                    const chatType = marker.chatType;
 
-                                if (chatType === "GROUP") {
-                                    const coord = {
-                                        latitude:
-                                            marker.location.coordinates[1],
-                                        longitude:
-                                            marker.location.coordinates[0]
-                                    };
+                                    if (chatType === "GROUP") {
+                                        const coord = {
+                                            latitude:
+                                                marker.location.coordinates[1],
+                                            longitude:
+                                                marker.location.coordinates[0]
+                                        };
 
-                                    return (
-                                        <Marker
-                                            key={index}
-                                            coordinate={coord}
-                                            onPress={this.onGroupChatPressed(
-                                                marker
-                                            )}
-                                            title={marker.chatRoom.roomName}
+                                        return (
+                                            <Marker
+                                                key={index}
+                                                coordinate={coord}
+                                                onPress={this.onGroupChatPressed(
+                                                    marker
+                                                )}
+                                                title={marker.chatRoom.roomName}
+                                            >
+                                                <View
+                                                    style={styles.markerIconWrapper}
+                                                >
+                                                    <Icon
+                                                        name="people"
+                                                        style={styles.markerIcon}
+                                                    />
+                                                </View>
+                                            </Marker>
+                                        );
+                                    } else if (chatType === "SINGLE") {
+                                        const coord = {
+                                            latitude:
+                                                marker.location.coordinates[1],
+                                            longitude:
+                                                marker.location.coordinates[0]
+                                        };
+
+                                        return (
+                                            <Marker
+                                                pinColor={Color.mainColor}
+                                                onPress={this.onMarkerPressed(
+                                                    marker
+                                                )}
+                                                key={index}
+                                                coordinate={coord}
+                                                title={marker.user.name}
+                                            >
+                                                <Icon
+                                                    name="person"
+                                                    style={{
+                                                        color: Color.mainColor
+                                                    }}
+                                                />
+                                            </Marker>
+                                        );
+                                    }
+                                })}
+                            </MapView>
+
+                            <View style={styles.footerContainer}>
+                                <View style={styles.nameContainer}>
+                                    {selectedGroup ||
+                                        showFarmersCount ||
+                                        showMiddlemenCount ||
+                                        dialogVisible ? (
+                                            <View
+                                                style={{
+                                                    flexDirection: "row",
+                                                    width: "100%"
+                                                }}
+                                            >
+                                                <Left style={{ flex: 1 }} />
+                                                <Body style={{ flex: 0 }}>
+                                                    <Text style={styles.nameStyle}>
+                                                        {selectedGroup &&
+                                                            selectedGroup.chatType ===
+                                                            "SINGLE"
+                                                            ? selectedGroup.user.name
+                                                            : selectedGroup &&
+                                                                selectedGroup.chatType ===
+                                                                "GROUP"
+                                                                ? selectedGroup.chatRoom
+                                                                    .roomName
+                                                                : t("nearme:greeting", {
+                                                                    name: LoggedUserCredentials.getUserName()
+                                                                })}
+                                                    </Text>
+                                                </Body>
+                                                <Right>
+                                                    <Button
+                                                        transparent
+                                                        onPress={
+                                                            this._backToOriginalScreen
+                                                        }
+                                                    >
+                                                        <Icon
+                                                            name="backspace"
+                                                            size={20}
+                                                            style={styles.markerIcon}
+                                                        />
+                                                    </Button>
+                                                </Right>
+                                            </View>
+                                        ) : (
+                                            <Text style={styles.nameStyle}>
+                                                {t("nearme:greeting", {
+                                                    name: LoggedUserCredentials.getUserName()
+                                                })}
+                                            </Text>
+                                        )}
+                                </View>
+
+                                {dialogVisible ? (
+                                    <View
+                                        style={{
+                                            flex: 1,
+                                            justifyContent: "center"
+                                        }}
+                                    >
+                                        <View
+                                            style={{
+                                                flexDirection: "row",
+                                                alignSelf: "center"
+                                            }}
                                         >
                                             <View
-                                                style={styles.markerIconWrapper}
+                                                style={[
+                                                    styles.markerIconWrapper,
+                                                    {
+                                                        width: 64,
+                                                        height: 64,
+                                                        borderRadius: 32,
+                                                        marginTop: 30,
+                                                        marginRight: 5
+                                                    }
+                                                ]}
                                             >
                                                 <Icon
                                                     name="people"
                                                     style={styles.markerIcon}
                                                 />
                                             </View>
-                                        </Marker>
-                                    );
-                                } else if (chatType === "SINGLE") {
-                                    const coord = {
-                                        latitude:
-                                            marker.location.coordinates[1],
-                                        longitude:
-                                            marker.location.coordinates[0]
-                                    };
-
-                                    return (
-                                        <Marker
-                                            pinColor={Color.mainColor}
-                                            onPress={this.onMarkerPressed(
-                                                marker
-                                            )}
-                                            key={index}
-                                            coordinate={coord}
-                                            title={marker.user.name}
-                                        >
-                                            <Icon
-                                                name="person"
-                                                style={{
-                                                    color: Color.mainColor
-                                                }}
-                                            />
-                                        </Marker>
-                                    );
-                                }
-                            })}
-                        </MapView>
-
-                        <View style={styles.footerContainer}>
-                            <View style={styles.nameContainer}>
-                                {selectedGroup ||
-                                showFarmersCount ||
-                                showMiddlemenCount ||
-                                dialogVisible ? (
-                                    <View
-                                        style={{
-                                            flexDirection: "row",
-                                            width: "100%"
-                                        }}
-                                    >
-                                        <Left style={{ flex: 1 }} />
-                                        <Body style={{ flex: 0 }}>
-                                            <Text style={styles.nameStyle}>
-                                                {selectedGroup &&
-                                                selectedGroup.chatType ===
-                                                    "SINGLE"
-                                                    ? selectedGroup.user.name
-                                                    : selectedGroup &&
-                                                      selectedGroup.chatType ===
-                                                          "GROUP"
-                                                    ? selectedGroup.chatRoom
-                                                          .roomName
-                                                    : t("nearme:greeting", {
-                                                          name: LoggedUserCredentials.getUserName()
-                                                      })}
-                                            </Text>
-                                        </Body>
-                                        <Right>
-                                            <Button
-                                                transparent
-                                                onPress={
-                                                    this._backToOriginalScreen
-                                                }
-                                            >
-                                                <Icon
-                                                    name="backspace"
-                                                    size={20}
-                                                    style={styles.markerIcon}
-                                                />
-                                            </Button>
-                                        </Right>
-                                    </View>
-                                ) : (
-                                    <Text style={styles.nameStyle}>
-                                        {t("nearme:greeting", {
-                                            name: LoggedUserCredentials.getUserName()
-                                        })}
-                                    </Text>
-                                )}
-                            </View>
-
-                            {dialogVisible ? (
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        justifyContent: "center"
-                                    }}
-                                >
-                                    <View
-                                        style={{
-                                            flexDirection: "row",
-                                            alignSelf: "center"
-                                        }}
-                                    >
-                                        <View
-                                            style={[
-                                                styles.markerIconWrapper,
-                                                {
-                                                    width: 64,
-                                                    height: 64,
-                                                    borderRadius: 32,
-                                                    marginTop: 30,
-                                                    marginRight: 5
-                                                }
-                                            ]}
-                                        >
-                                            <Icon
-                                                name="people"
-                                                style={styles.markerIcon}
-                                            />
-                                        </View>
-                                        <View style={{ marginLeft: 10 }}>
-                                            <Text
-                                                style={{
-                                                    alignSelf: "center",
-                                                    color: Color.mainColor,
-                                                    marginBottom: 1
-                                                }}
-                                            >
-                                                {t(
-                                                    "nearme:people_are_in_this_group",
-                                                    {
-                                                        num:
-                                                            selectedGroup.chatType ===
-                                                            "GROUP"
-                                                                ? selectedGroup
-                                                                      .chatRoom
-                                                                      .participants
-                                                                      .length
-                                                                : 0
-                                                    }
-                                                )}
-                                            </Text>
-                                            <Text
-                                                style={{
-                                                    alignSelf: "center",
-                                                    color: Color.mainColor,
-                                                    marginBottom: 3
-                                                }}
-                                            >
-                                                Community Group Chat
-                                            </Text>
-                                            <Button
-                                                onPress={this.joinGroup}
-                                                style={{
-                                                    backgroundColor:
-                                                        Color.mainColor,
-                                                    width: "100%",
-                                                    justifyContent: "center",
-                                                    height: "45%"
-                                                }}
-                                            >
-                                                <RNText
+                                            <View style={{ marginLeft: 10 }}>
+                                                <Text
                                                     style={{
-                                                        color: "#fff",
-                                                        alignSelf: "center"
+                                                        alignSelf: "center",
+                                                        color: Color.mainColor,
+                                                        marginBottom: 1
                                                     }}
                                                 >
-                                                    {selectedGroup.chatRoom.participants.includes(
-                                                        LoggedUserCredentials.getUserId()
-                                                    )
-                                                        ? t("nearme:view_chat")
-                                                        : t(
-                                                              "nearme:join_group"
-                                                          )}
-                                                </RNText>
-                                            </Button>
+                                                    {t(
+                                                        "nearme:people_are_in_this_group",
+                                                        {
+                                                            num:
+                                                                selectedGroup.chatType ===
+                                                                    "GROUP"
+                                                                    ? selectedGroup
+                                                                        .chatRoom
+                                                                        .participants
+                                                                        .length
+                                                                    : 0
+                                                        }
+                                                    )}
+                                                </Text>
+                                                <Text
+                                                    style={{
+                                                        alignSelf: "center",
+                                                        color: Color.mainColor,
+                                                        marginBottom: 3
+                                                    }}
+                                                />
+                                                <Button
+                                                    onPress={this.joinGroup}
+                                                    style={{
+                                                        backgroundColor:
+                                                            Color.mainColor,
+                                                        width: "100%",
+                                                        justifyContent: "center",
+                                                        height: "45%"
+                                                    }}
+                                                >
+                                                    <RNText
+                                                        style={{
+                                                            color: "#fff",
+                                                            alignSelf: "center"
+                                                        }}
+                                                    >
+                                                        {selectedGroup.chatRoom.participants.includes(
+                                                            LoggedUserCredentials.getUserId()
+                                                        )
+                                                            ? t("nearme:view_chat")
+                                                            : t(
+                                                                "nearme:join_group"
+                                                            )}
+                                                    </RNText>
+                                                </Button>
+                                            </View>
                                         </View>
                                     </View>
-                                </View>
-                            ) : previewVisible ? (
-                                this.renderFarmerPreview()
-                            ) : (
-                                this.renderNearMeButtons()
-                            )}
-                        </View>
-                    </ScrollView>
-                )}
+                                ) : previewVisible ? (
+                                    this.renderFarmerPreview()
+                                ) : (
+                                            this.renderNearMeButtons()
+                                        )}
+                            </View>
+                        </ScrollView>
+                    )}
             </Container>
         );
     }
