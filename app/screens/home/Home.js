@@ -298,7 +298,7 @@ class HomeScreen extends Component {
                         style={[styles.btnBubbleContainer, { position: 'absolute', zIndex: 999, right: '0%', top: '0%' }]}
                         onPress={this.openNotification}
                     >
-                        <View style={{ alignItems: "center", position: 'absolute', top: '12%', right: '20%' }}>
+                        <View style={styles.notiIconContainer}>
                             <View style={[styles.iconWrapper, { width: 40, height: 40, borderRadius: 20 }]}>
                                 <Icon
                                     name="notifications-outline"
@@ -307,7 +307,7 @@ class HomeScreen extends Component {
                                 />
                             </View>
                         </View>
-                        {hasNoti ? <View style={[styles.badge, { top: '8%', right: 20 }]} /> : <View />}
+                        {hasNoti ? <View style={[styles.badge, { top: Platform.OS === 'android' ? '8%' : '20%', right: 20 }]} /> : <View />}
                     </TouchableOpacity>
 
                     <View style={styles.footerContainer}>
@@ -530,5 +530,11 @@ const styles = StyleSheet.create({
         right: 23,
         borderWidth: 2,
         borderColor: "white"
+    },
+    notiIconContainer: {
+        alignItems: "center",
+        position: 'absolute',
+        top: Platform.OS === 'android' ? '12%' : '24%',
+        right: '20%'
     }
 });

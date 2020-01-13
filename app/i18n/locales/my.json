@@ -75,12 +75,14 @@
         "additional_feedback": "ထပ်မံဖော်ပြလိုသည်များ",
         "how_is_farmer": "တောင်သူ {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။",
         "how_is_middleman": "ပွဲစား {{ name }}နှင့် ဆက်ဆံရသည်မှာ အဆင်ပြေမှုရှိပါသလား။",
-        "feedback_has_been_sent": "Your feedback has been sent."
+        "feedback_has_been_sent": "ဖော်ပြချက်များ သိမ်းဆည်းပြီးပါပြီ။"
     },
     "notification": {
         "submitted_feedback": " မှ တုံ့ပြန်ချက် ပေးပို့ထားသည်။",
         "accept": "လက်ခံမည်",
-        "reject": "ငြင်းပယ်မည်"
+        "reject": "ငြင်းပယ်မည်",
+        "accept_msg": "သင့်တုံ့ပြန်ချက်ကို {{ name }} မှလက်ခံလိုက်သည်။",
+        "reject_msg": "သင့်တုံ့ပြန်ချက်ကို {{ name }} မှငြင်းပယ်လိုက်သည်။"
     },
     "tradinginfo": {
         "enter_quantity": "Please enter quantity.",

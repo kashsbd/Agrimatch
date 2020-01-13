@@ -103,22 +103,38 @@ class NotiListScreen extends React.Component {
                         isShowActivity={true}
                     />
                 </Left>
-                <Body>
-                    <Text>{item.createdBy.name} <Text>{t("notification:submitted_feedback")}</Text></Text>
-                    <View style={{ flexDirection: 'row', marginTop: 5, width: '100%' }}>
-                        <View style={{ width: '58%', flexDirection: 'row' }}>
-                            <TouchableOpacity onPress={this._onAllow(item)}>
-                                <Text>{t("notification:accept")}</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity onPress={this._onCancel(item)}>
-                                <Text>{t("notification:reject")}</Text>
-                            </TouchableOpacity>
-                        </View>
-                    </View>
-                    <Text note style={{ paddingTop: 5 }}>
-                        <TimeAgo time={item.createdAt} />
-                    </Text>
-                </Body>
+                {
+                    item.type === 'REQUEST-TRANSACT' ?
+                        (<Body>
+                            <Text>{item.createdBy.name} <Text>{t("notification:submitted_feedback")}</Text></Text>
+                            <View style={{ flexDirection: 'row', marginTop: 5, width: '100%' }}>
+                                <View style={{ width: '58%', flexDirection: 'row' }}>
+                                    <TouchableOpacity onPress={this._onAllow(item)}>
+                                        <Text>{t("notification:accept")}</Text>
+                                    </TouchableOpacity>
+                                    <TouchableOpacity onPress={this._onCancel(item)}>
+                                        <Text>{t("notification:reject")}</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                            <Text note style={{ paddingTop: 5 }}>
+                                <TimeAgo time={item.createdAt} />
+                            </Text>
+                        </Body>) :
+                        (
+                            <Body>
+                                {
+                                    item.data.status === 'ALLOW' ?
+                                        <Text>{t("notification:accept_msg", { name: item.createdBy.name })}</Text>
+                                        :
+                                        <Text>{t("notification:reject_msg", { name: item.createdBy.name })}</Text>
+                                }
+                                <Text note style={{ paddingTop: 5 }}>
+                                    <TimeAgo time={item.createdAt} />
+                                </Text>
+                            </Body>
+                        )
+                }
                 <Right />
             </ListItem>
         );

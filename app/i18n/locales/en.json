@@ -75,12 +75,14 @@
         "additional_feedback": "Additional Feedback",
         "how_is_farmer": "How was farmer {{ name }} ?",
         "how_is_middleman": "How was middleman {{ name }} ?",
-        "feedback_has_been_sent": "Your feedback has been sent."
+        "feedback_has_been_sent": "Your feedback has been submitted."
     },
     "notification": {
         "submitted_feedback": "submitted feedback.",
         "accept": "Accept",
-        "reject": "Reject"
+        "reject": "Reject",
+        "accept_msg": "Your feedback is accepted by {{ name }}.",
+        "reject_msg": "Your feedback is rejected by {{ name }}."
     },
     "tradinginfo": {
         "enter_quantity": "Please enter quantity.",
