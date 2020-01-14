@@ -98,7 +98,7 @@ class HomeScreen extends Component {
     }
 
     async getNotiData() {
-        const path = userUrl + '/' + LoggedUserCredentials.getUserId() + '/notis';
+        const path = userUrl + '/' + LoggedUserCredentials.getUserId() + '/notis?returnType=COUNT_ONLY';
 
         const config = {
             headers: {

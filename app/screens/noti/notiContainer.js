@@ -22,7 +22,7 @@ export class NotiContainer extends Component {
     }
 
     getAllNotis = async () => {
-        const path = userUrl + '/' + LoggedUserCredentials.getUserId() + '/notis';
+        const path = userUrl + '/' + LoggedUserCredentials.getUserId() + '/notis?returnType=NOTI_MSG_ONLY';
 
         const config = {
             headers: {
