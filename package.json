@@ -21,7 +21,7 @@
 		"i18next": "^17.0.16",
 		"moment": "^2.24.0",
 		"myanmar-phonenumber": "^0.3.1",
-		"native-base": "^2.13.8",
+		"native-base": "2.13.12",
 		"react": "16.9.0",
 		"react-dom": "16.9.0",
 		"react-i18next": "^10.13.0",
