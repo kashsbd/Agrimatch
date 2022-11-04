@@ -2728,6 +2728,11 @@ expo-sqlite@~8.0.0:
     "@types/websql" "^0.0.27"
     lodash "^4.17.15"
 
+expo-updates@~0.0.1-rc.0:
+  version "0.0.1-rc.3"
+  resolved "https://registry.yarnpkg.com/expo-updates/-/expo-updates-0.0.1-rc.3.tgz#0d925038d8d4eb9890d72de8076535ed5603b782"
+  integrity sha512-3M4zteIuaYlVSSvyIWP1h0X6KpyZliL00Zge2MdlGtH+Mda6byNA7UyVOgaP+QYQL1zzgM0YjPucQRLJ9dZpRg==
+
 expo-web-browser@~8.0.0:
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/expo-web-browser/-/expo-web-browser-8.0.0.tgz#8a4451c744c115569a4c810dac8851f219a21c72"
